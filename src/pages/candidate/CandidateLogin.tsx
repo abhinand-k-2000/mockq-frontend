@@ -1,9 +1,11 @@
-import Navbar from "../../components/welcome_page/Navbar";
 import loginImage from "/candidateLogin.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { verifyLogin } from "../../api/candidateApi";
 import toast from "react-hot-toast";
+import Navbar from "../../components/welcome_page/Navbar";
+import { UseDispatch, useDispatch } from "react-redux";
+import { setCandidateCredentials } from "../../redux/slice/authSlice";
 
 interface IFormInput {
   email: string;
@@ -12,6 +14,7 @@ interface IFormInput {
 
 const CandidateLogin = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -19,17 +22,19 @@ const CandidateLogin = () => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    // console.log(data);
     const { email, password } = data;
     
     const response = await verifyLogin(email, password);
+    console.log("respnse: ", response)
 
     if (response?.data.success) {
-      navigate('/candidate/home')
+      // console.log("diapactK :", response.data)
+      dispatch(setCandidateCredentials(response.data.data.token))
       toast.success("Successfully Logged in");
+      navigate('/candidate/home')
     } else {
       console.log(response?.data)
-      toast.error("Invalid Credentials")
+      toast.error(response.data.message)
     }
   };
 

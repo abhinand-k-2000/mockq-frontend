@@ -40,9 +40,11 @@ export const verifyOtp = async (otp: string) => {
 export const verifyLogin = async (email: string, password: string) => {
     try {
         const response = await Api.post(candidateEndpoint.verifyLogin, {email, password})
-        console.log("response api: ", response)
         return response;
-    } catch (error) {
+    } catch (error: any) {
+        if(error.response){
+            return error.response
+        }
         console.log(error)
     }
 }
@@ -55,9 +57,31 @@ export const resendOtp = async () => {
                 Authorization: `Bearer ${token}`
             }
         })
+        console.log("response data: ", response.data)
+        console.log("response: ", response)
         const newToken = response.data.token;
         localStorage.setItem("candidateOtp", newToken)
         return response
+    } catch (error) {
+
+        console.log(error)
+    }
+}
+
+export const logout = async() => {
+    try {
+        const response = await Api.post(candidateEndpoint.logout)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const home = async () => {
+    try {
+        const response = await Api.get(candidateEndpoint.home)
+        return response.data
     } catch (error) {
         console.log(error)
     }

@@ -54,7 +54,7 @@ const CandidateSignUp = () => {
           <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div className=" flex flex-col items-center">
               <div className="text-center">
-                <h1 className="text-2xl xl:text-4xl font-extrabold text-[#142057]">
+                <h1 className="text-2xl xl:text-3xl font-extrabold text-[#142057]">
                   Candidate Sign up
                 </h1>
                 <p className="text-[12px] text-gray-500">

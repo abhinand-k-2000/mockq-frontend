@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 const CandidateOtp = () => {
   const navigate = useNavigate();
 
-  const [counter, setCounter] = useState(30);
+  const [counter, setCounter] = useState(5);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
 
   const handleOnChange = (index: number, value: string) => {
@@ -33,7 +33,7 @@ const CandidateOtp = () => {
   };
 
   const handleResendOtp = async () => {
-    setCounter(30);
+    setCounter(5);
     const response = await resendOtp();
 
     if (response?.data.success) {

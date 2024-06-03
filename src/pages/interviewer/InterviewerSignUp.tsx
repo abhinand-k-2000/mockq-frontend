@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom"
 import signUpImage from "/candidateSignUp.png";
-import Navbar from "../../components/welcome_page/Navbar"
 import {useForm, SubmitHandler } from "react-hook-form"
 import { signup } from "../../api/interviewerApi";
 import toast from "react-hot-toast";
+import Navbar from "../../components/welcome_page/Navbar";
+import { Button } from "@material-tailwind/react";
 
 interface IFormInput {
   name: string, 
@@ -48,11 +49,11 @@ const InterviewerSignUp = () => {
 
         <div className="lg:w-1/2 xl:w-5/12 p-6  sm:p-12">
           <div className=" flex flex-col items-center">
-            <div className="text-center">
-              <h1 className="text-2xl xl:text-4xl font-extrabold text-[#142057]">
+            <div className="text-center ">
+              <h1 className="text-2xl  xl:text-3xl font-extrabold text-[#142057]">
                 Interviewer Sign up
               </h1>
-              <p className="text-[12px] text-gray-500">
+              <p className="text-[12px]  text-gray-500">
                 Hey enter your details to create your account
               </p>
             </div>

@@ -51,8 +51,57 @@ export const verifyLogin = async (email: string, password: string) => {
     try {
         const response = await Api.post(interviewerEndpoint.verifyLogin, {email, password})
         console.log("response: ", response);
-        return response
-    } catch (error) {
-        console.log(error)
+        return response.data
+    } catch (error: any) {
+        console.log("ERIRIR", error.response)
+        return error.response.data
     }
 }
+
+interface InterviewerDetails {
+    yearsOfExperience: string;
+    currentDesignation: string;
+    organisation: string;
+    collegeUniversity: string;
+    introduction: string;
+    profilePicture: File[];
+    salarySlip: File[];
+    resume: File[];
+}
+
+export const verifyDetails = async (interviewerDetails: InterviewerDetails) => {
+    try {
+
+        const formData = new FormData();
+        for (const key in interviewerDetails) {
+            if (interviewerDetails.hasOwnProperty(key)) {
+                const value = interviewerDetails[key as keyof InterviewerDetails];
+                if (key === 'profilePicture' || key === 'salarySlip' || key === 'resume') {
+                    // formData.append(key, interviewerDetails[key][0]);
+                    formData.append(key, (value as File[])[0]);
+
+                } else {
+                    // formData.append(key, interviewerDetails[key] );
+                    formData.append(key, value as string);
+                }
+            }
+        }
+        // const response = await Api.post(interviewerEndpoint.verifyDetails, {interviewerDetails})
+
+        const response = await Api.post(interviewerEndpoint.verifyDetails, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        console.log(response);
+        return response.data
+    } catch (error) {
+        console.log("Error in verifying details: ", error)
+    }
+}
+
+
+export const logout = async () => {
+    const response = await Api.post(interviewerEndpoint.logout)
+    return response.data
+}  
