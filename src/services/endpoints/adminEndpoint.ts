@@ -4,10 +4,13 @@ const adminEndpoint = {
     blockCandidate: '/admin/block-candidate',
     addStack: '/admin/add-stack',
     getStacks: '/admin/stacks-list',
+    unlistStack: '/admin/unlist-stack',
     getInterviewers: '/admin/interviewers-list',
     getInterviewerDetails: '/admin/interviewer',
     approveInterviewer: 'admin/approve-interviewer',
-    logout: 'admin/logout'
+    logout: 'admin/logout',
+
+
 }
 
 export default adminEndpoint

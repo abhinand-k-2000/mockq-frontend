@@ -12,7 +12,7 @@ interface InterviewerData {
   mobile: string;
   name: string;
   organisation: string;
-  password: string;
+  // password: string;
   profilePicture: string;
   resume: string;
   salarySlip: string;

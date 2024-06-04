@@ -94,4 +94,16 @@ export const logout = async () => {
     } catch (error) {
         console.log(error)
     }
+}    
+
+
+export const unlistStack = async (stackId: string) => {
+    try {
+        console.log(adminEndpoint.unlistStack+`/${stackId}`)
+        const response = await Api.put(adminEndpoint.unlistStack + `/${stackId}`)
+        console.log("resp: ", response)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
 }
