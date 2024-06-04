@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { resendOtp, verifyOtp } from "../../api/interviewerApi";
 
 const InterviewerOtp = () => {
-  const [counter, setCounter] = useState(5);
+  const [counter, setCounter] = useState(30);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const InterviewerOtp = () => {
   };
 
   const handleResendOtp = async () => {
-    setCounter(5);
+    setCounter(30);
     const response = await resendOtp();
 
     if (response?.data.success) {

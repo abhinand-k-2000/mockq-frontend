@@ -2,11 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "../components/admin/Layout";
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboard from "../pages/admin/AdminDashboard";
-import Candidates from "../components/admin/Candidates";
-import Stacks from "../components/admin/Stacks";
-import AddStack from "../components/admin/AddStack";
-import Interviewers from "../components/admin/Interviewers";
-import SingleInterviewerDetails from "../components/admin/SingleInterviewerDetails";
+import Candidates from "../pages/admin/Candidates";
+import Stacks from "../pages/admin/Stacks";
+import AddStack from "../pages/admin/AddStack";
+import Interviewers from "../pages/admin/Interviewers";
+import SingleInterviewerDetails from "../pages/admin/SingleInterviewerDetails";
 import AdminLoggedIn from "../components/admin/AdminLoggedIn";
 
 const AdminRoute = () => {

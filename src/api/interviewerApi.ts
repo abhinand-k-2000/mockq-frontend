@@ -53,7 +53,6 @@ export const verifyLogin = async (email: string, password: string) => {
         console.log("response: ", response);
         return response.data
     } catch (error: any) {
-        console.log("ERIRIR", error.response)
         return error.response.data
     }
 }

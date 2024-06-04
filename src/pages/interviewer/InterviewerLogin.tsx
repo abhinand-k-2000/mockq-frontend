@@ -27,6 +27,7 @@ const InterviewerLogin = () => {
     const response = await verifyLogin(email, password);
 
     if (!response.success) {
+      console.log("response: ", response)
       toast.error(response.message);
     }
 
@@ -58,7 +59,7 @@ const InterviewerLogin = () => {
             </p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mt-4">
+              <div  className="mt-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Email Address
                 </label>

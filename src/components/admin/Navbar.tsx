@@ -19,10 +19,10 @@ const handleLogout = async () => {
 
   return (
 
-    <nav className="bg-blue-800 p-4 ">
+    <nav className="bg-blue-800 p-6 ">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between">
-          <div className="text-white font-bold text-xl">MockQ</div>
+        <div className="flex items-center justify-end">
+          {/* <div className="text-white font-bold text-xl">MockQ</div> */}
           <div className="text-white font-medium">
             <button onClick={handleLogout} className="font-bold cursor-pointer">Logout</button>
           </div>

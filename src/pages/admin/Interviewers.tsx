@@ -36,10 +36,8 @@ const Interviewers = () => {
   const fetchInterviewers = async () => {
     const interviewersList = await getInterviewers();
     setInterviewers(interviewersList.data);
-    console.log("inte: ", interviewers);
   };
 
-  const handleInterviewerDetails = async (id: string) => {};
 
   useEffect(() => {
     fetchInterviewers();
@@ -124,7 +122,7 @@ const Interviewers = () => {
                             ? "px-6 py-4 text-sm text-green-600 whitespace-nowrap"
                             : "px-6 py-4 text-sm text-red-600 whitespace-nowrap"
                         } `}
-                      >
+                      > 
                         {interviewer.isApproved ? "Approved" : "Not Approved"}
                       </td>
 
@@ -136,7 +134,7 @@ const Interviewers = () => {
                         </button>
                         </Link>
 
-                        <button
+                        {/* <button
                           //   onClick={
                           //     () => handleOpenModal(candidate)
                           //     // handleBlock(candidate._id, candidate.isBlocked)
@@ -148,7 +146,7 @@ const Interviewers = () => {
                           }`}
                         >
                           {interviewer.isBlocked ? "Unblock" : "Block"}
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   ))}
