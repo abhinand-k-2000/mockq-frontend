@@ -30,7 +30,7 @@ const InterviewerDetails = () => {
     const response = await verifyDetails(data)
     console.log("response in component: ", response)
     if(response){
-      toast.success("Profile verification successfull!")
+      toast.success("Profile information added")
       navigate('/interviewer/home')
     }else {
       toast.error("Something went wrong")

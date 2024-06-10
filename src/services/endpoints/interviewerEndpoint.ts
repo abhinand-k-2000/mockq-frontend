@@ -5,8 +5,12 @@ const interviewerEndpoint = {
     verifyLogin: '/interviewer/verify-login',
     resendOtp: '/interviewer/resend-otp',
     verifyDetails: '/interviewer/verify-details',
+    logout: 'interviewer/logout',
 
-    logout: 'interviewer/logout'
+    homeDetails: '/interviewer/home',
+    addSlot: '/interviewer/add-slot',
+    getSlots: '/interviewer/get-slots'
+
 }
 
 export default interviewerEndpoint
