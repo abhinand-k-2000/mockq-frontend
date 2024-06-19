@@ -9,7 +9,7 @@ interface Stack {
   }
 
 const StackSelection = ({onSelectStack}: any) => {
-    console.log('child')
+    console.log('Inside stack selection')
 
     const [stacks, setStacks] = useState<Stack[]>([]);
   const [search, setSearch] = useState('')

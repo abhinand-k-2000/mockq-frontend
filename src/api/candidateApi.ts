@@ -86,3 +86,21 @@ export const home = async () => {
         console.log(error)
     }
 }
+
+export const getInterviewersByTech = async (tech: string) => {
+    try {
+        const response = await Api.get(candidateEndpoint.getInterviewersByTech, {params: {tech}})
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getInterviewerSlotDetails = async (interviewerId: string) => {
+    try {
+        const response = await Api.get(candidateEndpoint.getInterviewerSlotDetails + `/${interviewerId}`);
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}

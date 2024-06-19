@@ -1,6 +1,7 @@
 import  { useEffect, useState } from "react";
 import { home } from "../../api/candidateApi";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import toast from "react-hot-toast";
 
 interface Stack {
     stackName: string;
@@ -12,6 +13,9 @@ const TechnologySelection = ({
   onSelectTech,
   onSelectStack,
 }: any) => {
+
+  console.log('Inside tech selection')
+
 
   const [techs, setTechs] = useState<string[]>([]);
   const [searchWord, setSearchWord] = useState("")
@@ -25,15 +29,21 @@ const TechnologySelection = ({
       const stack = response.data.stacks.find(
         (item: Stack) => item.stackName === selectedStack
       );
+      console.log("stack: ", stack)
+      if(stack.length === 0){
+        toast.error("No interviewers!")
+        return
+      }
       setTechs(stack.technologies);
     } catch (error) {
+      toast.error("No interviewers!")
       console.error("Error fetching stacks:", error);
     }
   };
 
   useEffect(() => {
     fetchAllStacks();
-  }, []);
+  }, [selectedStack]);
   return (
     <>
       <div className="flex justify-center items-center px-16 py-20 bg-[#D9E9FF] max-md:px-5">
@@ -62,7 +72,7 @@ const TechnologySelection = ({
               {filteredTechs.map((tech, index) => (
                 <div
                   key={index}
-                  //   onClick={()=> onSelectStack(tech)}
+                    onClick={()=> onSelectTech(tech)}
                   className={`bg-[#142057] cursor-pointer flex justify-center items-center px-6 rounded-md h-[133px] w-[133px] text-white text-base font-semibold`}
                 >
                   {tech}

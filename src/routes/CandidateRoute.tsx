@@ -4,6 +4,8 @@ import CandidateSignUp from "../pages/candidate/CandidateSignUp"
 import CandidateOtp from "../pages/candidate/CandidateOtp"
 import CandidateHome from "../pages/candidate/CandidateHome"
 import CandidateLoggedIn from "../components/candidate/CandidateLoggedIn"
+import InterviewerAndSlotDetails from "../pages/candidate/InterviewerAndSlotDetails"
+import Account from "../pages/candidate/Account"
 
 const CandidateRoute = () => {
   return (  
@@ -15,6 +17,8 @@ const CandidateRoute = () => {
 
         <Route path="" element={<CandidateLoggedIn/>}>
         <Route path="home" element={<CandidateHome/>} />
+        <Route path="interviewer-slot-details/:interviewerId" element={<InterviewerAndSlotDetails />} />
+        <Route path="account" element={<Account />} />
 
         </Route>
     </Routes>

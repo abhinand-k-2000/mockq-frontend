@@ -1,18 +1,17 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "react-time-picker/dist/TimePicker.css";
 import { addSlot } from "../../api/interviewerApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-interface Slot {
+interface Slot { 
   date: Date,
   description: string,
   price: number,
   timeFrom: Date,
   timeTo: Date,
-  title: string,
+  title: string,  
   status: 'open' | 'booked'
 }
 
@@ -79,6 +78,7 @@ const AddSlot = () => {
                   onChange={field.onChange}
                   className="w-full p-2 border rounded-md focus:border-blue-500"
                   placeholderText="Select date"
+                  minDate={new Date()}
                 />
               )}
             />

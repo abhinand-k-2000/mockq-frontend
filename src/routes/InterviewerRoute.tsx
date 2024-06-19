@@ -9,6 +9,7 @@ import InterviewerSidebar from '../components/interviewer/InterviewerSidebar'
 import InterviewerLayout from '../components/interviewer/InterviewerLayout'
 import AddSlot from '../pages/interviewer/AddSlot'
 import SlotsList from '../pages/interviewer/SlotsList'
+import ApprovalPending from '../pages/interviewer/ApprovalPending'
 
 
 const InterviewerRoute = () => {
@@ -22,6 +23,15 @@ const InterviewerRoute = () => {
 
         <Route path='' element={<InterviewerLoggedIn/>}>
 
+        {/* <Route
+          path=""
+          element={
+            <ProtectedRoute>
+              <InterviewerLoggedIn />
+            </ProtectedRoute>
+          }
+        > */}
+
         {/* <Route path='home' element={<InterviewerHome/>} /> */}
 
         <Route path='home' element={<InterviewerLayout><InterviewerHome/></InterviewerLayout>} />
@@ -32,6 +42,12 @@ const InterviewerRoute = () => {
         <Route path='slots-list' element={<InterviewerLayout><SlotsList/></InterviewerLayout>} />
 
         <Route path='details' element={<InterviewerDetails/>} />
+
+
+
+        {/* </Route> */}
+
+        <Route path='approval-pending' element={<InterviewerLayout><ApprovalPending/></InterviewerLayout>} />
 
 
         </Route>
