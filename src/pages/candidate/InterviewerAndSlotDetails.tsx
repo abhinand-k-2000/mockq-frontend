@@ -11,9 +11,11 @@ interface Schedule {
     price: number;
     description: string;
     status: string;
+    technologies: string[]
   }
   
   interface Slot {
+    _id: string
     date: string;
     schedule: Schedule;
   }
@@ -37,7 +39,6 @@ const InterviewerAndSlotDetails = () => {
 
   const {selectedTech} = location.state || {}  // Retrieving selected tech from state
 
-  console.log("+++++++++++++++++++++++++++++++", selectedTech)
 
   const [interviewer, setInterviewer] = useState<IInterviewer>();
   const [slots, setSlots] = useState<ISlotsProps>();
@@ -103,7 +104,7 @@ const InterviewerAndSlotDetails = () => {
             </thead>
             {/* {slots && ( */}
               <tbody>
-                {slots && slots.map((slot, index) => (
+                {slots && slots.map((slot, index: number) => (
                   <React.Fragment key={slot._id+index}>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <th
