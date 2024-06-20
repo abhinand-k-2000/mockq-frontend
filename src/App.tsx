@@ -23,7 +23,6 @@ function App() {
           <Route path='/interviewer/*' element={<InterviewerRoute/>} />
         </Routes>
       </Router>
-      
     </>
   )
 }

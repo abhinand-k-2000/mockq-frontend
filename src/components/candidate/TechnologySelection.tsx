@@ -30,10 +30,12 @@ const TechnologySelection = ({
         (item: Stack) => item.stackName === selectedStack
       );
       console.log("stack: ", stack)
+
       if(stack.length === 0){
         toast.error("No interviewers!")
         return
       }
+      
       setTechs(stack.technologies);
     } catch (error) {
       toast.error("No interviewers!")

@@ -18,7 +18,7 @@ const InterviewerSelection = ({
 }: any) => {
   console.log("inside interviewerSelection: ", selectedTech);
   const [interviewers, setInterviewers] = useState<Interviewer[]>([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const fetchInterviewersByTech = async (tech: string) => {
     const response = await getInterviewersByTech(tech);
@@ -43,8 +43,6 @@ const InterviewerSelection = ({
         <div className="flex gap-2 items-start py-5 mt-5 text-base  rounded-md text-black text-opacity-70 max-md:flex-wrap">
           <div className="flex-auto max-md:max-w-full">
             <input
-              // value={searchWord}
-              // onChange={(e)=> setSearchWord(e.target.value)}
               type="text"
               placeholder="Search by technologies"
               className="bg-[#D9E9FF] placeholder-opacity-50  placeholder-blue-gray-500 p-2 w-full rounded-md text-sm"
@@ -62,18 +60,20 @@ const InterviewerSelection = ({
               {interviewers.map((interviewer, index) => (
                 <div
                   key={index}
-                //   onClick={()=> onSelectInterviewer(interviewer._id)}
-                onClick={()=> navigate(`/candidate/interviewer-slot-details/${interviewer._id}`)}
-
+                  onClick={() =>
+                    navigate(
+                      `/candidate/interviewer-slot-details/${interviewer._id}`, {state: {selectedTech}}  // passing the selected tech to the other page
+                    )
+                  }
                   className="bg-[#D9E9FF] cursor-pointer p-4 rounded-md shadow-lg hover:bg-[#BCD8FF] transition duration-300 ease-in-out w-full"
                 >
                   <div className="flex flex-row items-start space-x-4">
                     {/* Image on the left */}
-                    <img 
+                    <img
                       src={interviewer.profilePicture}
                       alt={interviewer.name}
                       className="w-16 h-16 "
-                    />  
+                    />
                     {/* Name and Introduction on the right */}
                     <div className="text-white text-base font-semibold">
                       <h3 className="text-[#142057]">{interviewer.name}</h3>

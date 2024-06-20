@@ -29,7 +29,6 @@ const CandidateHome = () => {
 
   const handleSelectInterviewer = (interviewer: any) => {
     setSelectedInterviewer(interviewer);
-    console.log("Inside handle select interviewer", selectedInterviewer)
   }
 
   return (

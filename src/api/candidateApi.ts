@@ -96,11 +96,17 @@ export const getInterviewersByTech = async (tech: string) => {
     }
 }
 
-export const getInterviewerSlotDetails = async (interviewerId: string) => {
+export const getInterviewerSlotDetails = async (interviewerId: string, techName: string) => {
     try {
-        const response = await Api.get(candidateEndpoint.getInterviewerSlotDetails + `/${interviewerId}`);
+        const response = await Api.get(candidateEndpoint.getInterviewerSlotDetails + `/${interviewerId}`, {
+            params: {techName}
+        });
         return response.data
     } catch (error) {
         console.log(error)
     }
 }
+
+
+
+  

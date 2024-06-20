@@ -10,6 +10,7 @@ interface Schedule {
   price: number;
   description: string;
   status: 'open' | 'booked';
+  technologies: string[];
 }
 
 interface Slot {
@@ -96,7 +97,10 @@ const SlotsList = () => {
                 To
               </th>
               <th scope="col" className="px-6 py-3">
-                Title
+                Domain
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Technologies
               </th>
               <th scope="col" className="px-6 py-3">
                 Price
@@ -153,6 +157,8 @@ const SlotsList = () => {
                         {schedule.title}
                       </a>
                     </td>
+                    {/* <td className="px-6 font-semibold py-4">{schedule.technologies.join(', ')}</td> */}
+                    <td className="px-6 font-semibold py-4">{schedule.technologies.map(item => item.toUpperCase()).join(', ')}</td>
                     <td className="px-6 py-4">{schedule.price}</td>
                     <td className="px-6 py-4">{schedule.description}</td>
                     <td className={`px-6 py-4`}>{schedule.status}</td>

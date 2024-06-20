@@ -1,54 +1,89 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addSlot } from "../../api/interviewerApi";
+import { addSlot, getDomains } from "../../api/interviewerApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import Select from "react-select";
 
-interface Slot { 
-  date: Date,
-  description: string,
-  price: number,
-  timeFrom: Date,
-  timeTo: Date,
-  title: string,  
-  status: 'open' | 'booked'
+interface Options {
+  value: string;
+  label: string;
+}
+
+interface Domain {
+  _id: string;
+  stackName: string;
+  technologies: string[];
+  isListed: boolean;
+}
+
+interface Slot {
+  date: Date;
+  description: string;
+  technologies: Options[];
+  price: number;
+  timeFrom: Date;
+  timeTo: Date;
+  title: string;
+  status: "open" | "booked";
 }
 
 const AddSlot = () => {
+  const [domainsList, setDomainsList] = useState<Domain[]>([]);
+  const [technologies, setTechnologies] = useState<Options[]>([]);
+
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
+    trigger
   } = useForm<Slot>({
-    defaultValues: {
-      // date: null,
-      // timeFrom: "",
-      // // timeTo: "",
-      // title: "",
-      // description: "",
-      // price: "",
-    },
+    defaultValues: {},
   });
+
+  const fetchDomainList = async () => {
+    const response = await getDomains();
+    setDomainsList(response.data);
+  };
+
+  const handleDomainChange =async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedDomain = e.target.value
+    const domainFullData = domainsList.filter(
+      (stack) => stack.stackName === selectedDomain);
+    const options: Options[] = domainFullData[0]?.technologies.map((item) => ({
+      value: item,
+      label: item,
+    })) || [];
+    setTechnologies(options);
+    setValue("technologies", [])
+    setValue("title", selectedDomain)
+    await trigger("title")
+    console.log("domain full data: ", technologies);
+  };
+
+  useEffect(() => {
+    fetchDomainList();
+  }, []);
 
   const onSubmit: SubmitHandler<Slot> = async (data: Slot) => {
     console.log("htmlForm Data:", data);
 
     const date = new Date(data.date);
-    console.log('date form data: ', date)
-    const dateString = date.toLocaleDateString('en-CA');
-    
+    const dateString = date.toLocaleDateString("en-CA");
+
     const timeFrom = new Date(`${dateString}T${data.timeFrom}:00+05:30`);
     const timeTo = new Date(`${dateString}T${data.timeTo}:00+05:30`);
 
     data.timeFrom = timeFrom;
-    data.timeTo = timeTo
+    data.timeTo = timeTo;
 
-
-    if(timeFrom > timeTo) {
+    if (timeFrom > timeTo) {
       toast.error("End time must be later than start time.");
       return; // Exit early if end time is earlier than start time
     }
@@ -135,17 +170,56 @@ const AddSlot = () => {
           </div>
 
           <div className="col-span-2">
-            <label className="block text-gray-700">Title</label>
-            <input
-              type="text"
-              {...register("title", { required: "Title is required" })}
-              className="w-full p-2 border rounded-md focus:border-blue-500"
-            />
+            <label
+              htmlFor="countries"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Select the domain
+            </label>
+            <select
+              {...register("title", { required: "Doamin is required" })}
+              defaultValue=""
+              onChange={handleDomainChange}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              <option value="" disabled>
+                Choose a domain
+              </option>
+              {domainsList &&
+                domainsList.map((domain: Domain) => (
+                  <option key={domain._id} value={domain.stackName}>
+                    {domain.stackName}
+                  </option>
+                ))}
+            </select>
             {errors.title && (
               <p className="mt-1 text-red-500 text-xs">
                 {errors.title.message}
               </p>
             )}
+          </div>
+
+          <div className="col-span-2">
+            <label className="block text-gray-700">Technologies</label>
+            {technologies && (
+          <Controller
+            name="technologies"
+            control={control}
+            rules={{ required: "At least one technology is required" }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                isMulti
+                options={technologies}
+              />
+            )}
+          />
+        )}
+        {errors.technologies && (
+          <p className="mt-1 text-red-500 text-xs">
+            {errors.technologies.message}
+          </p>
+        )}
           </div>
 
           <div className="col-span-2">

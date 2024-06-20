@@ -9,7 +9,8 @@ const interviewerEndpoint = {
 
     homeDetails: '/interviewer/home',
     addSlot: '/interviewer/add-slot',
-    getSlots: '/interviewer/get-slots'
+    getSlots: '/interviewer/get-slots',
+    getDomains: '/interviewer/get-domains'
 
 }
 

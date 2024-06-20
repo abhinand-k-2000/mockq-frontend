@@ -131,6 +131,11 @@ export const homeDetails = async () => {
   return response.data;
 };
 
+interface Technologies {
+  value: string;
+  label: string;
+}
+
 interface SlotData {
   description: string;
   timeFrom: Date;
@@ -139,21 +144,33 @@ interface SlotData {
   status: "open" | "booked";
   price: number;
   date: Date | null;
+  technologies: Technologies[]
+  
 }
 
 export const addSlot = async (slotData: SlotData) => {
-  //   const {description, timeFrom, timeTo, title, price, date } = slotData;
   try {
     const response = await Api.post(interviewerEndpoint.addSlot, { slotData });
     return response.data;
   } catch (error: any) {
-    return error.response.data 
+    return error.response.data;
   }
-
 };
 
 export const getSlotsList = async () => {
+  try {
     const response = await Api.get(interviewerEndpoint.getSlots);
-    console.log("inside api: ", response)
-    return response.data
-}
+    return response.data;
+  } catch (error: any) {
+    return error.response.data
+  }
+};
+
+export const getDomains = async () => {
+  try {
+    const response = await Api.get(interviewerEndpoint.getDomains);
+    return response.data;
+  } catch (error: any) {
+    return error.response.data;
+  }
+};

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CandidateNavbar from "../../components/candidate/CandidateNavbar";
 import { getInterviewerSlotDetails } from "../../api/candidateApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
 interface Schedule {
@@ -33,12 +33,17 @@ interface IInterviewer {
 const InterviewerAndSlotDetails = () => {
   const { interviewerId } = useParams();
   const navigate = useNavigate()
+  const location = useLocation();
+
+  const {selectedTech} = location.state || {}  // Retrieving selected tech from state
+
+  console.log("+++++++++++++++++++++++++++++++", selectedTech)
 
   const [interviewer, setInterviewer] = useState<IInterviewer>();
   const [slots, setSlots] = useState<ISlotsProps>();
 
-  const fetchInterviewerSlotDetails = async (interviewerId: string) => {
-    const response = await getInterviewerSlotDetails(interviewerId);
+  const fetchInterviewerSlotDetails = async (interviewerId: string, techName: string) => {
+    const response = await getInterviewerSlotDetails(interviewerId, techName);
     setInterviewer(response.data.details.interviewerDetails);
     setSlots(response.data.details.interviewSlotDetails);
 
@@ -46,7 +51,7 @@ const InterviewerAndSlotDetails = () => {
 
   useEffect(() => {
     if (interviewerId) {
-      fetchInterviewerSlotDetails(interviewerId);
+      fetchInterviewerSlotDetails(interviewerId, selectedTech);
     }
   }, []);
 
@@ -77,7 +82,10 @@ const InterviewerAndSlotDetails = () => {
                   To
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Title
+                  Domain
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Technologies
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Price
@@ -141,6 +149,7 @@ const InterviewerAndSlotDetails = () => {
                           {slot.slots.schedule.title}
                         </a>
                       </td>
+                      <td className="px-6 py-4">{slot.slots.schedule.technologies.map((item: any) => item.toUpperCase()).join(', ')}</td>
                       <td className="px-6 py-4">{slot.slots.schedule.price}</td>
                       <td className="px-6 py-4">
                         {slot.slots.schedule.description}
