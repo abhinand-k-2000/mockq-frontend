@@ -8,7 +8,12 @@ const candidateEndpoint = {
     home: '/candidate/home',
 
     getInterviewersByTech: '/candidate/get-interviewers',
-    getInterviewerSlotDetails: '/candidate//get-interviewer-slots-details'
+    getInterviewerSlotDetails: '/candidate/get-interviewer-slots-details',
+
+    makePayment: '/payment/create-payment',
+    bookSlot: '/candidate/book-slot',
+    getScheduledInterviews: '/candidate/get-scheduled-interviews'
+
 }
 
 

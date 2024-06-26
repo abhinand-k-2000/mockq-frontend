@@ -27,28 +27,27 @@ const CandidateHome = () => {
     setSelectedInterviewer(null)
   }
 
-  const handleSelectInterviewer = (interviewer: any) => {
-    setSelectedInterviewer(interviewer);
-  }
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <CandidateNavbar />
-
-    {
-      !selectedStack ? (
-        <StackSelection onSelectStack={handleSelectStack} />
-
-      ) : !selectedTech ? (
-        <TechnologySelection selectedStack={selectedStack} onSelectTech={handleSelectTech} onSelectStack={handleSelectStack}/>
-      ) : (
-        <InterviewerSelection selectedTech={selectedTech} onSelectInterviewer={handleSelectInterviewer} onSelectTech={handleSelectTech}/>
-      )
-    }
-
-
-      
-    </>
+      <div className="flex-grow">
+        {!selectedStack ? (
+          <StackSelection onSelectStack={handleSelectStack} />
+        ) : !selectedTech ? (
+          <TechnologySelection
+            selectedStack={selectedStack}
+            onSelectTech={handleSelectTech}
+            onSelectStack={handleSelectStack}
+          />
+        ) : (
+          <InterviewerSelection
+            selectedTech={selectedTech}
+            onSelectTech={handleSelectTech}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

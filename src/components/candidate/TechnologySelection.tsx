@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import { home } from "../../api/candidateApi";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import toast from "react-hot-toast";
+import { FaArrowLeft, FaSearch } from "react-icons/fa";
 
 interface Stack {
     stackName: string;
@@ -47,44 +48,46 @@ const TechnologySelection = ({
     fetchAllStacks();
   }, [selectedStack]);
   return (
-    <>
-      <div className="flex justify-center items-center px-16 py-20 bg-[#D9E9FF] max-md:px-5">
-        <div className="flex flex-col px-20 py-7 mt-24 max-w-full bg-[#EEF5FF] rounded-md w-[736px] max-md:px-5 max-md:mt-10">
-          <div className=" flex space-x-5  ml-9 text-5xl font-semibold text-[#142057] max-md:max-w-full max-md:text-4xl">
-            <FaArrowLeftLong
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
+      <div className="w-1/2 bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div className="px-6 py-8 sm:p-10">
+          <div className="flex items-center mb-8">
+            <button 
               onClick={() => onSelectStack("")}
-              className="cursor-pointer"
+              className="mr-4 p-2 rounded-full bg-[#D9E9FF] text-indigo-600 hover:bg-[#BCD8FF] transition duration-300"
+            >
+              <FaArrowLeft className="text-xl" />
+            </button>
+            <h1 className="text-4xl sm:text-5xl font-bold text-indigo-900">
+              {selectedStack}
+            </h1>
+          </div>
+          
+          <div className="relative mb-8">
+            <input
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+              type="text"
+              placeholder="Search by technologies"
+              className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
             />
-            <h1>{selectedStack}</h1>
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
-          <div className="flex gap-2 items-start py-5 mt-5 text-base  rounded-md text-black text-opacity-70 max-md:flex-wrap">
-            <div className="flex-auto max-md:max-w-full">
-              <input
-                value={searchWord}
-                onChange={(e)=> setSearchWord(e.target.value)}
-                type="text"
-                placeholder="Search by technologies"
-                className="bg-[#D9E9FF] placeholder-opacity-50  placeholder-blue-gray-500 p-2 w-full rounded-md text-sm"
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-center w-full mt-8 max-w-full">
-            <div className="grid grid-cols-3 gap-6 max-md:grid-cols-1">
-              {filteredTechs.map((tech, index) => (
-                <div
-                  key={index}
-                    onClick={()=> onSelectTech(tech)}
-                  className={`bg-[#142057] cursor-pointer flex justify-center items-center px-6 rounded-md h-[133px] w-[133px] text-white text-base font-semibold`}
-                >
-                  {tech}
-                </div>
-              ))}
-            </div>
+  
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+            {filteredTechs.map((tech, index) => (
+              <button
+                key={index}
+                onClick={() => onSelectTech(tech)}
+                className="bg-gradient-to-r from-[#1D2B6B] to-[#142057] hover:from-[#2A3F7E] hover:to-[#0A102E] text-white font-semibold py-4 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D2B6B]"
+              >
+                {tech}
+              </button>
+            ))}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -107,6 +107,24 @@ export const getInterviewerSlotDetails = async (interviewerId: string, techName:
     }
 }
 
+export const makePayment = async (data: any)=> {
+    try {
+        const response = await Api.post(candidateEndpoint.makePayment, {data})
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const getScheduledIinterviews = async () => {
+    try {
+        const response = await Api.get(candidateEndpoint.getScheduledInterviews)
+        return response.data
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
   

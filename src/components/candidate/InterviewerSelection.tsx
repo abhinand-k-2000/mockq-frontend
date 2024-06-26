@@ -1,91 +1,118 @@
-import { useEffect, useState } from "react";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { getInterviewersByTech } from "../../api/candidateApi";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaArrowLeft, FaSearch, FaUser, FaExclamationCircle } from "react-icons/fa";
+import { getInterviewersByTech } from "../../api/candidateApi";
 
 interface Interviewer {
   _id: string;
   name: string;
-  image: string;
   introduction: string;
   profilePicture: string;
 }
 
-const InterviewerSelection = ({
+interface InterviewerSelectionProps {
+  selectedTech: string;
+  onSelectTech: (tech: string) => void;
+}
+
+const InterviewerSelection: React.FC<InterviewerSelectionProps> = ({
   selectedTech,
-  onSelectInterviewer,
   onSelectTech,
-}: any) => {
-  console.log("inside interviewerSelection: ", selectedTech);
+  
+}) => {
   const [interviewers, setInterviewers] = useState<Interviewer[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const navigate = useNavigate();
 
-  const fetchInterviewersByTech = async (tech: string) => {
-    const response = await getInterviewersByTech(tech);
-    setInterviewers(response.data.interviewersList);
-    console.log("inteviwersList: ", interviewers);
-  };
-
   useEffect(() => {
-    fetchInterviewersByTech(selectedTech);
-  }, []);
+    const fetchInterviewersByTech = async () => {
+      try {
+        const response = await getInterviewersByTech(selectedTech);
+        setInterviewers(response.data.interviewersList);
+      } catch (error) {
+        console.error("Error fetching interviewers:", error);
+      }
+    };
 
-  return (
-    <div className="flex justify-center items-center px-16 py-20 bg-[#D9E9FF] max-md:px-5">
-      <div className="flex flex-col px-20 py-7 mt-24 max-w-full bg-[#EEF5FF] rounded-md w-[736px] max-md:px-5 max-md:mt-10">
-        <div className=" flex space-x-5  ml-9 text-4xl font-semibold text-[#142057] max-md:max-w-full max-md:text-4xl">
-          <FaArrowLeftLong
-            onClick={() => onSelectTech("")}
-            className="cursor-pointer"
+    fetchInterviewersByTech();
+  }, [selectedTech]);
+
+  const filteredInterviewers = interviewers.filter(interviewer =>
+    interviewer.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const InterviewerCard: React.FC<{ interviewer: Interviewer }> = ({ interviewer }) => (
+    <div
+      onClick={() => navigate(`/candidate/interviewer-slot-details/${interviewer._id}`, { state: { selectedTech } })}
+      className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out cursor-pointer overflow-hidden border-1 border-[#142057] group"
+    >
+      <div className="flex items-center p-4 space-x-4">
+        {interviewer.profilePicture ? (
+          <img
+            src={interviewer.profilePicture}
+            alt={interviewer.name}
+            className="w-16 h-16 rounded-full object-cover border-1 border-[#142057] group-hover:border-[#EEF5FF] transition duration-300"
           />
-          <h1>Interviewers for {selectedTech}</h1>
+        ) : (
+          <div className="w-16 h-16 rounded-full bg-[#EEF5FF] flex items-center justify-center border-2 border-[#142057] group-hover:bg-[#142057] group-hover:text-[#EEF5FF] transition duration-300">
+            <FaUser className="text-2xl" />
+          </div>
+        )}
+        <div className="flex-grow">
+          <h3 className="text-lg font-semibold text-[#142057]  transition duration-300">{interviewer.name}</h3>
+          <p className="text-sm text-[#2A3F7E]  line-clamp-2 transition duration-300">{interviewer.introduction}</p>
         </div>
-        <div className="flex gap-2 items-start py-5 mt-5 text-base  rounded-md text-black text-opacity-70 max-md:flex-wrap">
-          <div className="flex-auto max-md:max-w-full">
+        <FaArrowLeft className="transform rotate-180 text-[#142057]  transition duration-300" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#142057] to-[#1D2B6B] opacity-0 group-hover:opacity-100 transition duration-300 -z-10"></div>
+    </div>
+  );
+
+  const NoInterviewers: React.FC = () => (
+    <div className="flex flex-col items-center justify-center py-16 bg-white rounded-lg shadow-md">
+      <FaExclamationCircle className="text-6xl text-[#142057] mb-4" />
+      <p className="text-xl font-medium text-[#142057]">No interviewers registered</p>
+      <p className="text-sm text-[#2A3F7E] mt-2">Check back later for available interviewers</p>
+    </div>
+  );
+
+  
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
+      <div className="w-1/2 bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div className="px-6 py-8 sm:p-10">
+          <div className="flex items-center mb-8">
+            <button 
+              onClick={() => onSelectTech("")}
+              className="mr-4 p-2 rounded-full bg-[#D9E9FF] text-indigo-600 hover:bg-[#BCD8FF] transition duration-300"
+            >
+              <FaArrowLeft className="text-xl" />
+            </button>
+            <h1 className="text-4xl sm:text-5xl font-bold text-indigo-900">
+              Interviewers for {selectedTech}
+            </h1>
+          </div>
+          
+          <div className="relative mb-8">
             <input
               type="text"
-              placeholder="Search by technologies"
-              className="bg-[#D9E9FF] placeholder-opacity-50  placeholder-blue-gray-500 p-2 w-full rounded-md text-sm"
+              placeholder="Search interviewers"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition duration-200"
             />
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
-        </div>
-
-        <div className="flex justify-center w-full mt-8 max-w-full">
-          {!interviewers.length ? (
-            <p className="font-medium text-red-600">
-              No interivewers Registered
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 max-md:grid-cols-1">
-              {interviewers.map((interviewer, index) => (
-                <div
-                  key={index}
-                  onClick={() =>
-                    navigate(
-                      `/candidate/interviewer-slot-details/${interviewer._id}`, {state: {selectedTech}}  // passing the selected tech to the other page
-                    )
-                  }
-                  className="bg-[#D9E9FF] cursor-pointer p-4 rounded-md shadow-lg hover:bg-[#BCD8FF] transition duration-300 ease-in-out w-full"
-                >
-                  <div className="flex flex-row items-start space-x-4">
-                    {/* Image on the left */}
-                    <img
-                      src={interviewer.profilePicture}
-                      alt={interviewer.name}
-                      className="w-16 h-16 "
-                    />
-                    {/* Name and Introduction on the right */}
-                    <div className="text-white text-base font-semibold">
-                      <h3 className="text-[#142057]">{interviewer.name}</h3>
-                      <p className="text-[#142057] font-normal text-sm">
-                        {interviewer.introduction}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+  
+          <div className="space-y-6">
+            {filteredInterviewers.length ? (
+              filteredInterviewers.map((interviewer) => (
+                <InterviewerCard key={interviewer._id} interviewer={interviewer} />
+              ))
+            ) : (
+              <NoInterviewers />
+            )}
+          </div>
         </div>
       </div>
     </div>
