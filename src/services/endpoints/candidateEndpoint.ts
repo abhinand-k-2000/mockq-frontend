@@ -12,7 +12,9 @@ const candidateEndpoint = {
 
     makePayment: '/payment/create-payment',
     bookSlot: '/candidate/book-slot',
-    getScheduledInterviews: '/candidate/get-scheduled-interviews'
+    getScheduledInterviews: '/candidate/get-scheduled-interviews',
+    forgorPassword: '/candidate/forgot-password',
+    resetPassword: '/candidate/reset-password'
 
 }
 

@@ -2,6 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSlotsList } from "../../api/interviewerApi";
 import { MdOutlineEdit } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+
+const ApprovalPopup = ({ onClose }: { onClose: () => void }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-xl">
+      <h2 className="text-xl font-bold mb-4">Not Approved</h2>
+      <p className="mb-4">You are not approved by the admin to add slots.</p>
+      <button 
+        onClick={onClose}
+        className="bg-[#142057] text-white py-2 px-4 ml-auto block rounded-md"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+);
 
 interface Schedule {
   from: string;
@@ -26,6 +43,21 @@ interface Slot {
 const SlotsList = () => {
   const navigate = useNavigate();
   const [slotsList, setSlotsList] = useState<Slot[]>([]);
+  const [showPopUp, setShowPopUp] = useState(false)
+
+  const interviewerInfo = useSelector((state: RootState) => state.auth.interviewerInfo);
+
+
+  const handleAddSlot = () => {
+    console.log(interviewerInfo);
+    if (!interviewerInfo || !interviewerInfo.isApproved) {
+      setShowPopUp(true)
+      // alert("You are not approved by the admin");
+      return;
+    }
+    navigate("/interviewer/add-slot");
+  };
+  
 
   const fetchInterviewSlotsList = async () => {
     const response = await getSlotsList();
@@ -40,13 +72,17 @@ const SlotsList = () => {
 
   return (
     <>
+
+    {
+      showPopUp && <ApprovalPopup onClose={() => setShowPopUp(false)}/>
+    }
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className=" shadow-md flex flex-col space-y-2 rounded-md p-10 ">
           <h1 className="text-3xl font-semibold">Interviews List</h1>
           <p>See information about all interviews</p>
           <div className="text-end">
             <button
-              onClick={() => navigate("/interviewer/add-slot")}
+              onClick={handleAddSlot}
               className="bg-[#142057]  text-white py-3 px-4 rounded-md"
             >
               Add Slot

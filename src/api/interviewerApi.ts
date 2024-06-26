@@ -174,3 +174,33 @@ export const getDomains = async () => {
     return error.response.data;
   }
 };
+
+export const forgorPassword = async (email: string) => {
+  try {
+    const response = await Api.post(interviewerEndpoint.ForgotPassword, {email})
+    localStorage.setItem("intResetPassword", response.data.data);
+    return response.data
+  } catch (error: any) {
+    console.log(error)
+    return error.response.data
+  }
+}
+
+
+export const resetPassword = async (otp: string, password: string) => {
+  try {
+      const token = localStorage.getItem("intResetPassword")
+      const response = await Api.post(interviewerEndpoint.resetPassword, {otp, password}, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      })
+      if(response.data.success){
+          localStorage.removeItem("intResetPassword")
+      }
+      return response.data
+  } catch (error: any) {
+      console.log("inseide catch in api: ", error.response.data)
+      return error.response.data
+  }
+}

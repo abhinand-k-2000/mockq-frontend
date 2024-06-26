@@ -1,3 +1,4 @@
+import ForgotPassword from "../../pages/candidate/ForgotPassword"
 
 const interviewerEndpoint = {
     interviewerSignUp: '/interviewer/verify-email',
@@ -10,7 +11,10 @@ const interviewerEndpoint = {
     homeDetails: '/interviewer/home',
     addSlot: '/interviewer/add-slot',
     getSlots: '/interviewer/get-slots',
-    getDomains: '/interviewer/get-domains'
+    getDomains: '/interviewer/get-domains',
+
+    ForgotPassword: '/interviewer/forgot-password',
+    resetPassword: '/interviewer/reset-password'
 
 }
 

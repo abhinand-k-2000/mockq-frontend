@@ -24,164 +24,136 @@ const InterviewerDetails = () => {
   } = useForm<IFormInput>();
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-
-    
-
     const response = await verifyDetails(data)
-    console.log("response in component: ", response)
     if(response){
       toast.success("Profile information added")
       navigate('/interviewer/home')
     }else {
       toast.error("Something went wrong")
     }
-    console.log(data);
   };
 
   return (
     <>
       <InterviewerNavbar />
 
-      <div className="min-h-screen flex items-center justify-center bg-[#D9E9FF]  py-32">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-2xl">
-            <h1 className="text-2xl font-semibold mb-6">
-              Great, Let's configure your profile
-            </h1>
-            <p className="mb-6">
-              You are recommended to fill out this information which will be
-              used for your profile verification
+      <div className="min-h-screen flex items-center justify-center bg-[#D9E9FF] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl w-full space-y-8 bg-white shadow-2xl rounded-3xl p-10">
+          <div className="text-center">
+            <h2 className="mt-6 text-4xl font-extrabold text-[#142057]">
+              Configure Your Profile
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Please fill out the information below for profile verification
             </p>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700">
-                  Years Of Experience
-                </label>
-                <input
-                  type="tel"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                  placeholder="How many years of experience do you have working in the industry?"
-                  {...register("yearsOfExperience", {
-                    required: true,
-                    pattern: /^\d+$/,
-                  })}
-                />
-                {errors.yearsOfExperience && (
-                  <span className="text-red-500">
-                    This field is required and should be a number
-                  </span>
-                )}
-              </div>
-              <div className="flex space-x-4">
-                <div className="w-1/2">
-                  <label className="block text-gray-700">
-                    Current Designation
-                  </label>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="years-of-experience" className="sr-only">Years Of Experience</label>
                   <input
+                    id="years-of-experience"
+                    type="tel"
+                    {...register("yearsOfExperience", { required: true, pattern: /^\d+$/ })}
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Years of Experience"
+                  />
+                  {errors.yearsOfExperience && <p className="mt-2 text-sm text-red-600">This field is required and should be a number</p>}
+                </div>
+                <div>
+                  <label htmlFor="current-designation" className="sr-only">Current Designation</label>
+                  <input
+                    id="current-designation"
                     type="text"
-                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                    placeholder="Current Designation"
                     {...register("currentDesignation", { required: true })}
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Current Designation"
                   />
-                  {errors.currentDesignation && (
-                    <span className="text-red-500">This field is required</span>
-                  )}
+                  {errors.currentDesignation && <p className="mt-2 text-sm text-red-600">This field is required</p>}
                 </div>
-                <div className="w-1/2">
-                  <label className="block text-gray-700">Organisation</label>
+                <div>
+                  <label htmlFor="organisation" className="sr-only">Organisation</label>
                   <input
+                    id="organisation"
                     type="text"
-                    className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                    placeholder="Organisation"
                     {...register("organisation", { required: true })}
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="Organisation"
                   />
-                  {errors.organisation && (
-                    <span className="text-red-500">This field is required</span>
-                  )}
+                  {errors.organisation && <p className="mt-2 text-sm text-red-600">This field is required</p>}
+                </div>
+                <div>
+                  <label htmlFor="college-university" className="sr-only">College / University</label>
+                  <input
+                    id="college-university"
+                    type="text"
+                    {...register("collegeUniversity", { required: true })}
+                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    placeholder="College / University"
+                  />
+                  {errors.collegeUniversity && <p className="mt-2 text-sm text-red-600">This field is required</p>}
                 </div>
               </div>
-              <div>
-                <label className="block text-gray-700">
-                  College / University
-                </label>
-                <input
-                  type="text"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                  placeholder="Eg. University of Mumbai"
-                  {...register("collegeUniversity", { required: true })}
-                />
-                {errors.collegeUniversity && (
-                  <span className="text-red-500">This field is required</span>
-                )}
-              </div>
-              <div>
-                <label className="block text-gray-700">Introduction</label>
-                <input
-                  type="text"
-                  className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-                  placeholder="Write a one line introduction with"
+              <div >
+                <label htmlFor="introduction" className="sr-only ">Introduction</label>
+                <textarea
+                  id="introduction"
                   {...register("introduction", { required: true })}
+                  rows={3}
+                  className="appearance-none mt-5 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Write a brief introduction"
                 />
-                {errors.introduction && (
-                  <span className="text-red-500">This field is required</span>
-                )}
+                {errors.introduction && <p className="mt-2 text-sm text-red-600">This field is required</p>}
               </div>
             </div>
 
-            <div className="mt-6 space-y-10 ">
-              <div className="space-y-1 ">
-                <label className="block text-gray-700">Upload Your Image</label>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+              <div>
+                <label htmlFor="profile-picture" className="block text-sm font-medium text-gray-700">Profile Picture</label>
                 <input
+                  id="profile-picture"
                   type="file"
                   {...register("profilePicture", { required: true })}
-                  className=""
+                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
-                {errors.profilePicture && (
-                  <span className="text-red-500">This field is required</span>
-                )}
+                {errors.profilePicture && <p className="mt-2 text-sm text-red-600">This field is required</p>}
               </div>
-
-              <div className="space-y-1">
-                <label className="block text-gray-700">
-                  Upload Your Salary Slip
-                </label>
+              <div>
+                <label htmlFor="salary-slip" className="block text-sm font-medium text-gray-700">Salary Slip</label>
                 <input
+                  id="salary-slip"
                   type="file"
                   {...register("salarySlip", { required: true })}
-                  className=""
+                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
-                {errors.salarySlip && (
-                  <span className="text-red-500">This field is required</span>
-                )}
+                {errors.salarySlip && <p className="mt-2 text-sm text-red-600">This field is required</p>}
               </div>
-
-              <div className="space-y-1">
-                <label className="block text-gray-700">
-                  Upload Your Resume
-                </label>
+              <div>
+                <label htmlFor="resume" className="block text-sm font-medium text-gray-700">Resume</label>
                 <input
+                  id="resume"
                   type="file"
                   {...register("resume", { required: true })}
-                  className=""
+                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
-                {errors.resume && (
-                  <span className="text-red-500">This field is required</span>
-                )}
+                {errors.resume && <p className="mt-2 text-sm text-red-600">This field is required</p>}
               </div>
             </div>
 
-            <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700">
-              Save & Continue
-            </button>
-          </div>
-        </form>
+            <div>
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+              >
+                Save & Continue
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );
 };
 
 export default InterviewerDetails;
-
-
-

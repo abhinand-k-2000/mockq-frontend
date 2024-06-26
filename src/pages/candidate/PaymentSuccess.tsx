@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -51,10 +39,10 @@ const PaymentSuccess = () => {
           whileTap={{ scale: 0.95 }}
         >
           <Link 
-            to="/candidate/home" 
+            to="/candidate/outsourced-interviews" 
             className="inline-block px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-full transition duration-300 ease-in-out transform hover:shadow-lg"
           >
-            Back to Home
+            View Interviews
           </Link>
         </motion.div>
       </motion.div>

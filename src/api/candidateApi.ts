@@ -126,5 +126,34 @@ export const getScheduledIinterviews = async () => {
     }
 }
 
+export const forgorPassword = async(email: string) => {
+    try {
+        const response = await Api.post(candidateEndpoint.forgorPassword, {email})
+        console.log(response.data)
+        localStorage.setItem("resetPassword", response.data.data)
+        return response.data
+    } catch (error: any) {
+        console.log(error)
+        return error.response.data
+    }
+}
 
-  
+export const resetPassword = async (otp: string, password: string) => {
+    try {
+        const token = localStorage.getItem("resetPassword")
+        const response = await Api.post(candidateEndpoint.resetPassword, {otp, password}, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        if(response.data.success){
+            localStorage.removeItem("resetPassword")
+        }
+        return response.data
+    } catch (error: any) {
+        console.log("inseide catch in api: ", error.response.data)
+        return error.response.data
+    }
+}
+
+

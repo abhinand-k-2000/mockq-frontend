@@ -9,6 +9,7 @@ import Account from "../pages/candidate/Account"
 import PaymentSuccess from "../pages/candidate/PaymentSuccess"
 import OutsourcedInterviews from "../pages/candidate/OutsourcedInterviews"
 import PaymentFailed from "../pages/candidate/PaymentFailed"
+import ForgotPassword from "../pages/candidate/ForgotPassword"
 
 const CandidateRoute = () => {
   return (  
@@ -16,6 +17,7 @@ const CandidateRoute = () => {
         <Route path="sign-up" element={<CandidateSignUp/>} />
         <Route path="login" element={<CandidateLogin/>} />
         <Route path="otp" element={<CandidateOtp/>} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
 
 
         <Route path="" element={<CandidateLoggedIn/>}>

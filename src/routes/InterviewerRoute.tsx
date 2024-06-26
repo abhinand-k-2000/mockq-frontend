@@ -5,11 +5,12 @@ import InterviewerOtp from '../pages/interviewer/InterviewerOtp'
 import InterviewerHome from '../pages/interviewer/InterviewerHome'
 import InterviewerDetails from '../pages/interviewer/InterviewerDetails'
 import InterviewerLoggedIn from '../components/interviewer/InterviewerLoggedIn'
-import InterviewerSidebar from '../components/interviewer/InterviewerSidebar'
+// import InterviewerSidebar from '../components/interviewer/InterviewerSidebar'
 import InterviewerLayout from '../components/interviewer/InterviewerLayout'
 import AddSlot from '../pages/interviewer/AddSlot'
 import SlotsList from '../pages/interviewer/SlotsList'
 import ApprovalPending from '../pages/interviewer/ApprovalPending'
+import ForgotPassword from '../pages/interviewer/ForgotPassword'
 
 
 const InterviewerRoute = () => {
@@ -19,6 +20,7 @@ const InterviewerRoute = () => {
         <Route path='sign-up' element={<InterviewerSignUp />} />
         <Route path='login' element={<InterviewerLogin />} />
         <Route path='otp' element={<InterviewerOtp/> } />
+        <Route path='forgot-password' element={<ForgotPassword />} />
  
 
         <Route path='' element={<InterviewerLoggedIn/>}>

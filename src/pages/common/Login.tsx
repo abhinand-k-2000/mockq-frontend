@@ -1,35 +1,85 @@
+import React from "react";
 import Navbar from "../../components/welcome_page/Navbar";
 import { useNavigate } from "react-router-dom";
+import { FaUserTie, FaUserGraduate, FaArrowRight } from "react-icons/fa";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
-    <>
+    <div className="min-h-screen bg-[#D9E9FF]">
       <Navbar />
 
-      <div className="h-screen flex justify-evenly items-center bg-[#D9E9FF]">
-        {/* Card 1 */}
+      <div className="container mx-auto px-4 pt-24 pb-16">
+        <h1 className="text-3xl font-bold text-center text-[#142057] mb-16 leading-tight">
+          Elevate Your Career<br />Choose Your Path
+        </h1>
 
-        <div className="w-1/3  h-96 p-8 flex flex-col justify-center items-center text-center space-y-8 bg-[#EEF5FF] shadow-lg rounded-lg">
-            <div className="h-8 w-1/3 rounded-full bg-[#65CC6F] font-medium flex justify-center items-center ">Earn & Grow</div>
-          <h1 className="text-2xl text-[#142057] font-bold mb-4">Become an Interviewer</h1>
-          <p className="mb-4">
-            Join our community of freelance interviewers. Gain exposure beyond
-            your workspace and exercise the power of your knowledge and freedom
-          </p>   
-          <button onClick={()=> navigate("/interviewer/login")} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Login</button>
-        </div>  
+        <div className="flex flex-col lg:flex-row justify-center items-stretch gap-12">
+          <RoleCard
+            title="Become an Interviewer"
+            description="Join our elite community of freelance interviewers. Expand your horizons, share your expertise, and shape the future of tech talent."
+            icon={<FaUserTie className="text-6xl text-[#142057]" />}
+            badgeText="Earn & Grow"
+            badgeColor="bg-[#65CC6F]"
+            onClick={() => navigate("/interviewer/login")}
+            cardColor="bg-[#EEF5FF]"
+          />
 
-        {/* Card 2 */}
-        <div className="w-1/3 h-96 flex flex-col justify-center items-center p-8 text-center space-y-8 bg-[#EEF5FF] shadow-lg rounded-lg ml-4">
-        <div className="h-8 rounded-full w-1/3 bg-[#6CB8D1] font-medium flex justify-center items-center">Mock Interviews</div>
-
-          <h1 className="text-2xl text-[#142057] font-bold mb-4">For Candidates</h1>
-          <p className="mb-4">Get actionable feedback of your interview from industry experts</p>
-          <button onClick={()=> navigate("/candidate/login")} className="px-4  py-2 bg-blue-500 text-white rounded hover:bg-blue-700">Login</button>
+          <RoleCard
+            title="For Candidates"
+            description="Unlock your potential with expert-led mock interviews. Gain invaluable insights, boost your confidence, and ace your next tech interview."
+            icon={<FaUserGraduate className="text-6xl text-[#142057]" />}
+            badgeText="Mock Interviews"
+            badgeColor="bg-[#6CB8D1]"
+            onClick={() => navigate("/candidate/login")}
+            cardColor="bg-[#EEF5FF]"
+          />
         </div>
       </div>
-    </>
+    </div>
+  );
+};
+
+interface RoleCardProps {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  badgeText: string;
+  badgeColor: string;
+  onClick: () => void;
+  cardColor: string;
+}
+
+const RoleCard: React.FC<RoleCardProps> = ({
+  title,
+  description,
+  icon,
+  badgeText,
+  badgeColor,
+  onClick,
+  cardColor,
+}) => {
+  return (
+    <div className={`w-full lg:w-[450px] ${cardColor} rounded-3xl shadow-2xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-3xl`}>
+      <div className="p-10">
+        <div className="flex justify-between items-center mb-8">
+          {icon}
+          <span className={`${badgeColor} text-white text-sm font-bold px-4 py-2 rounded-full`}>
+            {badgeText}
+          </span>
+        </div>
+        <h2 className="text-3xl font-bold text-[#142057] mb-6">{title}</h2>
+        <p className="text-[#142057] text-lg mb-10 leading-relaxed">{description}</p>
+        <button
+          onClick={onClick}
+          className="w-full bg-[#142057] text-white py-4 rounded-full font-bold text-lg transition-all hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-[#142057] focus:ring-offset-2 group"
+        >
+          Login
+          <FaArrowRight className="inline ml-2 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+    </div>
   );
 };
 

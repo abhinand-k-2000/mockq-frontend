@@ -82,12 +82,12 @@ const CandidateLogin = () => {
                     Password is required
                   </p>
                 )}
-                <a
-                  href="#"
+                <Link
+                  to="/candidate/forgot-password"
                   className="text-xs text-gray-500 hover:text-gray-900 text-end w-full mt-2"
                 >
-                  Forget Password?
-                </a>
+                  Forgot Password?
+                </Link>
               </div>
 
               <div className="mt-8">

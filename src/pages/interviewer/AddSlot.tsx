@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import Select from "react-select";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface Options {
   value: string;
@@ -33,6 +35,8 @@ interface Slot {
 const AddSlot = () => {
   const [domainsList, setDomainsList] = useState<Domain[]>([]);
   const [technologies, setTechnologies] = useState<Options[]>([]);
+  const interviewerInfo = useSelector((state: RootState) => state.auth.interviewerInfo)
+
 
   const navigate = useNavigate();
 
@@ -54,6 +58,7 @@ const AddSlot = () => {
 
   const handleDomainChange =async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedDomain = e.target.value
+    
     const domainFullData = domainsList.filter(
       (stack) => stack.stackName === selectedDomain);
     const options: Options[] = domainFullData[0]?.technologies.map((item) => ({
@@ -68,6 +73,10 @@ const AddSlot = () => {
   };
 
   useEffect(() => {
+    if(interviewerInfo && !interviewerInfo.isApproved ) {
+      navigate('/interviewer/slots-list')
+      return
+    }
     fetchDomainList();
   }, []);
 
