@@ -9,6 +9,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 interface IScheduledInterview {
   _id: string;
@@ -21,41 +22,41 @@ interface IScheduledInterview {
   interviewerId: string;
   candidateId: string;
   status: string
+  roomId: string
 }
 
 const OutsourcedInterviews = () => {
+
+
   const [scheduledInterviews, setScheduledInterviews] = useState<IScheduledInterview[]>([]);
   const [openModal, setOpenModal] = useState(false)
   const [selectedInterview, setSelectedInterview] = useState<IScheduledInterview | undefined>(undefined)
+
+  const navigate = useNavigate()
 
   const fetchScheduledInterviews = async () => {
     const response = await getScheduledIinterviews();
     setScheduledInterviews(response.data);
   };
 
-  const formatDate = (isoDate: Date) => {
-    const dateObj = new Date(isoDate);
-    const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-    return dateObj.toLocaleDateString("en-US", options);
-  };
 
   const handleOpenModal = (interview: IScheduledInterview) => {
     setSelectedInterview(interview)
     setOpenModal(true)
     console.log(interview)
   }
-  const formatTime = (isoDate: Date) => {
-    const dateObj = new Date(isoDate);
-    let hours = dateObj.getUTCHours();
-    const minutes = dateObj.getUTCMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  const handleViewFeedback = (interviewId: string) => {
     
-    hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
-    const formattedHours = hours.toString().padStart(2, '0');
-    
-    return `${formattedHours}:${minutes} ${ampm}`;
-  };
+    navigate(`/candidate/feedback/${interviewId}`)
+  }
+
+
+
+  const handleJoinCall = () => {
+    navigate(`/room/${selectedInterview?.roomId}`)
+    // navigate(`/candidate/video-call/${selectedInterview?.roomId}`)
+  }
 
   useEffect(() => {
     fetchScheduledInterviews();
@@ -66,7 +67,7 @@ const OutsourcedInterviews = () => {
      {/*----------------------------------- Modal for block/unblock confirmation--------------------------------------------- */}
 
      <Dialog 
-  open={openModal} 
+  open={openModal}   
   handler={() => setOpenModal(false)} 
   className="max-w-xl mx-auto bg-white rounded-lg overflow-hidden shadow-xl transition-all duration-300 ease-in-out transform hover:scale-105"
 >
@@ -83,7 +84,11 @@ const OutsourcedInterviews = () => {
       </div>
       <div>
         <p className="text-sm text-gray-500">From</p>
-        <p className="text-lg font-semibold">{selectedInterview?.fromTime ? formatTime(selectedInterview.fromTime) : "Not specified"}</p>
+        {/* <p className="text-lg font-semibold">{selectedInterview?.fromTime ? formatTime(selectedInterview.fromTime) : "Not specified"}</p> */}
+        <p className="text-lg font-semibold">{new Date(selectedInterview?.fromTime!).toLocaleTimeString("en-US", {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}</p>
       </div>
     </div>
     
@@ -95,7 +100,10 @@ const OutsourcedInterviews = () => {
       </div>
       <div>
         <p className="text-sm text-gray-500">To</p>
-        <p className="text-lg font-semibold">{selectedInterview?.toTime ? formatTime(selectedInterview.toTime) : "Not specified"}</p>
+        <p className="text-lg font-semibold">{new Date(selectedInterview?.toTime!).toLocaleTimeString("en-US", {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}</p>
       </div>
     </div>
   </DialogBody>
@@ -105,14 +113,31 @@ const OutsourcedInterviews = () => {
     <p className="text-gray-700 leading-relaxed">{selectedInterview?.description}</p>
   </DialogBody>
   
-  <DialogFooter className="flex justify-center py-4 bg-white">
+  <DialogFooter className="flex justify-between  py-4 bg-white">
     <Button   
       color="green"
       onClick={() => setOpenModal(false)}
-      className="px-6 py-2 bg-gradient-to-r from-[#1B57F5] to-[#1442E1] text-white font-semibold rounded-full shadow-md hover:from-[#1736B6] hover:to-[#19328F] transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+      className="py-3 px-4 bg-red-400 text-white font-semibold  transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
     >
-      Ok
+      Cancel
     </Button>
+    <button
+                        onClick={() => handleJoinCall()}
+                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+                      >
+                        <svg
+                          className="h-5 w-5 inline-block mr-2"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path d="M15 10l4.55-4.55a1 1 0 00-1.41-1.41L13.5 8.5l-2-2a1 1 0 00-1.41 0L3 14.6l1.4 1.4 7-7 2 2 5.6-5.6L20.55 10H15z"></path>
+                        </svg>
+                        Join Call
+                      </button>
   </DialogFooter>
 </Dialog>
 
@@ -132,19 +157,19 @@ const OutsourcedInterviews = () => {
     <div className="p-1.5 w-full inline-block align-middle">
       <div className="overflow-hidden border rounded-lg shadow-lg bg-white">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
-            <tr>
-              {['ROLL NAME', 'SCHEDULED ON', 'PRICE', 'STATUS'].map((header) => (
-                <th
-                  key={header}
-                  scope="col"
-                  className="px-6 py-4 text-xs font-bold text-left text-white uppercase tracking-wider"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
+        <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
+  <tr>
+    {['ROLL NAME', 'SCHEDULED ON', 'PRICE', 'STATUS', ''].map((header) => (
+      <th
+        key={header}
+        scope="col"
+        className="px-6 py-4 text-xs font-bold text-left text-white uppercase tracking-wider"
+      >
+        {header}
+      </th>
+    ))}
+  </tr>
+</thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {scheduledInterviews.map((interview: IScheduledInterview) => (
               <tr 
@@ -156,7 +181,12 @@ const OutsourcedInterviews = () => {
                   {interview.title}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
-                  {formatDate(interview.date)}
+                  {/* {formatDate(interview.date)} */}
+                  {new Date(interview.date).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: 'numeric'
+                    })}
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
                   <div className="flex items-center">
@@ -173,6 +203,36 @@ const OutsourcedInterviews = () => {
                     {interview.status}
                   </span>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleViewFeedback(interview._id);
+          }}
+          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
+        >
+          View Feedback
+        </button>
+      </td>
+                {/* <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
+                      <button
+                        // onClick={() => handleJoinCall(interview)}
+                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
+                      >
+                        <svg
+                          className="h-5 w-5 inline-block mr-2"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path d="M15 10l4.55-4.55a1 1 0 00-1.41-1.41L13.5 8.5l-2-2a1 1 0 00-1.41 0L3 14.6l1.4 1.4 7-7 2 2 5.6-5.6L20.55 10H15z"></path>
+                        </svg>
+                        Join Call
+                      </button>
+                    </td> */}
               </tr>
             ))}
           </tbody>

@@ -204,3 +204,61 @@ export const resetPassword = async (otp: string, password: string) => {
       return error.response.data
   }
 }
+
+export const getSchedulesInterviews = async() => {
+  try {
+      const response = await Api.get(interviewerEndpoint.getSchedulesInterviews)
+      return response.data
+  } catch (error: any) {
+    return error.response.data
+  }
+}
+
+
+
+export const getInterviewerDetails = async() => {
+  try {
+    const response = await Api.get(interviewerEndpoint.getInterviewerDetails)
+    return response.data
+  } catch (error: any) {
+    console.log(error)
+    return error.response.data
+
+  }
+}
+
+
+export const getFeedbackDetails = async (interviewId: string) => {
+  try {
+    const {data} = await Api.get(interviewerEndpoint.getFeedbackDetails, {params: {interviewId}})
+    return data
+  } catch (error: any) {
+    console.log(error)
+    return error.response.data
+  }
+}
+
+interface IFeedbacK{
+  interviewId: string
+  interviewerId: string
+  candidateId: string
+  technicalSkills: string,
+  communicationSkills: string
+  problemSolvingSkills: string
+  strength: string
+  areaOfImprovement: string
+  additionalCommen: string
+
+}
+
+
+export const saveFeedback = async (fullDetails: IFeedbacK) => {
+  try {
+    const {data} = await Api.post(interviewerEndpoint.saveFeedbackDetails, {fullDetails})
+    return data
+  } catch (error: any) {
+    console.log(error)
+    return error.response.data
+  }
+}         
+  

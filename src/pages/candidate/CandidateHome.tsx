@@ -29,7 +29,7 @@ const CandidateHome = () => {
 
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen  ">
       <CandidateNavbar />
       <div className="flex-grow">
         {!selectedStack ? (

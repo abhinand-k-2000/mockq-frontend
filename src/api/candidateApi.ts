@@ -156,4 +156,16 @@ export const resetPassword = async (otp: string, password: string) => {
     }
 }
 
+export const getFeebackDetails = async (interviewId: string) => {
+    try {
+        console.log('id; ', interviewId)
+        const response = await Api.get(candidateEndpoint.getFeebackDetails, {params: {interviewId}})
+        console.log(response)
+        return response.data
+
+    } catch (error: any) {
+        console.log(error)
+        return error.response.data
+    }
+}
 

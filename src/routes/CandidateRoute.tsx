@@ -8,11 +8,13 @@ import InterviewerAndSlotDetails from "../pages/candidate/InterviewerAndSlotDeta
 import Account from "../pages/candidate/Account"
 import PaymentSuccess from "../pages/candidate/PaymentSuccess"
 import OutsourcedInterviews from "../pages/candidate/OutsourcedInterviews"
-import PaymentFailed from "../pages/candidate/PaymentFailed"
+import PaymentFailed from "../pages/candidate/PaymentFailed" 
 import ForgotPassword from "../pages/candidate/ForgotPassword"
+import CandidateFeedbackView from "../pages/candidate/CandidateFeedbackView"
 
 const CandidateRoute = () => {
   return (  
+    
     <Routes>
         <Route path="sign-up" element={<CandidateSignUp/>} />
         <Route path="login" element={<CandidateLogin/>} />
@@ -21,6 +23,10 @@ const CandidateRoute = () => {
 
 
         <Route path="" element={<CandidateLoggedIn/>}>
+        
+        <Route path="home" element={ <CandidateHome/>} />
+
+
         <Route path="home" element={<CandidateHome/>} />
         <Route path="interviewer-slot-details/:interviewerId" element={<InterviewerAndSlotDetails />} />
         <Route path="account" element={<Account />} />
@@ -29,6 +35,9 @@ const CandidateRoute = () => {
 
         <Route path="payment-success" element={<PaymentSuccess />} />
         <Route path="payment-failed" element={<PaymentFailed />} />
+
+
+        <Route path="feedback/:interviewId" element={<CandidateFeedbackView />} />
 
         </Route>
     </Routes>

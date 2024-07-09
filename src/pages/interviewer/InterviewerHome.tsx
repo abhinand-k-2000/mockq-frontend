@@ -22,6 +22,7 @@ const InterviewerHome = () => {
   }, []);
 
   return (
+    
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <h2 className="text-3xl font-bold p-6 bg-[#142057] text-white">

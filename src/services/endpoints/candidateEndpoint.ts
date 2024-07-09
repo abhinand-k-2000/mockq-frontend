@@ -14,7 +14,9 @@ const candidateEndpoint = {
     bookSlot: '/candidate/book-slot',
     getScheduledInterviews: '/candidate/get-scheduled-interviews',
     forgorPassword: '/candidate/forgot-password',
-    resetPassword: '/candidate/reset-password'
+    resetPassword: '/candidate/reset-password',
+
+    getFeebackDetails: '/candidate/get-feedback-details'
 
 }
 

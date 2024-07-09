@@ -5,6 +5,7 @@ import { interviewerLogout } from "../../redux/slice/authSlice";
 import { logout } from "../../api/adminApi";
 import { useState, useEffect } from "react";
 import { FiMenu, FiX, FiUser, FiCalendar, FiDollarSign, FiLogOut } from 'react-icons/fi';
+import { FaCheckToSlot } from "react-icons/fa6";
 
 const InterviewerSidebar = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,8 @@ const InterviewerSidebar = () => {
   const menuItems = [
     { path: "/interviewer/home", label: "Profile", icon: <FiUser /> },
     { path: "/interviewer/slots-list", label: "My Slots", icon: <FiCalendar /> },
-    { path: "/interviewer/payments", label: "Payments", icon: <FiDollarSign /> },
+    { path: "/interviewer/scheduled-interviews", label: "Scheduled", icon: <FaCheckToSlot/> },
+    { path: "/interviewer/payments", label: "Payments", icon:  <FiDollarSign />}
   ];
 
   return (

@@ -6,6 +6,7 @@ import SignUp from "./pages/common/SignUp"
 import Login from "./pages/common/Login"
 import CandidateRoute from "./routes/CandidateRoute"
 import InterviewerRoute from "./routes/InterviewerRoute"
+import Room from "./pages/common/Room"
 
 
 function App() {
@@ -17,6 +18,8 @@ function App() {
           <Route path="/" element={<Welcome/>} />
           <Route path="/sign-up" element={<SignUp/>} />
           <Route path="/login" element={<Login/>} />
+
+          <Route path="/room/:roomId" element={<Room />} />
 
           <Route path="/admin/*" element={<AdminRoute/>} />
           <Route path="/candidate/*" element={<CandidateRoute/>} />

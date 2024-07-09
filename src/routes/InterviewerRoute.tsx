@@ -11,6 +11,8 @@ import AddSlot from '../pages/interviewer/AddSlot'
 import SlotsList from '../pages/interviewer/SlotsList'
 import ApprovalPending from '../pages/interviewer/ApprovalPending'
 import ForgotPassword from '../pages/interviewer/ForgotPassword'
+import ScheduledInterviews from '../pages/interviewer/ScheduledInterviews'
+import FeedbackForm from '../pages/interviewer/FeedbackForm'
 
 
 const InterviewerRoute = () => {
@@ -43,7 +45,12 @@ const InterviewerRoute = () => {
 
         <Route path='slots-list' element={<InterviewerLayout><SlotsList/></InterviewerLayout>} />
 
+        <Route path='scheduled-interviews' element={<InterviewerLayout><ScheduledInterviews/></InterviewerLayout>} />
+
         <Route path='details' element={<InterviewerDetails/>} />
+
+
+        <Route path='feedback-form/:interviewId' element={<InterviewerLayout><FeedbackForm /></InterviewerLayout>} />
 
 
 
