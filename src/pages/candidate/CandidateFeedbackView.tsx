@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getFeebackDetails } from "../../api/candidateApi";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import CandidateNavbar from "../../components/candidate/CandidateNavbar";
 
 
 
@@ -47,7 +48,9 @@ const CandidateFeedbackView = () => {
 
   if (status === "error") {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <>
+        <CandidateNavbar />
+      <div className="flex items-center bg-[#EEF5FF] justify-center min-h-screen">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           <svg
             className="mx-auto h-16 w-16 text-red-500"
@@ -84,6 +87,7 @@ const CandidateFeedbackView = () => {
           </button>
         </div>
       </div>
+      </>
     );
   }
 
@@ -96,7 +100,16 @@ const CandidateFeedbackView = () => {
   )}`;
 
   return (
-    <div className="min-h-screen  flex items-center justify-center p-6">
+
+    <div className="flex flex-col min-h-screen">
+
+      <div className="sticky top-0 z-10" >
+
+    <CandidateNavbar />
+      </div>
+
+    
+    <div className=" flex-grow flex items-center justify-center p-28">
       <div className="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden transform hover:scale-102 transition-all duration-300">
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-pattern opacity-10"></div>
@@ -204,6 +217,7 @@ const CandidateFeedbackView = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -44,27 +44,37 @@ const InterviewerSelection: React.FC<InterviewerSelectionProps> = ({
   const InterviewerCard: React.FC<{ interviewer: Interviewer }> = ({ interviewer }) => (
     <div
       onClick={() => navigate(`/candidate/interviewer-slot-details/${interviewer._id}`, { state: { selectedTech } })}
-      className="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out cursor-pointer overflow-hidden border-1 border-[#142057] group"
+      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out cursor-pointer overflow-hidden border border-indigo-100 group"
     >
-      <div className="flex items-center p-4 space-x-4">
-        {interviewer.profilePicture ? (
-          <img
-            src={interviewer.profilePicture}
-            alt={interviewer.name}
-            className="w-16 h-16 rounded-full object-cover border-1 border-[#142057] group-hover:border-[#EEF5FF] transition duration-300"
-          />
-        ) : (
-          <div className="w-16 h-16 rounded-full bg-[#EEF5FF] flex items-center justify-center border-2 border-[#142057] group-hover:bg-[#142057] group-hover:text-[#EEF5FF] transition duration-300">
-            <FaUser className="text-2xl" />
-          </div>
-        )}
-        <div className="flex-grow">
-          <h3 className="text-lg font-semibold text-[#142057]  transition duration-300">{interviewer.name}</h3>
-          <p className="text-sm text-[#2A3F7E]  line-clamp-2 transition duration-300">{interviewer.introduction}</p>
+      <div className="flex items-center p-2 space-x-6">
+        <div className="flex-shrink-0">
+          {interviewer.profilePicture ? (
+            <img
+              src={interviewer.profilePicture}
+              alt={interviewer.name}
+              className="w-20 h-20 rounded-full  border-2 border-indigo-500 group-hover:border-indigo-600 transition duration-300 shadow-md"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-400 to-indigo-600 flex items-center justify-center border-2 border-indigo-500 group-hover:border-indigo-600 transition duration-300 shadow-md">
+              <FaUser className="text-3xl text-white" />
+            </div>
+          )}
         </div>
-        <FaArrowLeft className="transform rotate-180 text-[#142057]  transition duration-300" />
+        <div className="flex-grow">
+          <h3 className="text-xl font-semibold text-indigo-900 group-hover:text-indigo-700 transition duration-300">
+            {interviewer.name}
+          </h3>
+          <p className="text-sm text-indigo-700 mt-1 line-clamp-2 group-hover:text-indigo-600 transition duration-300">
+            {interviewer.introduction}
+          </p>
+        </div>
+        <div className="flex-shrink-0">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center ">
+            <FaArrowLeft className="transform rotate-180 " />
+          </div>
+        </div>
       </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#142057] to-[#1D2B6B] opacity-0 group-hover:opacity-100 transition duration-300 -z-10"></div>
+      {/* <div className="h-1 bg-gradient-to-r from-indigo-500 to-indigo-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div> */}
     </div>
   );
 
@@ -84,7 +94,7 @@ const InterviewerSelection: React.FC<InterviewerSelectionProps> = ({
           <div className="flex items-center mb-8">
             <button 
               onClick={() => onSelectTech("")}
-              className="mr-4 p-2 rounded-full bg-[#D9E9FF] text-indigo-600 hover:bg-[#BCD8FF] transition duration-300"
+              className="mr-4 p-2 rounded-full text-indigo-600 hover:bg-[#D9E9FF] transition duration-300"
             >
               <FaArrowLeft className="text-xl" />
             </button>

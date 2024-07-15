@@ -6,14 +6,14 @@ import confetti from 'canvas-confetti'
 const PaymentSuccess = () => {
   React.useEffect(() => {
     confetti({
-      particleCount: 100,
+      particleCount: 50,
       spread: 70,
       origin: { y: 0.6 }
     });
   }, []);
 
   return (
-    <div className="bg-gradient-to-br from-indigo-100 to-purple-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className=" min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <motion.div 
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -40,8 +40,8 @@ const PaymentSuccess = () => {
         >
           <Link 
             to="/candidate/outsourced-interviews" 
-            className="inline-block px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-full transition duration-300 ease-in-out transform hover:shadow-lg"
-          >
+            className="inline-block px-8 py-3 bg-[#19328F] text-white font-bold rounded-full transition duration-300 ease-in-out transform hover:shadow-lg"
+          >                            
             View Interviews
           </Link>
         </motion.div>

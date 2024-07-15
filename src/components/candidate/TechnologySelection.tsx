@@ -54,7 +54,7 @@ const TechnologySelection = ({
           <div className="flex items-center mb-8">
             <button 
               onClick={() => onSelectStack("")}
-              className="mr-4 p-2 rounded-full bg-[#D9E9FF] text-indigo-600 hover:bg-[#BCD8FF] transition duration-300"
+              className="mr-4 p-2 rounded-full text-indigo-600 hover:bg-[#D9E9FF] transition duration-300"
             >
               <FaArrowLeft className="text-xl" />
             </button>

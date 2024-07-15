@@ -8,6 +8,7 @@ import AddStack from "../pages/admin/AddStack";
 import Interviewers from "../pages/admin/Interviewers";
 import SingleInterviewerDetails from "../pages/admin/SingleInterviewerDetails";
 import AdminLoggedIn from "../components/admin/AdminLoggedIn";
+import Interviews from "../pages/admin/Interviews";
 
 const AdminRoute = () => {
   return (
@@ -28,6 +29,8 @@ const AdminRoute = () => {
       <Route path="add-stack" element={<Layout><AddStack/></Layout>} />
       <Route path="interviewers" element={<Layout><Interviewers/></Layout>} />
       <Route path="interviewer/:id" element={<Layout><><SingleInterviewerDetails/></></Layout>} />
+
+      <Route path="interviews" element={<Layout><Interviews /></Layout>} />
       </Route>
 
       

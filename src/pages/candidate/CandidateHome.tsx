@@ -13,7 +13,6 @@ const CandidateHome = () => {
   const [selectedTech, setSelectedTech] = useState<string>('')
   const [selectedInterviewer, setSelectedInterviewer] = useState(null)
 
-  console.log("HOME: ", selectedStack, selectedTech, selectedInterviewer)
 
 
   const handleSelectStack = (stack: string) => {      

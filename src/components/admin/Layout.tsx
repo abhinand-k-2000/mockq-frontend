@@ -22,12 +22,13 @@
 // export default Layout
 
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import { FiMenu } from 'react-icons/fi';
 
 const AdminLayout = ({ children }) => {
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

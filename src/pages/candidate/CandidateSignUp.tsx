@@ -6,6 +6,7 @@ import { signup } from "../../api/candidateApi";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 interface IFormInput {
   name: string;
@@ -146,49 +147,17 @@ const CandidateSignUp = () => {
                     )}
 
                     <button
+                      disabled={loading}
                       type="submit"
                       className="mt-5 tracking-wide font-semibold bg-[#142057] text-gray-100 w-full py-4 rounded-lg hover:bg-[#19328F] transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
                     >
                       {loading ? (
-                        <svg
-                          className="animate-spin h-5 w-5 mr-3 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647zM20 12c0-3.042-1.135-5.824-3-7.938l-3 2.647A7.962 7.962 0 0120 12h4zm-8 8c4.418 0 8-3.582 8-8h-4c0 2.216-.895 4.216-2.344 5.656l-2.312-2.312-1.406 1.406 2.312 2.312A7.963 7.963 0 0112 20zm-8-8h4c0-2.216.895-4.216 2.344-5.656l2.312 2.312 1.406-1.406-2.312-2.312A7.963 7.963 0 014 12z"
-                          ></path>
-                        </svg>
+                        <FaSpinner className="animate-spin mr-2" />
                       ) : (
-                        <>
-                          <svg
-                            className="w-6 h-6 -ml-2"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                            <circle cx="8.5" cy="7" r="4" />
-                            <path d="M20 8v6M23 11h-6" />
-                          </svg>
-                          <span className="ml-3">Sign Up</span>
-                        </>
+                        "Sign Up"
                       )}
-
                     </button>
+
                     <p className="mt-6 text-xs text-gray-600 text-center">
                       Already have an account?{" "}
                       <Link to="/candidate/login">

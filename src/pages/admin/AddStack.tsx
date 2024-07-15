@@ -84,7 +84,7 @@ const AddStack = () => {
             name="technologies"
             placeHolder="Enter technology and press enter"
             classNames={{
-              input: "w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out",
+              input: "w-full p-2 border border-gray-300 rounded-md  transition duration-300 ease-in-out",
               tag: "bg-blue-100 text-blue-800 rounded-full px-2 py-1 m-1 text-sm",
             }}
           />

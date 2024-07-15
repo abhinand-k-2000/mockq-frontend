@@ -169,3 +169,15 @@ export const getFeebackDetails = async (interviewId: string) => {
     }
 }
 
+
+export const isCandidatePremium = async () => {
+    try {
+        const response = await Api.get(candidateEndpoint.isCandidatePremium)
+        console.log(response);
+        return response.data
+    } catch (error: any) {
+        console.log(error)
+        return error.response.data
+    }
+}
+

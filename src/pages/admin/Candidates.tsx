@@ -9,6 +9,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 import { FiSearch, FiUser, FiMail, FiPhone, FiLock, FiUnlock } from "react-icons/fi";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 interface Candidate {
   _id: string;
@@ -16,7 +17,8 @@ interface Candidate {
   email: string;
   mobile: number;
   password: string;
-  isBlocked: boolean;
+  isBlocked: boolean;  
+  isPremium: boolean
 }
 
 const Candidates: React.FC = () => {
@@ -74,6 +76,8 @@ const Candidates: React.FC = () => {
     setSelectedCandidate(null);
   };
 
+  console.log(candidates)
+
   return (
     <div className="bg-gray-100 min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
@@ -100,6 +104,7 @@ const Candidates: React.FC = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mobile</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Premium</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
@@ -127,6 +132,15 @@ const Candidates: React.FC = () => {
                     <div className="flex items-center">
                       <FiPhone className="text-gray-400 mr-2" />
                       <div className="text-sm text-gray-900">{candidate.mobile}</div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4  whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="text-sm text-gray-900">
+                        
+                        {candidate.isPremium ? <FaCheck color="green" /> : <FaTimes color="red" />}
+
+                        </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

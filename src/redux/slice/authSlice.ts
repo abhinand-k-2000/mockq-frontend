@@ -7,6 +7,7 @@ const initialState = {
 } 
 
 
+
 const authSlice = createSlice({ 
     name: 'auth',
     initialState,
@@ -31,7 +32,7 @@ const authSlice = createSlice({
             state.adminInfo = action.payload
             localStorage.setItem("adminInfo", JSON.stringify(action.payload))
         },
-        adminLogout: (state) => {
+        adminLogout: (state) => { 
             state.adminInfo = null
             localStorage.removeItem("adminInfo")
         }

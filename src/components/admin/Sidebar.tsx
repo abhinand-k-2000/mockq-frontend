@@ -1,26 +1,9 @@
-// import { Link } from 'react-router-dom'
 
-// const Sidebar = () => {
-//   return (
-//     <aside className="bg-blue-800 text-white w-64">
-//     <div className="p-4 ">
-//       <h2 className="text-4xl font-bold mb-4 text-center p-1" >MockQ</h2>
-//       <ul className='mt-10 flex flex-col space-y-5'>
-//         <li className='bg-[#D9E9FF] text-black hover:bg-[#BCD8FF] shadow-lg rounded-lg text-center'><Link to="/admin/dashboard" className="block py-2">Home</Link></li>
-//         <li className='bg-[#D9E9FF] text-black hover:bg-[#BCD8FF] shadow-lg rounded-lg text-center'><Link to="/admin/candidates" className="block py-2">Candidates</Link></li>
-//         <li className='bg-[#D9E9FF] text-black hover:bg-[#BCD8FF] shadow-lg rounded-lg text-center'><Link to="/admin/interviewers" className="block py-2">Interviewers</Link></li>
-//         <li className='bg-[#D9E9FF] text-black hover:bg-[#BCD8FF] shadow-lg rounded-lg text-center'><Link to="/admin/stacks" className="block py-2">Stacks</Link></li>
-//       </ul>
-//     </div>
-//   </aside>
-//   )
-// }
-
-// export default Sidebar
 
 
 import { Link, useLocation } from 'react-router-dom';
 import { FiHome, FiUsers, FiUserCheck, FiLayers, FiX } from 'react-icons/fi';
+import { MdWork } from 'react-icons/md';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
@@ -30,6 +13,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { path: "/admin/candidates", label: "Candidates", icon: <FiUsers /> },
     { path: "/admin/interviewers", label: "Interviewers", icon: <FiUserCheck /> },
     { path: "/admin/stacks", label: "Stacks", icon: <FiLayers /> },
+    { path: "/admin/interviews", label: "Interviews", icon: <MdWork  /> },
   ];
 
   return (

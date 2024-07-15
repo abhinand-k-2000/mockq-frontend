@@ -61,10 +61,8 @@ const AddSlot = () => {
     
     const domainFullData = domainsList.filter(
       (stack) => stack.stackName === selectedDomain);
-    const options: Options[] = domainFullData[0]?.technologies.map((item) => ({
-      value: item,
-      label: item,
-    })) || [];
+    const options: Options[] = domainFullData[0]?.technologies.map((item) => ({value: item, label: item})) || [];
+
     setTechnologies(options);
     setValue("technologies", [])
     setValue("title", selectedDomain)
@@ -91,6 +89,14 @@ const AddSlot = () => {
 
     data.timeFrom = timeFrom;
     data.timeTo = timeTo;
+
+
+    const dateNow = new Date()
+    
+    if(timeFrom <= dateNow || timeTo <= dateNow){
+      toast.error("Please select a time later than the current time.")
+      return
+    }
 
     if (timeFrom > timeTo) {
       toast.error("End time must be later than start time.");

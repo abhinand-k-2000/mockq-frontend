@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { getSchedulesInterviews } from "../../api/interviewerApi";
 import { Link, useNavigate } from "react-router-dom";
-
+import { FaRegCheckCircle, FaRegClock } from "react-icons/fa";
+import { MdVideoCameraBack } from "react-icons/md";
 
 interface ScheduledInterview {
-    _id: string
-    date: Date;
-    fromTime: Date;
-    toTime: Date;
-    description: string;
-    title: string;
-    price: number;
-    interviewerId: string;
-    candidateId: string
-    status: string
-    roomId: string
+  _id: string;
+  date: Date;
+  fromTime: Date;
+  toTime: Date;
+  description: string;
+  title: string;
+  price: number;
+  interviewerId: string;
+  candidateId: string;
+  status: string;
+  roomId: string;
 }
 
-
 const ScheduledInterviews = () => {
-
-
-  const [scheduledInterviews, setScheduledInterviews] = useState<ScheduledInterview[]>([]);
-  const navigate = useNavigate()
+  const [scheduledInterviews, setScheduledInterviews] = useState<
+    ScheduledInterview[]
+  >([]);
+  const navigate = useNavigate();
 
   const fetchScheduledInterviews = async () => {
     const response = await getSchedulesInterviews();
@@ -31,10 +31,9 @@ const ScheduledInterviews = () => {
   console.log("scheduled: ", scheduledInterviews);
 
   const handleJoinCall = (roomId: string) => {
-
     // navigate(`/interviewer/video-call/${roomId}`)
-    navigate(`/room/${roomId}`)
-  }
+    navigate(`/room/${roomId}`);
+  };
 
   useEffect(() => {
     fetchScheduledInterviews();
@@ -85,73 +84,99 @@ const ScheduledInterviews = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Feedback
+                  Status
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Feedback
                 </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                ></th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {scheduledInterviews.map((interview, index) => (
-                <tr
-                  key={index}
-                  className="hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {new Date(interview.date).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(interview.fromTime).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(interview.toTime).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      {interview.title}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Link to={`/../interviewer/feedback-form/${interview._id}`} className="cursor-pointer underline text-blue-700">
-                      Add feedback
-                    </Link>
-                  </td>
-                  
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                      <button
-                        onClick={() => handleJoinCall(interview?.roomId)}
-                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
-                      >
-                        <svg
-                          className="h-5 w-5 inline-block mr-2"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M15 10l4.55-4.55a1 1 0 00-1.41-1.41L13.5 8.5l-2-2a1 1 0 00-1.41 0L3 14.6l1.4 1.4 7-7 2 2 5.6-5.6L20.55 10H15z"></path>
-                        </svg>
-                        Join Call
-                      </button>
-                    </td>
-                    
-                </tr>
-              ))}
-            </tbody>
+
+<tbody className="bg-white divide-y divide-gray-200">
+  {scheduledInterviews.map((interview, index) => (
+    <tr
+      key={index}
+      className="hover:bg-gray-50 transition-colors duration-200"
+    >
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-medium text-gray-900">
+          {new Date(interview.date).toLocaleDateString("en-US", {
+            day: "numeric",
+            month: "long",
+            year: "numeric"
+          })}
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="flex items-center text-sm text-gray-500">
+          <FaRegClock  className="h-5 w-5 mr-2 text-gray-400" />
+          {new Date(interview.fromTime).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+          {" - "}
+          {new Date(interview.toTime).toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span className="px-3 py-1 inline-flex text-sm font-medium rounded-full ">
+          {interview.title}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span
+          className={`px-3 py-1 inline-flex text-xs font-semibold rounded-full ${
+            interview.status === "Completed"
+              ? "bg-green-100 text-green-800"
+              : "bg-yellow-100 text-yellow-800"
+          }`}
+        >
+          {interview.status}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        {interview.status !== "Completed" ? (
+          <Link
+            to={`/../interviewer/feedback-form/${interview._id}`}
+            className="text-indigo-600 hover:text-indigo-900 font-medium transition duration-150 ease-in-out"
+          >
+            Add feedback
+          </Link>
+        ) : (
+          <span className="flex items-center text-green-600 font-medium">
+            <FaRegCheckCircle className="h-5 w-5 mr-1" />  
+            Feedback Added
+          </span>
+        )}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right">
+        {interview.status === "Completed" ? (
+          <span className="text-gray-500 font-medium">
+            Interview Completed
+          </span>
+        ) : (
+          <button
+            onClick={() => handleJoinCall(interview?.roomId)}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out"
+          >
+            <MdVideoCameraBack className="h-5 w-5 mr-2" />
+            Join Call
+          </button>
+        )}
+      </td>
+    </tr>
+  ))}
+</tbody>
           </table>
         </div>
       </div>

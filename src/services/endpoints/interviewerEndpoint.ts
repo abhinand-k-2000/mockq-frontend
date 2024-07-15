@@ -21,7 +21,9 @@ const interviewerEndpoint = {
 
     getFeedbackDetails: '/interviewer/get-scheduled-interview-by-id',
 
-    saveFeedbackDetails: '/interviewer/give-feedback'
+    saveFeedbackDetails: '/interviewer/give-feedback',
+
+    getPaymentDashboardDetails: '/interviewer/get-payment-dashboard'
 
 
 

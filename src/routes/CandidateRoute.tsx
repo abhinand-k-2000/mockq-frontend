@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import CandidateLogin from "../pages/candidate/CandidateLogin"
 import CandidateSignUp from "../pages/candidate/CandidateSignUp"
 import CandidateOtp from "../pages/candidate/CandidateOtp"
@@ -11,15 +11,32 @@ import OutsourcedInterviews from "../pages/candidate/OutsourcedInterviews"
 import PaymentFailed from "../pages/candidate/PaymentFailed" 
 import ForgotPassword from "../pages/candidate/ForgotPassword"
 import CandidateFeedbackView from "../pages/candidate/CandidateFeedbackView"
+import PremiumProtectedRoute from "../components/candidate/PremiumProtectedRoute"
+import { useSelector } from "react-redux"
+import { RootState } from "../redux/store"
+import { ReactNode } from "react"
+
+interface ProtectedRouteProps {
+  children: ReactNode;
+}
+
+const ProtectedRoute:React.FC<ProtectedRouteProps> = ({ children }) => {
+  const {candidateInfo} = useSelector((state: RootState) => state.auth);
+  return candidateInfo ? <Navigate to="/candidate/home" /> : children;
+};
+
+
 
 const CandidateRoute = () => {
+
+
   return (  
     
     <Routes>
-        <Route path="sign-up" element={<CandidateSignUp/>} />
-        <Route path="login" element={<CandidateLogin/>} />
-        <Route path="otp" element={<CandidateOtp/>} />
-        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="sign-up" element={<ProtectedRoute><CandidateSignUp/></ProtectedRoute>} />
+        <Route path="login" element={<ProtectedRoute><CandidateLogin/></ProtectedRoute>} />
+        <Route path="otp" element={<ProtectedRoute><CandidateOtp/></ProtectedRoute>} />
+        <Route path="forgot-password" element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
 
 
         <Route path="" element={<CandidateLoggedIn/>}>
@@ -27,7 +44,6 @@ const CandidateRoute = () => {
         <Route path="home" element={ <CandidateHome/>} />
 
 
-        <Route path="home" element={<CandidateHome/>} />
         <Route path="interviewer-slot-details/:interviewerId" element={<InterviewerAndSlotDetails />} />
         <Route path="account" element={<Account />} />
 
@@ -36,9 +52,10 @@ const CandidateRoute = () => {
         <Route path="payment-success" element={<PaymentSuccess />} />
         <Route path="payment-failed" element={<PaymentFailed />} />
 
-
         <Route path="feedback/:interviewId" element={<CandidateFeedbackView />} />
 
+        <Route path="community-chat" element={<PremiumProtectedRoute />} />
+ 
         </Route>
     </Routes>
   )

@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { verifyLogin } from "../../api/candidateApi";
 import toast from "react-hot-toast";
 import Navbar from "../../components/welcome_page/Navbar";
-import { UseDispatch, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { setCandidateCredentials } from "../../redux/slice/authSlice";
 
 interface IFormInput {
@@ -13,6 +13,7 @@ interface IFormInput {
 }
 
 const CandidateLogin = () => {
+  
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {

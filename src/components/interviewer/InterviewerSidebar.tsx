@@ -6,12 +6,24 @@ import { logout } from "../../api/adminApi";
 import { useState, useEffect } from "react";
 import { FiMenu, FiX, FiUser, FiCalendar, FiDollarSign, FiLogOut } from 'react-icons/fi';
 import { FaCheckToSlot } from "react-icons/fa6";
+import { getInterviewerDetails } from "../../api/interviewerApi";
 
 const InterviewerSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const [profilePicture, setProfilePicture]  = useState<string>("https://icon-library.com/images/generic-user-icon/generic-user-icon-13.jpg")
+
+
+  useEffect(() => {
+    const interviewerDetails = async () => {
+      const response = await getInterviewerDetails()
+      console.log('response', response)
+      setProfilePicture(response.data.profilePicture)
+    }
+    interviewerDetails();
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,9 +78,9 @@ const InterviewerSidebar = () => {
 
         <div className="mb-8">
           <img
-            src="https://www.creative-tim.com/learning-lab/tailwind-starter-kit/img/team-2-800x800.jpg"
+            src={profilePicture}
             alt="Profile"
-            className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+            className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
           />
         </div>
 

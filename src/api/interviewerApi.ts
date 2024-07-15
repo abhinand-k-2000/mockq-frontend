@@ -261,4 +261,14 @@ export const saveFeedback = async (fullDetails: IFeedbacK) => {
     return error.response.data
   }
 }         
+
+
+export const getPaymentDashboardDetails = async() => {
+  try {
+    const {data} = await Api.get(interviewerEndpoint.getPaymentDashboardDetails)
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
   

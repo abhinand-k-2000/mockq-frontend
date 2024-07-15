@@ -16,7 +16,9 @@ const candidateEndpoint = {
     forgorPassword: '/candidate/forgot-password',
     resetPassword: '/candidate/reset-password',
 
-    getFeebackDetails: '/candidate/get-feedback-details'
+    getFeebackDetails: '/candidate/get-feedback-details',
+
+    isCandidatePremium: '/candidate/is-premium',
 
 }
 
