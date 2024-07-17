@@ -20,6 +20,18 @@ const candidateEndpoint = {
 
     isCandidatePremium: '/candidate/is-premium',
 
+    getAllPremiumCandidates: '/candidate/get-all-premium-users',
+
+    createGroup: '/chat/group',
+
+    getAllChats: '/chat',
+
+    getAllMessages: '/chat/messages',
+
+    sendMessage: '/chat/send-message'
+
+
+
 }
 
 

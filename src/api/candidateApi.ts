@@ -173,7 +173,6 @@ export const getFeebackDetails = async (interviewId: string) => {
 export const isCandidatePremium = async () => {
     try {
         const response = await Api.get(candidateEndpoint.isCandidatePremium)
-        console.log(response);
         return response.data
     } catch (error: any) {
         console.log(error)
@@ -181,3 +180,49 @@ export const isCandidatePremium = async () => {
     }
 }
 
+export const getAllPremiumCandidates = async (search: string) => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getAllPremiumCandidates, {params: {search}})
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const createGroup = async (chatName: string, users: string[]) => { // types edited
+    try {
+        const {data} = await Api.post(candidateEndpoint.createGroup, {chatName, users})
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const getAllChats = async () => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getAllChats)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}           
+
+export const getAllMessages = async (chatId: string) => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getAllMessages + "/" + chatId);
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const saveMessage = async (content: string, chatId: string) => {
+    try {
+        const {data} = await Api.post(candidateEndpoint.sendMessage, {content, chatId})
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}

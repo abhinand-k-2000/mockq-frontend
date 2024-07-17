@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction } from  '@reduxjs/toolkit'
+import {createSlice } from  '@reduxjs/toolkit'
 
 const initialState = {
     candidateInfo: localStorage.getItem("candidateInfo") ? JSON.parse(localStorage.getItem('candidateInfo') as string) : null,

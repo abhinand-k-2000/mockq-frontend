@@ -1,30 +1,21 @@
-import {  useState } from 'react';
-import CandidateNavbar from '../../components/candidate/CandidateNavbar';
-import CheckoutForm from '../../components/candidate/CheckoutForm';
-import CommunityChat from './CommunityChat';
+import { useState } from "react";
+import CandidateNavbar from "../../components/candidate/CandidateNavbar";
+import CheckoutForm from "../../components/candidate/CheckoutForm";
+import CommunityChat from "./CommunityChat";
 
 const Subscribe = () => {
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
-  console.log('inside subscribe')
-
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-
-  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   const handleSubscriptionComplete = () => {
     setIsSubscribed(true);
     setIsCheckoutOpen(false);
   };
 
-
-  console.log('inside sub componentn: ', isSubscribed)
-  if(isSubscribed){
-    console.log("inside isSubscribed", isSubscribed)
-    return <CommunityChat />
+  if (isSubscribed) {
+    return <CommunityChat />;
   }
-
-
-
 
   const plans = [
     {
@@ -37,7 +28,8 @@ const Subscribe = () => {
         "Basic email support for technical issues.",
       ],
       cta: "Free",
-      ctaStyle: "text-indigo-600 cursor-not-allowed bg-white hover:bg-indigo-50  border border-indigo-600 ",
+      ctaStyle:
+        "text-indigo-600 cursor-not-allowed bg-white hover:bg-indigo-50  border border-indigo-600 ",
       icon: "🚀",
     },
     {
@@ -58,9 +50,11 @@ const Subscribe = () => {
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-[#D9E9FF] min-h-screen">
-
-    <CheckoutForm isOpen={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} onSubscriptionComplete={handleSubscriptionComplete} />
-
+      <CheckoutForm
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        onSubscriptionComplete={handleSubscriptionComplete}
+      />
 
       <CandidateNavbar />
 
@@ -87,24 +81,43 @@ const Subscribe = () => {
               )} */}
               <div className="flex items-center mb-2">
                 <span className="text-3xl mr-2">{plan.icon}</span>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900">{plan.name}</h3>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900">
+                  {plan.name}
+                </h3>
               </div>
               <p className="mb-8 flex items-baseline text-gray-900">
-                <span className="text-3xl font-extrabold tracking-tight">{plan.price}</span>
-                <span className="ml-1 text-2xl font-semibold text-gray-500">/year</span>
+                <span className="text-3xl font-extrabold tracking-tight">
+                  {plan.price}
+                </span>
+                <span className="ml-1 text-2xl font-semibold text-gray-500">
+                  /year
+                </span>
               </p>
               <p className="mb-4 text-lg text-gray-700">{plan.description}</p>
               <ul className="mb-6 space-y-2 text-sm text-gray-600">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-center">
-                    <svg className="h-4 w-4 mr-2 flex-shrink-0 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    <svg
+                      className="h-4 w-4 mr-2 flex-shrink-0 text-indigo-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                     <span>{feature}</span>
                   </li>
                 ))}
               </ul>
-              <button onClick={() => setIsCheckoutOpen(true)} className={`block w-full rounded-xl px-4 py-2 text-center text-lg font-semibold ${plan.ctaStyle}`}>
+              <button
+                onClick={() => setIsCheckoutOpen(true)}
+                className={`block w-full rounded-xl px-4 py-2 text-center text-lg font-semibold ${plan.ctaStyle}`}
+              >
                 {plan.cta}
               </button>
             </div>
@@ -116,4 +129,3 @@ const Subscribe = () => {
 };
 
 export default Subscribe;
-
