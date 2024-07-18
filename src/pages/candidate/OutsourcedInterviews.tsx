@@ -11,6 +11,8 @@ import {
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { FaRegClock } from "react-icons/fa";
+import InterviewerRatingModal from "../../components/candidate/InterviewerRatingModal";
+import toast from "react-hot-toast";
 
 interface IScheduledInterview {
   _id: string;
@@ -24,6 +26,7 @@ interface IScheduledInterview {
   candidateId: string;
   status: string;
   roomId: string;
+  interviewerRatingAdded: boolean
 }
 
 const OutsourcedInterviews = () => {
@@ -34,6 +37,15 @@ const OutsourcedInterviews = () => {
   const [selectedInterview, setSelectedInterview] = useState<
     IScheduledInterview | undefined
   >(undefined);
+
+  const [ratingModalOpen, setRatingModalOpen] = useState(false);
+
+  const handleRatingModalOpen = (interview: IScheduledInterview) => {
+    
+    setSelectedInterview(interview);
+      setRatingModalOpen(true);
+
+  };
 
   const navigate = useNavigate();
 
@@ -59,9 +71,16 @@ const OutsourcedInterviews = () => {
 
   useEffect(() => {
     fetchScheduledInterviews();
-  }, []);
+  }, [ratingModalOpen]);
   return (
     <>
+      {ratingModalOpen && (
+        <InterviewerRatingModal
+          open={ratingModalOpen}
+          onClose={() => setRatingModalOpen(false)}
+          interview={selectedInterview}
+        />
+      )}
       {/*----------------------------------- Modal for block/unblock confirmation--------------------------------------------- */}
 
       <Dialog
@@ -173,6 +192,7 @@ const OutsourcedInterviews = () => {
       {/*-----------------------------------End of Modal for block/unblock confirmation--------------------------------------------- */}
 
       <CandidateNavbar />
+
       <div className="min-h-screen flex flex-col bg-[#EEF5FF] p-24">
         <div className="max-w-7xl text-[#142057] mx-auto w-full">
           <h1 className="text-xl  font-bold mb-4">Outsourced Interviews</h1>
@@ -181,109 +201,127 @@ const OutsourcedInterviews = () => {
           </p>
 
           <div className="flex flex-col">
-            <div className="overflow-x-auto">
-              <div className="p-1.5 w-full inline-block align-middle">
-                <div className="overflow-hidden border rounded-lg shadow-lg bg-white">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
-                      <tr>
-                        {[
-                          "ROLL NAME",
-                          "SCHEDULED ON",
-                          "PRICE",
-                          "STATUS",
-                          "",
-                        ].map((header) => (
-                          <th
-                            key={header}
-                            scope="col"
-                            className="px-6 py-4 text-xs font-bold text-left text-white uppercase tracking-wider"
-                          >
-                            {header}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {scheduledInterviews.map(
-                        (interview: IScheduledInterview) => (
-                          <tr
-                            key={interview._id}
-                            className="hover:bg-gray-50 transition-colors duration-200 ease-in-out cursor-pointer"
-                            onClick={() => handleOpenModal(interview)}
-                          >
-                            <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
-                              {interview.title}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
-                              {/* {formatDate(interview.date)} */}
-                              {new Date(interview.date).toLocaleDateString(
-                                "en-US",
-                                {
-                                  day: "numeric",
-                                  month: "long",
-                                  year: "numeric",
-                                }
-                              )}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
-                              <div className="flex items-center">
-                                <MdOutlineCurrencyRupee className="text-green-500 mr-1" />
-                                <span>{interview.price}</span>
-                              </div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                              <span
-                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                  interview.status === "Completed"
-                                    ? "bg-green-100 text-green-800"
-                                    : interview.status === "Scheduled"
-                                    ? "bg-blue-100 text-blue-800"
-                                    : "bg-yellow-100 text-yellow-800"
-                                }`}
-                              >
-                                {interview.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleViewFeedback(interview._id);
-                                }}
-                                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md"
-                              >
-                                View Feedback
-                              </button>
-                            </td>
-                            {/* <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right">
-                      <button
-                        // onClick={() => handleJoinCall(interview)}
-                        className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md"
-                      >
-                        <svg
-                          className="h-5 w-5 inline-block mr-2"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M15 10l4.55-4.55a1 1 0 00-1.41-1.41L13.5 8.5l-2-2a1 1 0 00-1.41 0L3 14.6l1.4 1.4 7-7 2 2 5.6-5.6L20.55 10H15z"></path>
-                        </svg>
-                        Join Call
-                      </button>
-                    </td> */}
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="overflow-x-auto">
+    <div className="p-1.5 w-full inline-block align-middle">
+      <div className="overflow-hidden border rounded-lg shadow-lg bg-white">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
+            <tr>
+              {["ROLL NAME", "SCHEDULED ON", "PRICE", "STATUS", "", ""].map((header) => (
+                <th
+                  key={header}
+                  scope="col"
+                  className="px-6 py-5 text-sm font-bold text-left text-white uppercase tracking-wider"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {scheduledInterviews.map((interview: IScheduledInterview) => (
+              <tr
+                key={interview._id}
+                className="hover:bg-blue-50 transition-colors duration-200 ease-in-out cursor-pointer"
+                onClick={() => handleOpenModal(interview)}
+              >
+                <td className="px-6 py-5 text-sm font-medium text-gray-800 whitespace-nowrap">
+                  {interview.title}
+                </td>
+                <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                  {new Date(interview.date).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </td>
+                <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                  <div className="flex items-center">
+                    <MdOutlineCurrencyRupee className="text-blue-500 mr-1" />
+                    <span>{interview.price}</span>
+                  </div>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <span
+                    className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      interview.status === "Completed"
+                        ? "bg-green-100 text-green-800"
+                        : interview.status === "Scheduled"
+                        ? "bg-blue-100 text-blue-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {interview.status}
+                  </span>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap text-right">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleViewFeedback(interview._id);
+                    }}
+                    className="bg-[#2F76FF] hover:bg-[#19328F] text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                  >
+                    View Feedback
+                  </button>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap text-right">
+                  <button
+                    onClick={(e) => {
+                      if(interview.interviewerRatingAdded) {
+                        e.stopPropagation()
+                        toast.success('You\'ve Already Rated This Interview', {
+                          style: {
+                            border: '1px solid #2F76FF',
+                            padding: '16px',
+                            color: '#19328F',
+                            backgroundColor: '#D9E9FF', 
+                          },
+                          iconTheme: {
+                            primary: '#2F76FF',
+                            secondary: '#19328F',
+                          },
+                        });
+                        return
+                      }
+                      if(interview.status === 'Completed'){
+                        e.stopPropagation();
+                        handleRatingModalOpen(interview);
+                      } else {
+                        e.stopPropagation()
+                       
+
+                        toast.success('You can rate the interview once it is completed.', {
+                          style: {
+                            border: '1px solid #2F76FF',
+                            padding: '16px',
+                            color: '#19328F',
+                            backgroundColor: '#D9E9FF', 
+                          },
+                          iconTheme: {
+                            primary: '#2F76FF',
+                            secondary: '#19328F',
+                          },
+                        });
+                        
+                      }
+                    }}
+                    className="border-2 border-[#2F76FF] text-[#2F76FF] hover:bg-[#2F76FF] hover:text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                  >
+                    Rate Interview
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+          
         </div>
       </div>
     </>

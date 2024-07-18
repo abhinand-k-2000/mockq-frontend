@@ -15,6 +15,7 @@ import PremiumProtectedRoute from "../components/candidate/PremiumProtectedRoute
 import { useSelector } from "react-redux"
 import { RootState } from "../redux/store"
 import { ReactNode } from "react"
+import Analytics from "../pages/candidate/Analytics"
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -55,6 +56,8 @@ const CandidateRoute = () => {
         <Route path="feedback/:interviewId" element={<CandidateFeedbackView />} />
 
         <Route path="community-chat" element={<PremiumProtectedRoute />} />
+
+        <Route path="analytics" element={<Analytics />} />
  
         </Route>
     </Routes>

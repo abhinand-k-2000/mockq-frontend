@@ -226,3 +226,21 @@ export const saveMessage = async (content: string, chatId: string) => {
         console.log(error)
     }
 }
+
+export const giveInterviewerRating = async (interviewerId: string, interviewId: string, rating: number, comment: string) => {
+    try {
+        const {data} = await Api.post(candidateEndpoint.giveInterviewerRating, {interviewId, interviewerId, rating, comment})
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const getAnalytics = async () => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getAnalytics)
+        return data
+    } catch (error) {
+        console.log(error)   
+    }
+}

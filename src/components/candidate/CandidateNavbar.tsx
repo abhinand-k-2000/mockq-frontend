@@ -58,8 +58,8 @@ const CandidateNavbar = () => {
         <div className=''>
             <ul className='flex space-x-20 font-bold text-[#142057] '>
                 <li className='cursor-pointer'><Link to="/candidate/outsourced-interviews">Outsourced Interviews</Link></li>
-                <li className='cursor-pointer'>Analytics</li>
-                <li onClick={() => navigate('/candidate/community-chat')} className='cursor-pointer'>Community</li>
+                <li className='cursor-pointer'><Link to="/candidate/analytics">Analytics</Link></li>
+                <li className='cursor-pointer'><Link to='/candidate/community-chat'>Community</Link></li>
             </ul>
         </div>
         <div className="flex m-10">

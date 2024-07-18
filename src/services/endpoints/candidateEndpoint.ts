@@ -28,7 +28,11 @@ const candidateEndpoint = {
 
     getAllMessages: '/chat/messages',
 
-    sendMessage: '/chat/send-message'
+    sendMessage: '/chat/send-message',
+
+    giveInterviewerRating: '/candidate/give-interviewer-rating',
+
+    getAnalytics: '/candidate/get-analytics'
 
 
 
