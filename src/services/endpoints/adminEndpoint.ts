@@ -9,7 +9,8 @@ const adminEndpoint = {
     getInterviewerDetails: '/admin/interviewer',
     approveInterviewer: 'admin/approve-interviewer',
     logout: 'admin/logout',
-    getInterviews: '/admin/interviews-list'
+    getInterviews: '/admin/interviews-list',
+    getDashboardDetails: '/admin/dashboard'
 
 
 }

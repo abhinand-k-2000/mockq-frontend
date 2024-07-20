@@ -8,7 +8,7 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { FiSearch, FiUser, FiMail, FiPhone, FiLock, FiUnlock } from "react-icons/fi";
+import { FiSearch, FiUser, FiMail, FiPhone, FiLock, FiUnlock, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
 interface Candidate {
@@ -27,6 +27,9 @@ const Candidates: React.FC = () => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [search, setSearch] = useState('');
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [candidatesPerPage] = useState(5);
 
   const handleSearch = (name: string) => {
     setSearch(name);
@@ -76,6 +79,26 @@ const Candidates: React.FC = () => {
     setSelectedCandidate(null);
   };
 
+   // Get current candidates
+   const indexOfLastCandidate = currentPage * candidatesPerPage;
+   const indexOfFirstCandidate = indexOfLastCandidate - candidatesPerPage;
+   const currentCandidates = filteredCandidates.slice(indexOfFirstCandidate, indexOfLastCandidate);
+
+   // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(filteredCandidates.length / candidatesPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   console.log(candidates)
 
   return (
@@ -109,7 +132,7 @@ const Candidates: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredCandidates.map((candidate, index) => (
+              {currentCandidates.map((candidate, index) => (
                 <tr key={candidate._id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -170,7 +193,60 @@ const Candidates: React.FC = () => {
             </tbody>
           </table>
         </div>
+
+<div>
+        <div className="mt-4 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing <span className="font-medium">{indexOfFirstCandidate + 1}</span> to{" "}
+              <span className="font-medium">
+                {Math.min(indexOfLastCandidate, filteredCandidates.length)}
+              </span>{" "}
+              of <span className="font-medium">{filteredCandidates.length}</span> results
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">  
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1 ? "bg-gray-200 text-gray-500" : "bg-blue-500 text-white"
+              }`}
+            >
+              <FiChevronLeft />
+            </button>
+            {[...Array(Math.ceil(filteredCandidates.length / candidatesPerPage))].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => paginate(i + 1)}
+                className={`px-3 py-1 rounded-md ${
+                  currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={nextPage}
+              disabled={currentPage === Math.ceil(filteredCandidates.length / candidatesPerPage)}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === Math.ceil(filteredCandidates.length / candidatesPerPage)
+                  ? "bg-gray-200 text-gray-500"
+                  : "bg-blue-500 text-white"
+              }`}
+            >
+              <FiChevronRight />
+            </button>
+          </div>
+        </div>
+      </div>   
+
+
+
       </div>
+
+
+      
 
       <Dialog open={openModal} handler={handleCloseModal}>
         <DialogHeader>

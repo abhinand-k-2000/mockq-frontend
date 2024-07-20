@@ -8,9 +8,15 @@ import { Provider } from "react-redux";
 import store from "./redux/store.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Provider store={store}>
+  <Provider store={store}> 
     <React.StrictMode>
-      <Toaster />
+      <Toaster
+        position="top-center"
+        containerStyle={{
+          zIndex: 99999, // Very high z-index
+          top: "1rem",
+        }}
+      />
       <ThemeProvider>
         <App />
       </ThemeProvider>

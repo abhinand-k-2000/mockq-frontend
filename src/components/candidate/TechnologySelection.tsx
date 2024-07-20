@@ -15,7 +15,6 @@ const TechnologySelection = ({
   onSelectStack,
 }: any) => {
 
-  console.log('Inside tech selection')
 
 
   const [techs, setTechs] = useState<string[]>([]);
@@ -30,7 +29,6 @@ const TechnologySelection = ({
       const stack = response.data.stacks.find(
         (item: Stack) => item.stackName === selectedStack
       );
-      console.log("stack: ", stack)
 
       if(stack.length === 0){
         toast.error("No interviewers!")

@@ -35,25 +35,20 @@ interface Slot {
   schedule: Schedule[];
 }
 
-// interface InterviewSlot {
-//   interviewerId: string;
-//   slots: Slot[];
-// }
-
 const SlotsList = () => {
   const navigate = useNavigate();
   const [slotsList, setSlotsList] = useState<Slot[]>([]);
   const [showPopUp, setShowPopUp] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [slotsPerPage] = useState(5);
 
   const interviewerInfo = useSelector(
     (state: RootState) => state.auth.interviewerInfo
   );
 
   const handleAddSlot = () => {
-    console.log(interviewerInfo);
     if (!interviewerInfo || !interviewerInfo.isApproved) {
       setShowPopUp(true);
-      // alert("You are not approved by the admin");
       return;
     }
     navigate("/interviewer/add-slot");
@@ -69,6 +64,13 @@ const SlotsList = () => {
   useEffect(() => {
     fetchInterviewSlotsList();
   }, []);
+
+  // Pagination logic
+  const indexOfLastSlot = currentPage * slotsPerPage;
+  const indexOfFirstSlot = indexOfLastSlot - slotsPerPage;
+  const currentSlots = slotsList.slice(indexOfFirstSlot, indexOfLastSlot);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
@@ -119,95 +121,148 @@ const SlotsList = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  {[
-                    "Date",
-                    "From",
-                    "To",
-                    "Domain",
-                    "Technologies",
-                    "Price",
-                    "Status",
-                    "Action",
-                  ].map((header) => (
-                    <th
-                      key={header}
-                      className={`px-3 sm:px-6 py-3 ${header === 'Action' ? "text-right" : "text-left"} text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                    >
-                      {header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {slotsList.map((slot, slotIndex) =>
-                  slot.schedule.map((schedule, scheduleIndex) => (
-                    <tr
-                      key={`${slotIndex}-${scheduleIndex}`}
-                      className="hover:bg-gray-50 transition-colors duration-200"
-                    >
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {new Date(slot?.date).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "short",
-                          })}
-                        </div>
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(schedule.from).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(schedule.to).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                        <a
-                          href="#"
-                          className="text-sm font-medium text-blue-600 hover:text-blue-900"
-                        >
-                          {schedule.title}
-                        </a>
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {schedule.technologies
-                            .map((item) => item.toUpperCase())
-                            .join(", ")}
-                        </div>
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {schedule.price}
-                      </td>
-                      {/* <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">{schedule.description}</td> */}
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${schedule.status === 'booked' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
-                          {schedule.status}
-                        </span>
-                      </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-indigo-600 hover:text-indigo-900">
-                          <MdOutlineEdit className="h-5 w-5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <TableComponent currentSlots={currentSlots} />
+
+        <Pagination
+          slotsPerPage={slotsPerPage}
+          totalSlots={slotsList.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </div>
     </div>
+  );
+};
+
+// Table component
+const TableComponent = ({ currentSlots }: { currentSlots: Slot[] }) => {
+  return (
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-gray-50">
+            <tr>
+              {[
+                "Date",
+                "From",
+                "To",
+                "Domain",
+                "Technologies",
+                "Price",
+                "Status",
+                "Action",
+              ].map((header) => (
+                <th
+                  key={header}
+                  className={`px-3 sm:px-6 py-3 ${header === 'Action' ? "text-right" : "text-left"} text-xs font-medium text-gray-500 uppercase tracking-wider`}
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {currentSlots.map((slot, slotIndex) =>
+              slot.schedule.map((schedule, scheduleIndex) => (
+                <tr
+                  key={`${slotIndex}-${scheduleIndex}`}
+                  className="hover:bg-gray-50 transition-colors duration-200"
+                >
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {new Date(slot?.date).toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </div>
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(schedule.from).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {new Date(schedule.to).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <a
+                      href="#"
+                      className="text-sm font-medium text-blue-600 hover:text-blue-900"
+                    >
+                      {schedule.title}
+                    </a>
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {schedule.technologies
+                        .map((item) => item.toUpperCase())
+                        .join(", ")}
+                    </div>
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {schedule.price}
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${schedule.status === 'booked' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
+                      {schedule.status}
+                    </span>
+                  </td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button className="text-indigo-600 hover:text-indigo-900">
+                      <MdOutlineEdit className="h-5 w-5" />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+// Pagination component
+const Pagination = ({
+  slotsPerPage,
+  totalSlots,
+  paginate,
+  currentPage,
+}: {
+  slotsPerPage: number;
+  totalSlots: number;
+  paginate: (pageNumber: number) => void;
+  currentPage: number;
+}) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalSlots / slotsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <nav className="mt-4">
+      <ul className="flex justify-center">
+        {pageNumbers.map((number) => (
+          <li key={number} className="mx-1">
+            <button
+              onClick={() => paginate(number)}
+              className={`px-3 py-2 rounded-md ${
+                currentPage === number
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };
 

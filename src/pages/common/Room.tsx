@@ -19,9 +19,9 @@ const Room = () => {
   const { roomId } = useParams();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  
 
-    console.log(decoded)  
+  useEffect(() => {
 
     let ui: ZegoUIKitPrebuilt | undefined;
 
@@ -29,8 +29,9 @@ const Room = () => {
 
       if (!containerRef.current) return;
 
-      const appID = 1042216805;
-      const serverSecret = "6ca16ad57604f96de2d0cee670eac28f";
+      const appID = Number(import.meta.env.VITE_ZEKO_APP_ID)
+      const serverSecret = import.meta.env.VITE_ZEKO_SERVER_SECRET;
+
       const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
         appID,
         serverSecret,

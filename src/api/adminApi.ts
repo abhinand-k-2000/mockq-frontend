@@ -115,3 +115,12 @@ export const getInterviews = async () => {
         console.log(error)
     }
 }
+
+export const getDashboardDetails = async () => {
+    try {
+        const {data} = await Api.get(adminEndpoint.getDashboardDetails)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}

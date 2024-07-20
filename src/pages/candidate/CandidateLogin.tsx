@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { verifyLogin } from "../../api/candidateApi";
 import toast from "react-hot-toast";
 import Navbar from "../../components/welcome_page/Navbar";
-import {  useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setCandidateCredentials } from "../../redux/slice/authSlice";
 
 interface IFormInput {
@@ -13,9 +13,8 @@ interface IFormInput {
 }
 
 const CandidateLogin = () => {
-  
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -24,21 +23,37 @@ const CandidateLogin = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const { email, password } = data;
-    
+
     const response = await verifyLogin(email, password);
-    console.log("respnse: ", response)
 
     if (response?.data.success) {
-      // console.log("diapactK :", response.data)
-      dispatch(setCandidateCredentials(response.data.data.token))
-      toast.success("Successfully Logged in");
-      navigate('/candidate/home')
+      dispatch(setCandidateCredentials(response.data.data.token));
+      toast.success("Successfully Logged in", {
+        style: {
+          border: "1px solid #2F76FF",
+          padding: "16px",
+          color: "#19328F",
+          backgroundColor: "#D9E9FF",
+        },
+      });
+      navigate("/candidate/home");
     } else {
-      console.log(response?.data)
-      toast.error(response.data.message)
+
+      toast.error(response.data.message, {
+        style: {
+          border: "1px solid #dc3545",
+          padding: "16px",
+          color: "#721c24",
+          backgroundColor: "#f8d7da",
+        },
+        iconTheme: {
+          primary: "#dc3545",
+          secondary: "#721c24",
+        },
+      });
+      // toast.error(response.data.message)
     }
   };
-
 
   return (
     <>

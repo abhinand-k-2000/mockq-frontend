@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getStacks, unlistStack } from "../../api/adminApi";
 import toast from "react-hot-toast";
 import { Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
-import { FiPlus, FiList, FiTrash2, FiCheckSquare, FiPackage, FiLayers } from 'react-icons/fi';
+import { FiPlus, FiList, FiTrash2, FiCheckSquare, FiPackage, FiLayers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface Stack {
   _id: string;
@@ -17,6 +17,8 @@ const Stacks = () => {
   const [stacksList, setStacksList] = useState<Stack[]>([]);
   const [unlistedStacksList, setUnlistedStacksList] = useState<Stack[]>([]);
   const [open, setOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [stacksPerPage] = useState(6); // 3x3 grid
 
   const fetchStacks = async () => {
     const response = await getStacks();
@@ -39,6 +41,26 @@ const Stacks = () => {
   useEffect(() => {
     fetchStacks();
   }, []);
+
+  // Get current stacks
+  const indexOfLastStack = currentPage * stacksPerPage;
+  const indexOfFirstStack = indexOfLastStack - stacksPerPage;
+  const currentStacks = stacksList.slice(indexOfFirstStack, indexOfLastStack);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(stacksList.length / stacksPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <div className="bg-white min-h-screen p-8">
@@ -65,7 +87,7 @@ const Stacks = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {stacksList.map((stack: Stack) => (
+          {currentStacks.map((stack: Stack) => (
             <div
               key={stack._id}
               className="bg-white rounded-lg overflow-hidden border border-gray-200 transition duration-300 ease-in-out hover:shadow-lg"
@@ -98,6 +120,41 @@ const Stacks = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Pagination */}
+        <div className="mt-8 flex justify-center items-center space-x-2">
+          <button
+            onClick={prevPage}
+            disabled={currentPage === 1}
+            className={`px-3 py-1 rounded-md ${
+              currentPage === 1 ? "bg-gray-200 text-gray-500" : "bg-gray-800 text-white"
+            }`}
+          >
+            <FiChevronLeft />
+          </button>
+          {[...Array(Math.ceil(stacksList.length / stacksPerPage))].map((_, i) => (
+            <button
+              key={i}
+              onClick={() => paginate(i + 1)}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === i + 1 ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            onClick={nextPage}
+            disabled={currentPage === Math.ceil(stacksList.length / stacksPerPage)}
+            className={`px-3 py-1 rounded-md ${
+              currentPage === Math.ceil(stacksList.length / stacksPerPage)
+                ? "bg-gray-200 text-gray-500"
+                : "bg-gray-800 text-white"
+            }`}
+          >
+            <FiChevronRight />
+          </button>
         </div>
       </div>
 

@@ -13,6 +13,8 @@ const Sidebar = () => {
   const { chats, selectedChat } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch();
 
+  console.log("chats: ", chats)
+
   const fetchChats = async () => {
     try {
       const response = await getAllChats();
@@ -24,7 +26,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     fetchChats();
-  }, []);
+  }, [isModalOpen]);
 
   return (
     <div className="w-72 bg-gradient-to-br from-[#19328F] to-[#0F1F5C] text-white flex flex-col shadow-xl">
@@ -54,9 +56,9 @@ const Sidebar = () => {
                   : "bg-white bg-opacity-10 text-white hover:bg-opacity-20"
               } rounded-lg transition duration-300  hover:shadow-md`}
             >
-              <h3 className="font-semibold truncate">{chat.chatName}</h3>
+              <h3 className="font-semibold truncate">{chat?.chatName}</h3>
               <p className="text-xs opacity-70 mt-1">
-                {chat.users?.length} Members
+                {chat?.users?.length} Members
               </p>
             </div>
           ))

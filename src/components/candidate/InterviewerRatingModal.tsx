@@ -36,7 +36,6 @@ const InterviewerRatingModal = ({ open, onClose, interview }) => {
 
   const handleRatingSubmit = async () => {
     if (validateForm()) {
-      console.log("Rating:", rating, "Comment:", comment, "inet: ", interview);
 
       try {
         const response = await giveInterviewerRating(

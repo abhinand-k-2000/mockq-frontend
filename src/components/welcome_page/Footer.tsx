@@ -6,7 +6,7 @@ import { FaFacebook } from "react-icons/fa";
 const Footer = () => {
   return (
     <>
-    <div className='h-40 w-full text-[#EEF5FF] bg-[#0E1434]  grid grid-cols-12'>
+    <div className='h-40 mt-10 w-full text-[#EEF5FF] bg-[#0E1434]  grid grid-cols-12'>
         <div className='col-span-3 flex flex-col justify-center items-center '>
             <h2 className='text-4xl font-bold'>MockQ</h2>
             <div className="flex space-x-2 mt-3 cursor-pointer">

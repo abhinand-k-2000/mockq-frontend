@@ -37,7 +37,7 @@ const Interviews = () => {
     null
   );
   const [currentPage, setCurrentPage] = useState(1);
-  const [interviewsPerPage] = useState(3);
+  const [interviewsPerPage] = useState(5);
 
   useEffect(() => {
     const fetchInterviews = async () => {
@@ -80,6 +80,8 @@ const Interviews = () => {
     // setSearch("");
     // setFilter("")
   };
+
+
 
   return (
     <div className="container mx-auto px-4 py-8">

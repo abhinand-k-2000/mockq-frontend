@@ -10,7 +10,6 @@ interface Stack {
   }
 
 const StackSelection = ({onSelectStack}: any) => {
-    console.log('Inside stack selection')
 
     const [stacks, setStacks] = useState<Stack[]>([]);
   const [search, setSearch] = useState('')
@@ -25,7 +24,6 @@ const StackSelection = ({onSelectStack}: any) => {
   const fetchAllStacks = async () => {
     try {
       const response = await home();
-      console.log(response)
       setStacks(response.data.stacks);
     } catch (error) {
       console.error("Error fetching stacks:", error);

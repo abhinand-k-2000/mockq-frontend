@@ -1,10 +1,7 @@
-
-
-
 import React, { useEffect, useState } from "react";
 import { getInterviewers } from "../../api/adminApi";
 import { Link } from "react-router-dom";
-import { FiSearch, FiUser, FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye } from "react-icons/fi";
+import { FiSearch, FiUser, FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface InterviewerData {
   collegeUniversity: string;
@@ -16,7 +13,6 @@ interface InterviewerData {
   mobile: string;
   name: string;
   organisation: string;
-  // password: string;
   profilePicture: string;
   resume: string;
   salarySlip: string;
@@ -28,14 +24,22 @@ interface InterviewerData {
 const Interviewers: React.FC = () => {
   const [interviewers, setInterviewers] = useState<InterviewerData[]>([]);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [interviewersPerPage] = useState(5);
 
   const handleSearch = (name: string) => {
     setSearch(name);
+    setCurrentPage(1); // Reset to first page when searching
   };
 
   const filteredInterviewers = interviewers.filter((interviewer) =>
     interviewer.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Get current interviewers
+  const indexOfLastInterviewer = currentPage * interviewersPerPage;
+  const indexOfFirstInterviewer = indexOfLastInterviewer - interviewersPerPage;
+  const currentInterviewers = filteredInterviewers.slice(indexOfFirstInterviewer, indexOfLastInterviewer);
 
   const fetchInterviewers = async () => {
     const interviewersList = await getInterviewers();
@@ -45,6 +49,21 @@ const Interviewers: React.FC = () => {
   useEffect(() => {
     fetchInterviewers();
   }, []);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const nextPage = () => {
+    if (currentPage < Math.ceil(filteredInterviewers.length / interviewersPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
@@ -77,9 +96,9 @@ const Interviewers: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredInterviewers.map((interviewer, index) => (
+              {currentInterviewers.map((interviewer, index) => (
                 <tr key={interviewer._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{indexOfFirstInterviewer + index + 1}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
@@ -124,6 +143,51 @@ const Interviewers: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-4 flex items-center justify-between">
+          <div>
+            <p className="text-sm text-gray-700">
+              Showing <span className="font-medium">{indexOfFirstInterviewer + 1}</span> to{" "}
+              <span className="font-medium">
+                {Math.min(indexOfLastInterviewer, filteredInterviewers.length)}
+              </span>{" "}
+              of <span className="font-medium">{filteredInterviewers.length}</span> results
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={prevPage}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === 1 ? "bg-gray-200 text-gray-500" : "bg-blue-500 text-white"
+              }`}
+            >
+              <FiChevronLeft />
+            </button>
+            {[...Array(Math.ceil(filteredInterviewers.length / interviewersPerPage))].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => paginate(i + 1)}
+                className={`px-3 py-1 rounded-md ${
+                  currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={nextPage}
+              disabled={currentPage === Math.ceil(filteredInterviewers.length / interviewersPerPage)}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === Math.ceil(filteredInterviewers.length / interviewersPerPage)
+                  ? "bg-gray-200 text-gray-500"
+                  : "bg-blue-500 text-white"
+              }`}
+            >
+              <FiChevronRight />
+            </button>
+          </div>
         </div>
       </div>
     </div>
