@@ -23,7 +23,9 @@ const interviewerEndpoint = {
 
     saveFeedbackDetails: '/interviewer/give-feedback',
 
-    getPaymentDashboardDetails: '/interviewer/get-payment-dashboard'
+    getPaymentDashboardDetails: '/interviewer/get-payment-dashboard',
+
+    verifyInterviewerVideoConference: "/interviewer/verify-video-conference"
 
 
 

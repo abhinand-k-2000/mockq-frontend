@@ -57,7 +57,6 @@ const OutsourcedInterviews = () => {
   const handleOpenModal = (interview: IScheduledInterview) => {
     setSelectedInterview(interview);
     setOpenModal(true);
-    console.log(interview);
   };
 
   const handleViewFeedback = (interviewId: string) => {
@@ -207,7 +206,7 @@ const OutsourcedInterviews = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
             <tr>
-              {["ROLL NAME", "SCHEDULED ON", "PRICE", "STATUS", "", ""].map((header) => (
+              {["ROLL NAME", "SCHEDULED ON", "PRICE", "STATUS", "", " "].map((header) => (
                 <th
                   key={header}
                   scope="col"

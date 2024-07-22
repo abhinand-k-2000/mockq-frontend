@@ -272,3 +272,13 @@ export const getPaymentDashboardDetails = async() => {
   }
 }
   
+
+export const verifyInterviewerVideoConference = async (roomId: string, userId: string) => {
+  try {
+      const {data} = await Api.post(interviewerEndpoint.verifyInterviewerVideoConference, {roomId, userId})
+      return data
+  } catch (error: any) {
+      console.log(error)
+      return error.response.data
+  }
+}  

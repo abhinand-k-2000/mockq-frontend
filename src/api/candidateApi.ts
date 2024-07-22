@@ -244,3 +244,13 @@ export const getAnalytics = async () => {
         console.log(error)   
     }
 }
+
+export const verifyCandidateVideoConference = async (roomId: string, userId: string) => {
+    try {
+        const {data} = await Api.post(candidateEndpoint.verifyCandidateVideoConference, {roomId, userId})
+        return data
+    } catch (error: any) {
+        console.log(error)
+        return error.response.data
+    }
+}

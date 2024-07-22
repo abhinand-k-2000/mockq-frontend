@@ -15,7 +15,6 @@ const ProtectedRoute = ({ children }) => {
   const user = useSelector(
     (state: RootState) => state.auth.interviewerInfo || state.auth.candidateInfo
   );
-  console.log("indise protection: ", user)
 
   if (!user) {
     return <Navigate to="/login" />;
