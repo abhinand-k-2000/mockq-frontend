@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { getInterviews } from "../../api/adminApi";
 import InterviewDetails from "../../components/admin/InterviewDetails";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../../components/Pagination";
+import TableShimmer from "../../components/shimmer/TableShimmer";
 
 interface ICandidate {
   name: string;
@@ -36,25 +39,31 @@ const Interviews = () => {
   const [selectedInterview, setSelectedInterview] = useState<IInterview | null>(
     null
   );
-  const [currentPage, setCurrentPage] = useState(1);
-  const [interviewsPerPage] = useState(5);
+  
+  const [loading, setLoading] = useState(false)
+  const [searchParams, setSearchParams ] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1)
+  const currentPage = parseInt(searchParams.get("page") || "1")
+  const limit = parseInt(searchParams.get("limit") || "5")
 
   useEffect(() => {
-    const fetchInterviews = async () => {
-      const response = await getInterviews();
+    const fetchInterviews = async (page: number, limit: number) => {
+      setLoading(true)
+      const response = await getInterviews(page, limit);
+      console.log('response: ', response)
       setInterviews(response.data);
+      setTotalPages(Math.ceil(response.total / limit))
+      setLoading(false)
     };
-    fetchInterviews();
-  }, []);
+    fetchInterviews(currentPage, limit);
+  }, [currentPage, limit]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase());
-    setCurrentPage(1);
   };
 
   const handleFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilter(e.target.value);
-    setCurrentPage(1);
   };
 
   let filteredInterviews = interviews.filter(
@@ -68,18 +77,9 @@ const Interviews = () => {
     setSelectedInterview(null);
   };
 
-  const indexOfLastInterview = currentPage * interviewsPerPage;
-  const indexOfFirstInterview = indexOfLastInterview - interviewsPerPage;
-  const currentInterviews = filteredInterviews.slice(
-    indexOfFirstInterview,
-    indexOfLastInterview
-  );
-
-  const paginate = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-    // setSearch("");
-    // setFilter("")
-  };
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({page: newPage.toString(), limit: limit.toString()})
+  }
 
 
 
@@ -140,8 +140,14 @@ const Interviews = () => {
                   </th>
                 </tr>
               </thead>
+              {
+                loading ? (
+                  <TableShimmer columns={7}/>
+                ) : (
+
+                
               <tbody className="bg-white divide-y divide-gray-200">
-                {currentInterviews.map((interview) => (
+                {filteredInterviews.map((interview) => (
                   <tr key={interview._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {interview._id.slice(-6)}
@@ -194,27 +200,13 @@ const Interviews = () => {
                   </tr>
                 ))}
               </tbody>
+              )
+            }
             </table>
           </div>
+          <Pagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}/>
 
-          <div className="flex justify-end mt-4">
-            {Array.from(
-              { length: Math.ceil(interviews.length / interviewsPerPage) },
-              (_, index) => (
-                <button
-                  key={index}
-                  onClick={() => paginate(index + 1)}
-                  className={`px-3 py-1 ${
-                    currentPage === index + 1
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300 text-gray-700"
-                  } rounded-md mr-2`}
-                >
-                  {index + 1}
-                </button>
-              )
-            )}
-          </div>
+          
         </>
       )}
     </div>

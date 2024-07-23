@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getSlotsList } from "../../api/interviewerApi";
 import { MdOutlineEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-
-const ApprovalPopup = ({ onClose }: { onClose: () => void }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-xl">
-      <h2 className="text-xl font-bold mb-4">Not Approved</h2>
-      <p className="mb-4">You are not approved by the admin to add slots.</p>
-      <button
-        onClick={onClose}
-        className="bg-[#142057] text-white py-2 px-4 ml-auto block rounded-md"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-);
+import Pagination from "../../components/Pagination";
+import TableShimmer from "../../components/shimmer/TableShimmer";
 
 interface Schedule {
   from: string;
@@ -39,8 +26,12 @@ const SlotsList = () => {
   const navigate = useNavigate();
   const [slotsList, setSlotsList] = useState<Slot[]>([]);
   const [showPopUp, setShowPopUp] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [slotsPerPage] = useState(5);
+  const [loading, setLoading] = useState(false)
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1);
+  const currentPage = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "4");
 
   const interviewerInfo = useSelector(
     (state: RootState) => state.auth.interviewerInfo
@@ -52,36 +43,52 @@ const SlotsList = () => {
       return;
     }
     navigate("/interviewer/add-slot");
-  };
+  }; 
 
-  const fetchInterviewSlotsList = async () => {
-    const response = await getSlotsList();
+  const fetchInterviewSlotsList = async (page: number, limit: number) => {
+    setLoading(true)
+    const response = await getSlotsList(page, limit);
     if (response.success) {
       setSlotsList(response.data);
+      setTotalPages(Math.ceil(response.total / limit));
+      setLoading(false)
     }
   };
 
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: newPage.toString(), limit: limit.toString() });
+  };
+
   useEffect(() => {
-    fetchInterviewSlotsList();
-  }, []);
-
-  // Pagination logic
-  const indexOfLastSlot = currentPage * slotsPerPage;
-  const indexOfFirstSlot = indexOfLastSlot - slotsPerPage;
-  const currentSlots = slotsList.slice(indexOfFirstSlot, indexOfLastSlot);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    fetchInterviewSlotsList(currentPage, limit);
+  }, [currentPage, limit]);
 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
-      <div className="max-w-full mx-auto">
-        {showPopUp && <ApprovalPopup onClose={() => setShowPopUp(false)} />}
+      <div className="max-w-7xl mx-auto">
+        {showPopUp && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-xl">
+              <h2 className="text-xl font-bold mb-4">Not Approved</h2>
+              <p className="mb-4">
+                You are not approved by the admin to add slots.
+              </p>
+              <button
+                onClick={() => setShowPopUp(false)}
+                className="bg-[#142057] text-white py-2 px-4 ml-auto block rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="px-4 sm:px-8 py-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
               <div>
-                <h1 className="text-4xl sm:text-4xl font-bold text-gray-800">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-800">
                   Slots List
                 </h1>
                 <p className="text-gray-600 mt-1">
@@ -121,149 +128,120 @@ const SlotsList = () => {
           </div>
         </div>
 
-        <TableComponent currentSlots={currentSlots} />
-
-        <Pagination
-          slotsPerPage={slotsPerPage}
-          totalSlots={slotsList.length}
-          paginate={paginate}
-          currentPage={currentPage}
-        />
-      </div>
-    </div>
-  );
-};
-
-// Table component
-const TableComponent = ({ currentSlots }: { currentSlots: Slot[] }) => {
-  return (
-    <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              {[
-                "Date",
-                "From",
-                "To",
-                "Domain",
-                "Technologies",
-                "Price",
-                "Status",
-                "Action",
-              ].map((header) => (
-                <th
-                  key={header}
-                  className={`px-3 sm:px-6 py-3 ${header === 'Action' ? "text-right" : "text-left"} text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {currentSlots.map((slot, slotIndex) =>
-              slot.schedule.map((schedule, scheduleIndex) => (
-                <tr
-                  key={`${slotIndex}-${scheduleIndex}`}
-                  className="hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
-                      {new Date(slot?.date).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "short",
-                      })}
-                    </div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(schedule.from).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(schedule.to).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-blue-600 hover:text-blue-900"
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">  
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  {[
+                    "Date",
+                    "From",
+                    "To",
+                    "Domain",
+                    "Technologies",
+                    "Price",
+                    "Status",
+                    "Action",
+                  ].map((header) => (
+                    <th
+                      key={header}
+                      className={`px-6 py-3 ${
+                        header === "Action" ? "text-right" : "text-left"
+                      } text-xs font-medium text-gray-500 uppercase tracking-wider`}
                     >
-                      {schedule.title}
-                    </a>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {schedule.technologies
-                        .map((item) => item.toUpperCase())
-                        .join(", ")}
-                    </div>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {schedule.price}
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${schedule.status === 'booked' ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"}`}>
-                      {schedule.status}
-                    </span>
-                  </td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-indigo-600 hover:text-indigo-900">
-                      <MdOutlineEdit className="h-5 w-5" />
-                    </button>
-                  </td>
+                      {header}
+                    </th>
+                  ))}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              {
+            loading ? (
+              <TableShimmer columns={7}/>
+            ) : (
+              <tbody className="bg-white divide-y divide-gray-200">
+                {slotsList.map((slot, slotIndex) =>
+                  slot.schedule.map((schedule, scheduleIndex) => (
+                    <tr
+                      key={`${slotIndex}-${scheduleIndex}`}
+                      className="hover:bg-gray-50 transition-colors duration-200"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          {new Date(slot?.date).toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                          })}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(schedule.from).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {new Date(schedule.to).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        
+                          <a href="#"
+                          className="text-sm font-medium text-blue-600 hover:text-blue-900"
+                        >
+                          {schedule.title}
+                        </a>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">
+                          {schedule.technologies
+                            .map((item) => item.toUpperCase())
+                            .join(", ")}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {schedule.price}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            schedule.status === "booked"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-blue-100 text-blue-800"
+                          }`}
+                        >
+                          {schedule.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button className="text-indigo-600 hover:text-indigo-900">
+                          <MdOutlineEdit className="h-5 w-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  
+                  ))
+                )}
+              </tbody>
+              )
+            }
+            </table>
+          </div>
+            
+        </div>
+
+        <div className="mt-6">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-// Pagination component
-const Pagination = ({
-  slotsPerPage,
-  totalSlots,
-  paginate,
-  currentPage,
-}: {
-  slotsPerPage: number;
-  totalSlots: number;
-  paginate: (pageNumber: number) => void;
-  currentPage: number;
-}) => {
-  const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(totalSlots / slotsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav className="mt-4">
-      <ul className="flex justify-center">
-        {pageNumbers.map((number) => (
-          <li key={number} className="mx-1">
-            <button
-              onClick={() => paginate(number)}
-              className={`px-3 py-2 rounded-md ${
-                currentPage === number
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              }`}
-            >
-              {number}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
 
 export default SlotsList;

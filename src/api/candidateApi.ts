@@ -117,9 +117,9 @@ export const makePayment = async (data: any)=> {
 }
 
 
-export const getScheduledIinterviews = async () => {
+export const getScheduledIinterviews = async (page: number, limit: number) => {
     try {
-        const response = await Api.get(candidateEndpoint.getScheduledInterviews)
+        const response = await Api.get(candidateEndpoint.getScheduledInterviews+`?page=${page}&limit=${limit}`)
         return response.data
     } catch (error) {
         console.log(error)

@@ -157,9 +157,9 @@ export const addSlot = async (slotData: SlotData) => {
   }
 };
 
-export const getSlotsList = async () => {
+export const getSlotsList = async (page: number, limit: number) => {
   try {
-    const response = await Api.get(interviewerEndpoint.getSlots);
+    const response = await Api.get(interviewerEndpoint.getSlots + `?page=${page}&limit=${limit}`);
     return response.data;
   } catch (error: any) {
     return error.response.data
@@ -205,9 +205,9 @@ export const resetPassword = async (otp: string, password: string) => {
   }
 }
 
-export const getSchedulesInterviews = async() => {
+export const getSchedulesInterviews = async(page: number, limit: number) => {
   try {
-      const response = await Api.get(interviewerEndpoint.getSchedulesInterviews)
+      const response = await Api.get(interviewerEndpoint.getSchedulesInterviews + `?page=${page}&limit=${limit}`)
       return response.data
   } catch (error: any) {
     return error.response.data

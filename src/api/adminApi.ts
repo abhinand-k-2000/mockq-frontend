@@ -12,18 +12,18 @@ export const verifyLogin = async (email: string, password: string) => {
     }
 }
 
-export const getCandidates = async () => {
+export const getCandidates = async (page: number, limit: number) => {
     try {
-        const response = await Api.get(adminEndpoint.getCandidates);
+        const response = await Api.get(adminEndpoint.getCandidates + `?page=${page}&limit=${limit}`);
         return response.data
     } catch (error) {
         console.error('Error fetching candidates:', error);
     }
 }
 
-export const getInterviewers = async () => {
+export const getInterviewers = async (page: number, limit: number) => {
     try {
-        const response = await Api.get(adminEndpoint.getInterviewers);
+        const response = await Api.get(adminEndpoint.getInterviewers + `?page=${page}&limit=${limit}`);
         return response.data
     } catch (error) {
         console.log("Error fetching interviewrs: ", error)
@@ -69,9 +69,9 @@ export const addStack = async (stackData: stackData) => {
     }
 }
 
-export const getStacks = async () => {
+export const getStacks = async (page: number, limit: number) => {
     try {
-        const response = await Api.get(adminEndpoint.getStacks)
+        const response = await Api.get(adminEndpoint.getStacks + `?page=${page}&limit=${limit}`)
         return response.data
     } catch (error) {
         console.log("Error fetching stacks")
@@ -107,10 +107,10 @@ export const unlistStack = async (stackId: string) => {
     }
 }
 
-export const getInterviews = async () => {
+export const getInterviews = async (page: number, limit: number) => {
     try {
-        const {data} = await Api.get(adminEndpoint.getInterviews)
-        return data
+        const {data} = await Api.get(adminEndpoint.getInterviews + `?page=${page}&limit=${limit}`)
+        return data 
     } catch (error) {
         console.log(error)
     }

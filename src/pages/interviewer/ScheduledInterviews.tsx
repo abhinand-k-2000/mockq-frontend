@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { getSchedulesInterviews } from "../../api/interviewerApi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FaRegCheckCircle, FaRegClock } from "react-icons/fa";
 import { MdVideoCameraBack } from "react-icons/md";
+import Pagination from "../../components/Pagination";
+import TableShimmer from "../../components/shimmer/TableShimmer";
 
 interface ScheduledInterview {
   _id: string;
@@ -20,30 +22,41 @@ interface ScheduledInterview {
 
 const ScheduledInterviews = () => {
   const [scheduledInterviews, setScheduledInterviews] = useState<ScheduledInterview[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [interviewsPerPage] = useState(5);
+
+  const [loading, setLoading] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [totalPages, setTotalPages] = useState(1)
+  const currentPage = parseInt(searchParams.get('page') || '1')
+  const limit = parseInt(searchParams.get('limit') || '5')
+ 
   const navigate = useNavigate();
 
-  const fetchScheduledInterviews = async () => {
-    const response = await getSchedulesInterviews();
+  const fetchScheduledInterviews = async (page: number, limit: number) => {
+    setLoading(true)
+    const response = await getSchedulesInterviews(page, limit);
     setScheduledInterviews(response.data);
+    setTotalPages(Math.ceil(response.total / limit))
+    setLoading(false)
   };
 
   const handleJoinCall = (roomId: string) => {
     navigate(`/room/${roomId}`);
   };
 
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({page: newPage.toString(), limit: limit.toString()})
+  }
+
   useEffect(() => {
-    fetchScheduledInterviews();
-  }, []);
+    fetchScheduledInterviews(currentPage, limit);
+  }, [currentPage, limit]);
 
-  // Get current interviews
-  const indexOfLastInterview = currentPage * interviewsPerPage;
-  const indexOfFirstInterview = indexOfLastInterview - interviewsPerPage;
-  const currentInterviews = scheduledInterviews.slice(indexOfFirstInterview, indexOfLastInterview);
 
-  // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+
+   
+      
+  
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
@@ -84,8 +97,15 @@ const ScheduledInterviews = () => {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
               </tr>
             </thead>
+
+            {
+              loading ? ( 
+                <TableShimmer  columns={6}/>
+              ) : (
+
+              
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentInterviews.map((interview, index) => (
+              {scheduledInterviews.map((interview, index) => (
                 <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
@@ -157,47 +177,20 @@ const ScheduledInterviews = () => {
                 </tr>
               ))}
             </tbody>
+            )
+          }
           </table>
         </div>
         <Pagination
-          interviewsPerPage={interviewsPerPage}
-          totalInterviews={scheduledInterviews.length}
-          paginate={paginate}
           currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>
   );
 };
 
-// Pagination component
-const Pagination = ({ interviewsPerPage, totalInterviews, paginate, currentPage }) => {
-  const pageNumbers = [];
 
-  for (let i = 1; i <= Math.ceil(totalInterviews / interviewsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <nav className="mt-4">
-      <ul className="flex justify-center">
-        {pageNumbers.map(number => (
-          <li key={number} className="mx-1">
-            <button
-              onClick={() => paginate(number)}
-              className={`px-3 py-2 rounded-md ${
-                currentPage === number
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              {number}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-};
 
 export default ScheduledInterviews;

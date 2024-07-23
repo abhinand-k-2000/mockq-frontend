@@ -33,7 +33,7 @@ const candidateEndpoint = {
 
   getAnalytics: "/candidate/get-analytics",
 
-  verifyCandidateVideoConference: "/candidate/verify-video-conference"
+  verifyCandidateVideoConference: "/candidate/verify-video-conference",
 };
 
 export default candidateEndpoint;

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { getInterviewers } from "../../api/adminApi";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FiSearch, FiUser, FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import Pagination from "../../components/Pagination";
+import TableShimmer from "../../components/shimmer/TableShimmer";
 
 interface InterviewerData {
   collegeUniversity: string;
@@ -24,46 +26,38 @@ interface InterviewerData {
 const Interviewers: React.FC = () => {
   const [interviewers, setInterviewers] = useState<InterviewerData[]>([]);
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [interviewersPerPage] = useState(5);
+
+  const [loading, setLoading] = useState(false)
+  const [searchParams, setSearchParams ] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1)
+  const currentPage = parseInt(searchParams.get("page") || "1")
+  const limit = parseInt(searchParams.get("limit") || "5")
 
   const handleSearch = (name: string) => {
     setSearch(name);
-    setCurrentPage(1); // Reset to first page when searching
   };
 
   const filteredInterviewers = interviewers.filter((interviewer) =>
     interviewer.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Get current interviewers
-  const indexOfLastInterviewer = currentPage * interviewersPerPage;
-  const indexOfFirstInterviewer = indexOfLastInterviewer - interviewersPerPage;
-  const currentInterviewers = filteredInterviewers.slice(indexOfFirstInterviewer, indexOfLastInterviewer);
 
-  const fetchInterviewers = async () => {
-    const interviewersList = await getInterviewers();
+
+  const fetchInterviewers = async (page: number, limit: number) => {
+    setLoading(true)
+    const interviewersList = await getInterviewers(page, limit);
     setInterviewers(interviewersList.data);
+    setTotalPages(Math.ceil(interviewersList.total / limit))
+    setLoading(false)
   };
 
   useEffect(() => {
-    fetchInterviewers();
-  }, []);
+    fetchInterviewers(currentPage, limit);
+  }, [currentPage, limit]);
 
-  // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  const nextPage = () => {
-    if (currentPage < Math.ceil(filteredInterviewers.length / interviewersPerPage)) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const prevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({page: newPage.toString(), limit: limit.toString()})
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen p-8">
@@ -95,10 +89,18 @@ const Interviewers: React.FC = () => {
                 <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
+            
+            {
+              loading ? (
+                <TableShimmer columns={6}/>
+              ) : (
+
+              
             <tbody className="divide-y divide-gray-200">
-              {currentInterviewers.map((interviewer, index) => (
+              {filteredInterviewers.map((interviewer, index) => (
                 <tr key={interviewer._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{indexOfFirstInterviewer + index + 1}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{ index + 1}</td>
+                  {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{indexOfFirstInterviewer + index + 1}</td> */}
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
@@ -128,7 +130,7 @@ const Interviewers: React.FC = () => {
                       </span>
                     ) : (
                       <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                        <FiXCircle className="mr-1" /> Not Approved
+                        <FiXCircle className="m-1" /> Not Approved
                       </span>
                     )}
                   </td>
@@ -141,54 +143,14 @@ const Interviewers: React.FC = () => {
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </tbody> 
+            )
+          }
           </table>
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">{indexOfFirstInterviewer + 1}</span> to{" "}
-              <span className="font-medium">
-                {Math.min(indexOfLastInterviewer, filteredInterviewers.length)}
-              </span>{" "}
-              of <span className="font-medium">{filteredInterviewers.length}</span> results
-            </p>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={prevPage}
-              disabled={currentPage === 1}
-              className={`px-3 py-1 rounded-md ${
-                currentPage === 1 ? "bg-gray-200 text-gray-500" : "bg-blue-500 text-white"
-              }`}
-            >
-              <FiChevronLeft />
-            </button>
-            {[...Array(Math.ceil(filteredInterviewers.length / interviewersPerPage))].map((_, i) => (
-              <button
-                key={i}
-                onClick={() => paginate(i + 1)}
-                className={`px-3 py-1 rounded-md ${
-                  currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-            <button
-              onClick={nextPage}
-              disabled={currentPage === Math.ceil(filteredInterviewers.length / interviewersPerPage)}
-              className={`px-3 py-1 rounded-md ${
-                currentPage === Math.ceil(filteredInterviewers.length / interviewersPerPage)
-                  ? "bg-gray-200 text-gray-500"
-                  : "bg-blue-500 text-white"
-              }`}
-            >
-              <FiChevronRight />
-            </button>
-          </div>
-        </div>
+        <Pagination currentPage={currentPage} onPageChange={handlePageChange} totalPages={totalPages}/>
+
       </div>
     </div>
   );

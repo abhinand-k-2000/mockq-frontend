@@ -9,10 +9,12 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { FaRegClock } from "react-icons/fa";
 import InterviewerRatingModal from "../../components/candidate/InterviewerRatingModal";
 import toast from "react-hot-toast";
+import Pagination from "../../components/Pagination";
+import TableShimmer from "../../components/shimmer/TableShimmer";
 
 interface IScheduledInterview {
   _id: string;
@@ -26,7 +28,7 @@ interface IScheduledInterview {
   candidateId: string;
   status: string;
   roomId: string;
-  interviewerRatingAdded: boolean
+  interviewerRatingAdded: boolean;
 }
 
 const OutsourcedInterviews = () => {
@@ -40,18 +42,25 @@ const OutsourcedInterviews = () => {
 
   const [ratingModalOpen, setRatingModalOpen] = useState(false);
 
-  const handleRatingModalOpen = (interview: IScheduledInterview) => {
-    
-    setSelectedInterview(interview);
-      setRatingModalOpen(true);
+  const [loading, setLoading]= useState(false)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [totalPages, setTotalPages] = useState(1);
+  const currentPage = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "5");
 
+  const handleRatingModalOpen = (interview: IScheduledInterview) => {
+    setSelectedInterview(interview);
+    setRatingModalOpen(true);
   };
 
   const navigate = useNavigate();
 
-  const fetchScheduledInterviews = async () => {
-    const response = await getScheduledIinterviews();
+  const fetchScheduledInterviews = async (page: number, limit: number) => {
+    setLoading(true)
+    const response = await getScheduledIinterviews(page, limit);
     setScheduledInterviews(response.data);
+    setTotalPages(Math.ceil(response.total / limit));
+    setLoading(false)
   };
 
   const handleOpenModal = (interview: IScheduledInterview) => {
@@ -65,12 +74,15 @@ const OutsourcedInterviews = () => {
 
   const handleJoinCall = () => {
     navigate(`/room/${selectedInterview?.roomId}`);
-    // navigate(`/candidate/video-call/${selectedInterview?.roomId}`)
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams({ page: newPage.toString(), limit: limit.toString() });
   };
 
   useEffect(() => {
-    fetchScheduledInterviews();
-  }, [ratingModalOpen]);
+    fetchScheduledInterviews(currentPage, limit);
+  }, [ratingModalOpen, currentPage, limit]);
   return (
     <>
       {ratingModalOpen && (
@@ -80,6 +92,172 @@ const OutsourcedInterviews = () => {
           interview={selectedInterview}
         />
       )}
+
+      <CandidateNavbar />
+
+      <div className="min-h-screen flex flex-col bg-[#EEF5FF] p-24">
+        <div className="max-w-7xl text-[#142057] mx-auto w-full">
+          <h1 className="text-xl  font-bold mb-4">Outsourced Interviews</h1>
+          <p className="font-normal mb-10">
+            Find expert interviewers to take interviews on your behalf
+          </p>
+
+          <div className="flex flex-col">
+            <div className="overflow-x-auto">
+              <div className="p-1.5 w-full inline-block align-middle">
+                <div className="overflow-hidden border rounded-lg shadow-lg bg-white">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
+                      <tr>
+                        {[
+                          "ROLL NAME",
+                          "SCHEDULED ON",
+                          "PRICE",
+                          "STATUS",
+                          "",
+                          " ",
+                        ].map((header) => (
+                          <th
+                            key={header}
+                            scope="col"
+                            className="px-6 py-5 text-sm font-bold text-left text-white uppercase tracking-wider"
+                          >
+                            {header}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    {
+                      loading ? (
+                        <TableShimmer columns={6}/>
+                      ) : (
+
+                     
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {scheduledInterviews.map(
+                        (interview: IScheduledInterview) => (
+                          <tr
+                            key={interview._id}
+                            className="hover:bg-blue-50 transition-colors duration-200 ease-in-out cursor-pointer"
+                            onClick={() => handleOpenModal(interview)}
+                          >
+                            <td className="px-6 py-5 text-sm font-medium text-gray-800 whitespace-nowrap">
+                              {interview.title}
+                            </td>
+                            <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                              {new Date(interview.date).toLocaleDateString(
+                                "en-US",
+                                {
+                                  day: "numeric",
+                                  month: "long",
+                                  year: "numeric",
+                                }
+                              )}
+                            </td>
+                            <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <MdOutlineCurrencyRupee className="text-blue-500 mr-1" />
+                                <span>{interview.price}</span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap">
+                              <span
+                                className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                  interview.status === "Completed"
+                                    ? "bg-green-100 text-green-800"
+                                    : interview.status === "Scheduled"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-yellow-100 text-yellow-800"
+                                }`}
+                              >
+                                {interview.status}
+                              </span>
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap text-right">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleViewFeedback(interview._id);
+                                }}
+                                className="bg-[#2F76FF] hover:bg-[#19328F] text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                              >
+                                View Feedback
+                              </button>
+                            </td>
+                            <td className="px-6 py-5 whitespace-nowrap text-right">
+                              <button
+                                onClick={(e) => {
+                                  if (interview.interviewerRatingAdded) {
+                                    e.stopPropagation();
+                                    toast.success(
+                                      "You've Already Rated This Interview",
+                                      {
+                                        style: {
+                                          border: "1px solid #2F76FF",
+                                          padding: "16px",
+                                          color: "#19328F",
+                                          backgroundColor: "#D9E9FF",
+                                        },
+                                        iconTheme: {
+                                          primary: "#2F76FF",
+                                          secondary: "#19328F",
+                                        },
+                                      }
+                                    );
+                                    return;
+                                  }
+                                  if (interview.status === "Completed") {
+                                    e.stopPropagation();
+                                    handleRatingModalOpen(interview);
+                                  } else {
+                                    e.stopPropagation();
+
+                                    toast.success(
+                                      "You can rate the interview once it is completed.",
+                                      {
+                                        style: {
+                                          border: "1px solid #2F76FF",
+                                          padding: "16px",
+                                          color: "#19328F",
+                                          backgroundColor: "#D9E9FF",
+                                        },
+                                        iconTheme: {
+                                          primary: "#2F76FF",
+                                          secondary: "#19328F",
+                                        },
+                                      }
+                                    );
+                                  }
+                                }}
+                                className="border-2 border-[#2F76FF] text-[#2F76FF] hover:bg-[#2F76FF] hover:text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
+                              >
+                                Rate Interview
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                     )
+                    }
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-grow"></div>
+
+            <div className="mt-6">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/*----------------------------------- Modal for block/unblock confirmation--------------------------------------------- */}
 
       <Dialog
@@ -189,140 +367,6 @@ const OutsourcedInterviews = () => {
       </Dialog>
 
       {/*-----------------------------------End of Modal for block/unblock confirmation--------------------------------------------- */}
-
-      <CandidateNavbar />
-
-      <div className="min-h-screen flex flex-col bg-[#EEF5FF] p-24">
-        <div className="max-w-7xl text-[#142057] mx-auto w-full">
-          <h1 className="text-xl  font-bold mb-4">Outsourced Interviews</h1>
-          <p className="font-normal mb-10">
-            Find expert interviewers to take interviews on your behalf
-          </p>
-
-          <div className="flex flex-col">
-  <div className="overflow-x-auto">
-    <div className="p-1.5 w-full inline-block align-middle">
-      <div className="overflow-hidden border rounded-lg shadow-lg bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gradient-to-r from-[#2F76FF] to-[#19328F]">
-            <tr>
-              {["ROLL NAME", "SCHEDULED ON", "PRICE", "STATUS", "", " "].map((header) => (
-                <th
-                  key={header}
-                  scope="col"
-                  className="px-6 py-5 text-sm font-bold text-left text-white uppercase tracking-wider"
-                >
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {scheduledInterviews.map((interview: IScheduledInterview) => (
-              <tr
-                key={interview._id}
-                className="hover:bg-blue-50 transition-colors duration-200 ease-in-out cursor-pointer"
-                onClick={() => handleOpenModal(interview)}
-              >
-                <td className="px-6 py-5 text-sm font-medium text-gray-800 whitespace-nowrap">
-                  {interview.title}
-                </td>
-                <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
-                  {new Date(interview.date).toLocaleDateString("en-US", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </td>
-                <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <MdOutlineCurrencyRupee className="text-blue-500 mr-1" />
-                    <span>{interview.price}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap">
-                  <span
-                    className={`px-3 py-1.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      interview.status === "Completed"
-                        ? "bg-green-100 text-green-800"
-                        : interview.status === "Scheduled"
-                        ? "bg-blue-100 text-blue-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {interview.status}
-                  </span>
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap text-right">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewFeedback(interview._id);
-                    }}
-                    className="bg-[#2F76FF] hover:bg-[#19328F] text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
-                  >
-                    View Feedback
-                  </button>
-                </td>
-                <td className="px-6 py-5 whitespace-nowrap text-right">
-                  <button
-                    onClick={(e) => {
-                      if(interview.interviewerRatingAdded) {
-                        e.stopPropagation()
-                        toast.success('You\'ve Already Rated This Interview', {
-                          style: {
-                            border: '1px solid #2F76FF',
-                            padding: '16px',
-                            color: '#19328F',
-                            backgroundColor: '#D9E9FF', 
-                          },
-                          iconTheme: {
-                            primary: '#2F76FF',
-                            secondary: '#19328F',
-                          },
-                        });
-                        return
-                      }
-                      if(interview.status === 'Completed'){
-                        e.stopPropagation();
-                        handleRatingModalOpen(interview);
-                      } else {
-                        e.stopPropagation()
-                       
-
-                        toast.success('You can rate the interview once it is completed.', {
-                          style: {
-                            border: '1px solid #2F76FF',
-                            padding: '16px',
-                            color: '#19328F',
-                            backgroundColor: '#D9E9FF', 
-                          },
-                          iconTheme: {
-                            primary: '#2F76FF',
-                            secondary: '#19328F',
-                          },
-                        });
-                        
-                      }
-                    }}
-                    className="border-2 border-[#2F76FF] text-[#2F76FF] hover:bg-[#2F76FF] hover:text-white py-2 px-4 rounded-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-md"
-                  >
-                    Rate Interview
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-          
-        </div>
-      </div>
     </>
   );
 };
