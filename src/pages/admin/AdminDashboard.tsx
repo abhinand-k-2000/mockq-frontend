@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FaUsers, FaUserTie, FaCalendarCheck, FaMoneyBillWave } from 'react-icons/fa';
+import { FaUsers, FaUserTie, FaCalendarCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import { getDashboardDetails } from '../../api/adminApi';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartOptions } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -43,7 +43,6 @@ const aggregateChartData = (interviews: IInterview[], groupBy: 'month' | 'day') 
     if (groupBy === 'month') {
       key = date.toLocaleString('default', { month: 'short', year: 'numeric' });
     } else {
-      // key = date.toISOString().split('T')[0]; // YYYY-MM-DD format
       key = new Date(date).toLocaleDateString('en-IN', {day: '2-digit', month: 'long'}); // YYYY-MM-DD format
     }
 
@@ -77,7 +76,7 @@ const AdminDashboard = () => {
   const [chartData, setChartData] = useState<any>(null);
   const [viewMode, setViewMode] = useState<'month' | 'day'>('month');
 
-  const chartOptions = {
+  const chartOptions:ChartOptions<'bar'> = {
     responsive: true,
     plugins: {
       legend: {
@@ -178,7 +177,13 @@ const AdminDashboard = () => {
   );
 };
 
-const StatCard = ({ icon, title, value }) => (
+interface IStatCardProps {
+  icon: React.ReactNode;
+  title: string;
+  value: number
+}
+
+const StatCard: React.FC<IStatCardProps> = ({ icon, title, value }) => (
   <div className="bg-white rounded-lg shadow-lg p-6 flex items-center space-x-4 transform hover:scale-105 transition-all duration-300">
     <div className="text-4xl">{icon}</div>
     <div>

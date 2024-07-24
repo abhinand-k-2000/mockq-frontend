@@ -1,7 +1,14 @@
 import { Chip } from '@material-tailwind/react'
-import React from 'react'
 
-const UserBadgeItem = ({user, handleFunction}) => {
+interface IUser {
+  name: string
+}
+interface IProps {
+  user: IUser;
+  handleFunction: () => void;
+}
+
+const UserBadgeItem: React.FC<IProps> = ({user, handleFunction}) => {
   return (
 
     <Chip 

@@ -1,16 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HiChartBar, HiQuestionMarkCircle } from "react-icons/hi";
 import { GrTransaction } from "react-icons/gr";
-
-
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { getPaymentDashboardDetails } from '../../api/interviewerApi';
 
+interface Transaction {
+  date: string;
+  candidate: {
+    name: string;
+  };
+  fromTime: string;
+  toTime: string;
+  price: number;
+}
+
+// interface DashboardResponse {
+//   totalRevenue: number;
+//   interviews: Transaction[];
+// }
+
 const PaymentsDashboard = () => {
   const [totalEarnings, setTotalEarnings] = useState(0);
-  const [transactionHistory, setTransactionHistory] = useState([]);
-
+  const [transactionHistory, setTransactionHistory] = useState<Transaction []>([]);
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 3
 
@@ -42,13 +54,12 @@ const PaymentsDashboard = () => {
     fetchDashboadDetails()
   }, [])
 
-  console.log("trans: ", transactionHistory)
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentTransactions = transactionHistory.slice(indexOfFirstItem, indexOfLastItem)
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
   return (
     <div className="bg-gray-100 min-h-screen">

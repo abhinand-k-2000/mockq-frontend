@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   Button,
   Dialog,
@@ -11,8 +11,16 @@ import {
 import { FaStar } from "react-icons/fa";
 import { giveInterviewerRating } from "../../api/candidateApi";
 import toast from "react-hot-toast";
+import { IScheduledInterview } from "../../pages/candidate/OutsourcedInterviews";
 
-const InterviewerRatingModal = ({ open, onClose, interview }) => {
+interface IProps {
+  open: boolean;
+  onClose: ()=> void;
+  interview: IScheduledInterview
+
+}
+
+const InterviewerRatingModal: React.FC<IProps> = ({ open, onClose, interview }) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState("");
@@ -89,7 +97,7 @@ const InterviewerRatingModal = ({ open, onClose, interview }) => {
         <div className="flex flex-col items-center space-y-4">
           <div className="flex flex-col items-center">
             <div className="flex">
-              {[...Array(5)].map((star, index) => {
+              {[...Array(5)].map((_, index) => {
                 const ratingValue = index + 1;
                 return (
                   <label key={index}>

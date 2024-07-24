@@ -9,9 +9,12 @@ import InterviewerRoute from "./routes/InterviewerRoute"
 import Room from "./pages/common/Room"
 import { RootState } from "./redux/store"
 import { useSelector } from "react-redux"
+import { ReactNode } from "react"
 
-
-const ProtectedRoute = ({ children }) => {
+interface IProps {
+  children: ReactNode;
+}
+const ProtectedRoute: React.FC<IProps> = ({ children }) => {
   const user = useSelector(
     (state: RootState) => state.auth.interviewerInfo || state.auth.candidateInfo
   );

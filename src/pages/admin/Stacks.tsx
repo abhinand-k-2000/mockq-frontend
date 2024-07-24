@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getStacks, unlistStack } from "../../api/adminApi";
 import toast from "react-hot-toast";
 import { Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
-import { FiPlus, FiList, FiTrash2, FiCheckSquare, FiPackage, FiLayers, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiPlus, FiList, FiTrash2, FiCheckSquare, FiPackage, FiLayers } from 'react-icons/fi';
 import Pagination from "../../components/Pagination";
 import StacksShimmer from "../../components/shimmer/StacksShimmer";
 

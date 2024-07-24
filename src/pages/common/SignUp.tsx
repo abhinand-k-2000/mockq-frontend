@@ -67,7 +67,15 @@ const SignUp = () => {
   );
 };
 
-const RoleCard = ({ icon, title, description, onClick }) => (
+
+interface IProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  onClick: () => void
+}
+
+const RoleCard: React.FC<IProps> = ({ icon, title, description, onClick }) => (
   <motion.div
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}

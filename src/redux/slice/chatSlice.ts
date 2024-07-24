@@ -1,6 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+interface Chat {
+    _id: string;
+    chatName: string;
+    isGroupChat: boolean;
+    users: string[];
+    latestMessage: string
+}
+
+interface ChatState {
+    chats: Chat[];
+    selectedChat: Chat | null;
+}
+
+const initialState: ChatState = {
     chats: [],
     selectedChat: null
 }

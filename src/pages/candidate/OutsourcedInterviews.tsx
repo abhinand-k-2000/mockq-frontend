@@ -9,14 +9,14 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FaRegClock } from "react-icons/fa";
 import InterviewerRatingModal from "../../components/candidate/InterviewerRatingModal";
 import toast from "react-hot-toast";
 import Pagination from "../../components/Pagination";
 import TableShimmer from "../../components/shimmer/TableShimmer";
 
-interface IScheduledInterview {
+export interface IScheduledInterview {
   _id: string;
   date: Date;
   fromTime: Date;
@@ -85,7 +85,7 @@ const OutsourcedInterviews = () => {
   }, [ratingModalOpen, currentPage, limit]);
   return (
     <>
-      {ratingModalOpen && (
+      {ratingModalOpen && selectedInterview &&(
         <InterviewerRatingModal
           open={ratingModalOpen}
           onClose={() => setRatingModalOpen(false)}

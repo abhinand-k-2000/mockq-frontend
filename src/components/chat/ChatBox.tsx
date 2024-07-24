@@ -1,4 +1,3 @@
-import React from "react";
 import SingleChat from "./SingleChat";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";

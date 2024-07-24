@@ -190,7 +190,7 @@ export const getAllPremiumCandidates = async (search: string) => {
 }
 
 
-export const createGroup = async (chatName: string, users: string[]) => { // types edited
+export const createGroup = async (chatName: string, users: string) => { // types edited
     try {
         const {data} = await Api.post(candidateEndpoint.createGroup, {chatName, users})
         return data

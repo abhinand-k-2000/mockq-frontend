@@ -1,6 +1,5 @@
 import  { useEffect, useState } from "react";
 import { home } from "../../api/candidateApi";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaSearch } from "react-icons/fa";
 

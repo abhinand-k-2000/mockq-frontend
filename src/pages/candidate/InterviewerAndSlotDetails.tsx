@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import CandidateNavbar from "../../components/candidate/CandidateNavbar";
 import { getInterviewerSlotDetails, makePayment } from "../../api/candidateApi";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { FaArrowLeftLong } from "react-icons/fa6";
-import { FaArrowLeft, FaCalendarAlt, FaClock, FaCode, FaDollarSign, FaInfoCircle } from "react-icons/fa";
+import { FaArrowLeft, FaInfoCircle } from "react-icons/fa";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 
 interface Schedule {

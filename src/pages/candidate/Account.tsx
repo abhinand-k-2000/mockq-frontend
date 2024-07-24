@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import CandidateNavbar from '../../components/candidate/CandidateNavbar'
 
 const Account = () => {

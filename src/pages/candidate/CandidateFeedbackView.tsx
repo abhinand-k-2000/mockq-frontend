@@ -4,11 +4,33 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import CandidateNavbar from "../../components/candidate/CandidateNavbar";
 
+interface Feedback {
+  interviewer?: { name: string };
+  candidate?: { name: string };
+  technicalSkills?: string;
+  communicationSkills?: string;
+  problemSolvingSkills?: string;
+  strength?: string;
+  areaOfImprovement?: string;
+  additionalComments?: string;
+  [key: string]: any
 
+}
+
+interface InterviewDetails {
+  date: string;
+  fromTime: string;
+  toTime: string;
+}
+
+interface FeedbackDetails {
+  feedback: Feedback;
+  interviewDetails: InterviewDetails;
+}
 
 const CandidateFeedbackView = () => {
-  const { interviewId } = useParams();
-  const [feedbackDetails, setFeedbackDetails] = useState(null);
+  const { interviewId } = useParams<{interviewId: string}>();
+  const [feedbackDetails, setFeedbackDetails] = useState<FeedbackDetails | null>(null);
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
 
   const navigate = useNavigate();
@@ -92,9 +114,9 @@ const CandidateFeedbackView = () => {
   }
 
   const timing = `${new Date(
-    feedbackDetails.interviewDetails.fromTime
+    feedbackDetails!.interviewDetails.fromTime
   ).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })} -
-  ${new Date(feedbackDetails.interviewDetails.toTime).toLocaleTimeString(
+  ${new Date(feedbackDetails!.interviewDetails.toTime).toLocaleTimeString(
     "en-IN",
     { hour: "2-digit", minute: "2-digit" }
   )}`;
@@ -123,17 +145,17 @@ const CandidateFeedbackView = () => {
             {[
               {
                 label: "Interviewer",
-                value: feedbackDetails.feedback.interviewer?.name,
+                value: feedbackDetails?.feedback.interviewer?.name,
                 icon: "👤",
               },
               {
                 label: "Candidate",
-                value: feedbackDetails.feedback.candidate?.name,
+                value: feedbackDetails?.feedback.candidate?.name,
                 icon: "🎓",
               },
               {
                 label: "Date",
-                value: new Date(feedbackDetails.interviewDetails.date)
+                value: new Date(feedbackDetails!.interviewDetails.date)
                   .toLocaleDateString("en-IN", {
                     month: "long",
                     day: "2-digit",
@@ -177,7 +199,7 @@ const CandidateFeedbackView = () => {
                   {skill.split(/(?=[A-Z])/).join(" ")}
                 </h3>
                 <p className="text-gray-700 font-medium">
-                  {feedbackDetails.feedback[skill]}
+                  {feedbackDetails?.feedback[skill]}
                 </p>
               </div>
             ))}
@@ -210,7 +232,7 @@ const CandidateFeedbackView = () => {
                   {field.split(/(?=[A-Z])/).join(" ")}
                 </h3>
                 <p className="text-gray-700">
-                  {feedbackDetails.feedback[field]}
+                  {feedbackDetails?.feedback[field]}
                 </p>
               </div>
             ))}

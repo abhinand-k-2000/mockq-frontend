@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import CommunityChat from '../../pages/candidate/CommunityChat';
 import Subscribe from '../../pages/candidate/Subscribe';
 import { isCandidatePremium } from '../../api/candidateApi';

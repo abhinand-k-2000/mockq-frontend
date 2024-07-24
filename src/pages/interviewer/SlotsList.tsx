@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getSlotsList } from "../../api/interviewerApi";
 import { MdOutlineEdit } from "react-icons/md";

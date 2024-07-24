@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import toast from "react-hot-toast";
@@ -12,13 +12,22 @@ import io, { Socket } from "socket.io-client"
 const ENDPOINT = "http://localhost:3000"
 let socket: Socket;
 
+interface DecodedToken {
+  id: string;
+}
+interface IMessage {
+  _id: string;
+  sender: {_id: string; name: string};
+  content: string
+}
+
 const SingleChat = () => {
   const { selectedChat } = useSelector((state: RootState) => state.chat);
   const { candidateInfo } = useSelector((state: RootState) => state.auth);
-  const decoded = jwtDecode(candidateInfo);
+  const decoded: DecodedToken = jwtDecode(candidateInfo);
   const userId = decoded.id;
 
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [socketConnected, setSocketConnected] = useState(false)
@@ -61,14 +70,15 @@ const SingleChat = () => {
     fetchMessages();
   }, [selectedChat]);
 
-  const typingHandler = (e) => {
+  const typingHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
   };
 
-  const sendMessage = async (event) => {
+  const sendMessage = async (event: KeyboardEvent<HTMLInputElement> | {key: string}) => {
     if (event.key === "Enter" && newMessage) {
       setNewMessage("");
       try {
+        if(!selectedChat) return toast.error("No chat selected!")
         const response = await saveMessage(newMessage, selectedChat._id);
         
         socket.emit("new message", response.data)

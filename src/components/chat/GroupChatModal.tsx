@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   Button,
   Dialog,
@@ -7,7 +7,6 @@ import {
   CardBody,
   CardFooter,
   Typography,
-  Checkbox,
   Input,
   Spinner,
 } from "@material-tailwind/react";
@@ -19,13 +18,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setChats } from "../../redux/slice/chatSlice";
 import { FaUsers } from "react-icons/fa";
+
+interface IProps {
+  open: boolean;
+  handleOpen: () => void
+}
+interface IUser {
+  _id: string;
+  name: string
+  email: string
+}
  
-const  GroupChatModal = ({open, handleOpen}) => {
+const  GroupChatModal: React.FC<IProps> = ({open, handleOpen}) => {
 
     const [groupChatName, setGroupChatName] = useState("")
-    const [search, setSearch] = useState("");
-    const [selectedUsers, setSelectedUsers] = useState([])
-    const [searchResult, setSearchResult] = useState([])
+    const [selectedUsers, setSelectedUsers] = useState<IUser[]>([])
+    const [searchResult, setSearchResult] = useState<IUser[]>([])
     const [loading, setLoading] = useState(false)
 
     const chats = useSelector((state: RootState) => state.chat.chats)
@@ -33,8 +41,7 @@ const  GroupChatModal = ({open, handleOpen}) => {
 
 
 
-    const handleSearch = async (query: string) => {
-        setSearch(query);
+    const handleSearch = async (query: string) => {        
         if(!query) return 
 
         try {
@@ -42,14 +49,14 @@ const  GroupChatModal = ({open, handleOpen}) => {
             const response = await getAllPremiumCandidates(query)
             setLoading(false)
             setSearchResult(response.data)
-        } catch (error: any) {
+        } catch (error) {
             console.log(error)
-            toast.error(error)
+            // toast.error(error)
         }
     }
 
     
-    const handleGroup = (userToAdd) => {
+    const handleGroup = (userToAdd: IUser) => {
         if(selectedUsers.includes(userToAdd)){
             toast.error("User already added")
             return 
@@ -58,7 +65,7 @@ const  GroupChatModal = ({open, handleOpen}) => {
         setSelectedUsers([...selectedUsers, userToAdd])
     }
     
-    const handleDelete = (userToDelete) => {
+    const handleDelete = (userToDelete: IUser) => {
         setSelectedUsers(selectedUsers.filter(user => user._id !== userToDelete._id))
     }
 
@@ -80,13 +87,16 @@ const  GroupChatModal = ({open, handleOpen}) => {
           });
             return 
         }
-        console.log('insdie handle sujbitttttttt')
-        const users = JSON.stringify(selectedUsers.map(u => u._id))
-        const response = await createGroup(groupChatName, users )
-        dispatch(setChats([response, ...chats]))
-        setGroupChatName("")
-        setSelectedUsers([])
-        handleOpen()
+        try {
+          const users = JSON.stringify(selectedUsers.map(u => u._id));
+          const response = await createGroup(groupChatName, users);
+          dispatch(setChats([response, ...chats]));
+          setGroupChatName("");
+          setSelectedUsers([]);
+          handleOpen();
+        } catch (error) {
+          toast.error("Failed to create group");
+        }
 
     }
 
@@ -113,12 +123,15 @@ const  GroupChatModal = ({open, handleOpen}) => {
             size="lg"
             onChange={(e) => setGroupChatName(e.target.value)}
             className="border-blue-gray-200 focus:border-blue-500"
+            crossOrigin='anonymous'
           />
           <Input
             label="Search members"
             size="lg"
             onChange={(e) => handleSearch(e.target.value)}
             className="border-blue-gray-200 focus:border-blue-500"
+            crossOrigin='anonymous'
+
           />
           <div className="flex flex-wrap gap-2 mt-2">
             {selectedUsers.map((user) => (

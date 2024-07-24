@@ -4,7 +4,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { signup } from "../../api/interviewerApi";
 import toast from "react-hot-toast";
 import Navbar from "../../components/welcome_page/Navbar";
-import { Button } from "@material-tailwind/react";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 

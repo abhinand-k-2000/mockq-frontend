@@ -1,4 +1,3 @@
-import { BiSolidCommentDetail } from "react-icons/bi";
 import Api from "../services/axios";
 
 import interviewerEndpoint from "../services/endpoints/interviewerEndpoint";
@@ -247,7 +246,7 @@ interface IFeedbacK{
   problemSolvingSkills: string
   strength: string
   areaOfImprovement: string
-  additionalCommen: string
+  additionalComments: string
 
 }
 

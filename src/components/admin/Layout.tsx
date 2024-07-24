@@ -1,33 +1,13 @@
-// import {ReactNode} from 'react'
-// import Sidebar from './Sidebar'
-// import Navbar from './Navbar'   
-
-
-// interface Props {
-//     children: ReactNode
-// }
-
-// const Layout = ({children}: Props) => {
-//   return (
-//     <div className="flex h-screen">
-//       <Sidebar />
-//       <div className="flex flex-col w-full">
-//         <Navbar />
-//         <main className="flex-1 p-4 overflow-y-auto">{children}</main>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default Layout
-
 
 import { ReactNode, useState } from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import { FiMenu } from 'react-icons/fi';
 
-const AdminLayout = ({ children }) => {
+interface IProps {
+  children: ReactNode;
+}
+
+const AdminLayout: React.FC<IProps> = ({ children }) => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

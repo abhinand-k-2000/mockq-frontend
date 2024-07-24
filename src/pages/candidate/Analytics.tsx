@@ -5,6 +5,7 @@ import { Pie } from 'react-chartjs-2';
 import { FaCalendarAlt, FaCheckCircle } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { getAnalytics } from '../../api/candidateApi';
+import { ChartOptions } from 'chart.js';
 
 
 interface IAnlaytics {
@@ -29,7 +30,7 @@ const Analytics = () => {
     ],
   };
 
-  const chartOptions = {
+  const chartOptions: ChartOptions<'pie'> = {
     responsive: true,
     plugins: {
       legend: {

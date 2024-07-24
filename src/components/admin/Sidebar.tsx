@@ -1,11 +1,14 @@
 
-
-
 import { Link, useLocation } from 'react-router-dom';
 import { FiHome, FiUsers, FiUserCheck, FiLayers, FiX } from 'react-icons/fi';
 import { MdWork } from 'react-icons/md';
 
-const Sidebar = ({ isOpen, setIsOpen }) => {
+interface IProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void
+}
+
+const Sidebar: React.FC<IProps> = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
 
   const menuItems = [

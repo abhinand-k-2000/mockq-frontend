@@ -1,4 +1,3 @@
-import React from "react";
 import frontend from '/frontend.svg'
 
 import { FaSearch } from "react-icons/fa";

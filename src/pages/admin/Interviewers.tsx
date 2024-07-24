@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getInterviewers } from "../../api/adminApi";
 import { Link, useSearchParams } from "react-router-dom";
-import { FiSearch, FiUser, FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiSearch,  FiMail, FiPhone, FiCheckCircle, FiXCircle, FiEye } from "react-icons/fi";
 import Pagination from "../../components/Pagination";
 import TableShimmer from "../../components/shimmer/TableShimmer";
 

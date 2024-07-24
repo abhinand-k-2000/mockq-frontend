@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { FaPlus, FaUsers } from "react-icons/fa";
 import GroupChatModal from "./GroupChatModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,6 @@ const Sidebar = () => {
   const { chats, selectedChat } = useSelector((state: RootState) => state.chat);
   const dispatch = useDispatch();
 
-  console.log("chats: ", chats)
 
   const fetchChats = async () => {
     try {

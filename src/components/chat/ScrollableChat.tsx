@@ -1,15 +1,25 @@
 import {  Tooltip } from "@material-tailwind/react";
-import React, { useEffect, useRef } from "react";
+import  { useEffect, useRef } from "react";
 import Avatar from 'react-avatar';
-import {
-  isLastMessage,
-  isSameSender,
-  isSameSenderMargin,
-  isSameUser,
-} from "../../config/chatLogic";
+import {isLastMessage, isSameSender, isSameSenderMargin} from "../../config/chatLogic";
 
-const ScrollableChat = ({ messages, userId }) => {
-  const messagesEndRef = useRef();
+interface IUser {
+  _id: string;
+  name: string
+}
+interface IMessage {
+  _id: string;
+  sender: IUser;
+  content: string
+}
+interface ScrollableChatProps {
+  messages: IMessage[];
+  userId: string
+}
+
+
+const ScrollableChat: React.FC<ScrollableChatProps> = ({ messages, userId }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBotton = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,6 +28,7 @@ const ScrollableChat = ({ messages, userId }) => {
   useEffect(() => {
     scrollToBotton();
   }, [messages]);
+
   return (
     <div className="h-[400px] overflow-y-auto p-4">
       {messages &&
@@ -35,7 +46,6 @@ const ScrollableChat = ({ messages, userId }) => {
                 />
               </Tooltip>
             )}
-
             <span
               style={{
                 background: `${m.sender._id == userId ? "#BEE3F8" : "#B9F5D0"}`,
