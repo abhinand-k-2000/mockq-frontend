@@ -30,7 +30,7 @@ const SingleChat = () => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false)
+  // const [socketConnected, setSocketConnected] = useState(false)
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -51,7 +51,7 @@ const SingleChat = () => {
     socket = io(ENDPOINT);
     socket.emit("setup", userId);
     socket.on("connected", () => {
-      setSocketConnected(true)
+      // setSocketConnected(true)
     })
 
 

@@ -5,25 +5,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaInfoCircle } from "react-icons/fa";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 
-interface Schedule {
-  from: string;
-  to: string;
-  title: string;
-  price: number;
-  description: string;
-  status: string;
-  technologies: string[];
-}
 
-interface Slot {
-  _id: string;
-  date: string;
-  schedule: Schedule;
-}
-
-interface ISlotsProps {
-  slots: Slot[];
-}
 
 interface IInterviewer {
   name: string;
@@ -38,15 +20,13 @@ const InterviewerAndSlotDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { selectedTech } = location.state || {}; // Retrieving selected tech from state
+  const { selectedTech } = location.state || {}; 
 
 
   const handleCheckout = async (slot: any) => {
-    console.log("data: ", slot);
 
     const response = await makePayment(slot);
 
-    console.log("respnse: ", response);
     if (response.success) {
       window.location = response.data;
     }

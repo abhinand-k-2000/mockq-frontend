@@ -11,19 +11,19 @@ const CandidateHome = () => {
 
   const [selectedStack , setSelectedStack] = useState<string>('')
   const [selectedTech, setSelectedTech] = useState<string>('')
-  const [selectedInterviewer, setSelectedInterviewer] = useState(null)
+  // const [selectedInterviewer, setSelectedInterviewer] = useState(null)
 
 
 
   const handleSelectStack = (stack: string) => {      
     setSelectedStack(stack)
     setSelectedTech('');
-    setSelectedInterviewer(null)
+    // setSelectedInterviewer(null)
   }
 
   const handleSelectTech = (tech: string) => {
     setSelectedTech(tech)
-    setSelectedInterviewer(null)
+    // setSelectedInterviewer(null)
   }
 
 
