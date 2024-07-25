@@ -62,7 +62,7 @@ const CheckoutForm = ({isOpen, onClose, onSubscriptionComplete}: ICheckOutForm) 
       }
 
       const response = await fetch(
-        "http://localhost:3000/api/payment/create-subscription",
+        "https://www.mockq.abhinandk.online/api/payment/create-subscription",
         {
           method: "POST",
           headers: {

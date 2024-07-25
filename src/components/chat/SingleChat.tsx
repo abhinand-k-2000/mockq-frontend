@@ -9,7 +9,7 @@ import { jwtDecode } from "jwt-decode";
 import { Spinner } from "@material-tailwind/react";
 import io, { Socket } from "socket.io-client"
 
-const ENDPOINT = "http://localhost:3000"
+const ENDPOINT = "https://www.mockq.abhinandk.online"
 let socket: Socket;
 
 interface DecodedToken {
