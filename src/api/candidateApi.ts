@@ -57,8 +57,6 @@ export const resendOtp = async () => {
                 Authorization: `Bearer ${token}`
             }
         })
-        console.log("response data: ", response.data)
-        console.log("response: ", response)
         const newToken = response.data.token;
         localStorage.setItem("candidateOtp", newToken)
         return response
