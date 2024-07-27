@@ -37,7 +37,7 @@ const InterviewerDetails = () => {
     <>
       <InterviewerNavbar />
 
-      <div className="min-h-screen flex items-center justify-center bg-[#D9E9FF] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-[#D9E9FF] py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl w-full space-y-8 bg-white shadow-2xl rounded-3xl p-10">
           <div className="text-center">
             <h2 className="mt-6 text-4xl font-extrabold text-[#142057]">
