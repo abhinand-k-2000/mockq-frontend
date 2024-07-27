@@ -252,3 +252,12 @@ export const verifyCandidateVideoConference = async (roomId: string, userId: str
         return error.response.data
     }
 }
+
+export const getNotifications = async () => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getNotifications)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}

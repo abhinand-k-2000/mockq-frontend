@@ -34,6 +34,8 @@ const candidateEndpoint = {
   getAnalytics: "/candidate/get-analytics",
 
   verifyCandidateVideoConference: "/candidate/verify-video-conference",
+
+  getNotifications: "/candidate/get-notifications"
 };
 
 export default candidateEndpoint;
