@@ -16,24 +16,29 @@ interface Stack {
 
 const Stacks = () => {
   const navigate = useNavigate();
-  const [stacksList, setStacksList] = useState<Stack[]>([]);
-  const [unlistedStacksList, setUnlistedStacksList] = useState<Stack[]>([]);
+  const [stacks, setStacks] = useState<Stack[]>([]);
   const [open, setOpen] = useState(false);
 
   const [loading, setLoading] = useState(false)
   const [searchParams, setSearchParams ] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1)
+
   const currentPage = parseInt(searchParams.get("page") || "1")
   const limit = parseInt(searchParams.get("limit") || "5")
 
 
   const fetchStacks = async (page: number, limit: number) => {
     setLoading(true)
-    const response = await getStacks(page, limit);
+    try {
+      const response = await getStacks(page, limit);
+      console.log('response;: ', response)
     if (response.success) {
-      setStacksList(response.data.filter((stack: Stack) => stack.isListed));
-      setUnlistedStacksList(response.data.filter((stack: Stack) => !stack.isListed));
+      setStacks(response.data)
       setTotalPages(Math.ceil(response.total / limit))
+    }
+    } catch (error) {
+      toast.error("Failed to fetch stacks")
+    }finally {
       setLoading(false)
     }
   };
@@ -42,7 +47,7 @@ const Stacks = () => {
     const response = await unlistStack(stackId);
     if (response.data) {
       toast.success(response.data.isListed ? "Stack Listed" : "Stack Unlisted");
-      fetchStacks(currentPage, limit);
+      setStacks(prevStacks => prevStacks.map(stack => stack._id === stackId ? {...stack, isListed: !stack.isListed} : stack))
     } else {
       toast.error("Something went wrong in unlisting stack!");
     }
@@ -55,6 +60,9 @@ const Stacks = () => {
   useEffect(() => {
     fetchStacks(currentPage, limit);
   }, [currentPage, limit]);
+
+  const listedStacks = stacks.filter(stack => stack.isListed);
+  const unlistedStacks = stacks.filter(stack => !stack.isListed);
 
 
 
@@ -90,7 +98,7 @@ const Stacks = () => {
          
   
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {stacksList.map((stack: Stack) => (
+          {listedStacks.map((stack: Stack) => (
             <div
               key={stack._id}
               className="bg-white rounded-lg overflow-hidden border border-gray-800 transition duration-300 ease-in-out hover:shadow-lg"
@@ -142,10 +150,10 @@ const Stacks = () => {
           Unlisted Stacks
         </DialogHeader>
         <DialogBody divider className="h-[400px] overflow-y-auto">
-          {unlistedStacksList.length === 0 ? (
+          {unlistedStacks.length === 0 ? (
             <p className="text-center text-blue-500 py-4">No unlisted stacks available.</p>
           ) : (
-            unlistedStacksList.map((stack: Stack) => (
+            unlistedStacks.map((stack: Stack) => (
               <div
                 key={stack._id}
                 className="bg-white border border-blue-200 rounded-lg m-3 p-4 flex justify-between items-center hover:bg-blue-50 transition duration-300 ease-in-out"

@@ -13,8 +13,8 @@ import Interviews from "../pages/admin/Interviews";
 const AdminRoute = () => {
   return (
     <Routes>
-      <Route path="" element={<AdminLogin />} />
 
+      <Route path="" element={<AdminLogin />} />
       <Route path="" element={<AdminLoggedIn/>}>
       <Route
         path="dashboard"

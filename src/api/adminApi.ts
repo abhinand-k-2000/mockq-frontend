@@ -42,7 +42,7 @@ export const getInterviewerDetails = async (id: string) => {
 export const blockCandidate = async (candidateId: string) => {
     try {
         const response = await Api.put(adminEndpoint.blockCandidate+`/${candidateId}`)
-        return response
+        return response.data
     } catch (error) {
         console.log("Error blocking candidate", error)
     }

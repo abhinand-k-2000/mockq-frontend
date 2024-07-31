@@ -11,26 +11,21 @@ const CandidateHome = () => {
 
   const [selectedStack , setSelectedStack] = useState<string>('')
   const [selectedTech, setSelectedTech] = useState<string>('')
-  // const [selectedInterviewer, setSelectedInterviewer] = useState(null)
-
-
 
   const handleSelectStack = (stack: string) => {      
     setSelectedStack(stack)
     setSelectedTech('');
-    // setSelectedInterviewer(null)
   }
 
   const handleSelectTech = (tech: string) => {
     setSelectedTech(tech)
-    // setSelectedInterviewer(null)
   }
 
 
   return (
     <div className="flex flex-col min-h-screen  ">
       <CandidateNavbar />
-      <div className="flex-grow">
+      <div className="flex-grow ">
         {!selectedStack ? (
           <StackSelection onSelectStack={handleSelectStack} />
         ) : !selectedTech ? (

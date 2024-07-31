@@ -1,32 +1,30 @@
-import  { useEffect, useState } from 'react'
-import { home } from '../../api/candidateApi';
-import { FaSearch } from 'react-icons/fa';
-
-
+import { useEffect, useState } from "react";
+import { home } from "../../api/candidateApi";
+import { FaSearch } from "react-icons/fa";
+import StacksSelectionShimmer from "../shimmer/StacksSelectionShimmer";
 
 interface Stack {
-    stackName: string;
-    technologies: string[];
-  }
+  stackName: string;
+  technologies: string[];
+}
 
-const StackSelection = ({onSelectStack}: any) => {
-
-    const [stacks, setStacks] = useState<Stack[]>([]);
-  const [search, setSearch] = useState('')
-
-
-  
+const StackSelection = ({ onSelectStack }: any) => {
+  const [stacks, setStacks] = useState<Stack[]>([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true)
 
   const handleSearch = (word: string) => {
-    setSearch(word)
-  }
+    setSearch(word);
+  };
 
   const fetchAllStacks = async () => {
     try {
       const response = await home();
       setStacks(response.data.stacks);
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching stacks:", error);
+      setLoading(false)
     }
   };
 
@@ -34,18 +32,20 @@ const StackSelection = ({onSelectStack}: any) => {
     fetchAllStacks();
   }, []);
 
-  const filteredStacks = stacks.filter((stacks) => stacks.stackName.toLowerCase().includes(search.toLowerCase()))
+  const filteredStacks = stacks.filter((stacks) =>
+    stacks.stackName.toLowerCase().includes(search.toLowerCase())
+  );
+
+  if(loading) return <StacksSelectionShimmer heading={"Request Interviewer"}/>
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
-
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF]  to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-
         <div className="px-6 py-8 sm:p-10">
           <h1 className="text-4xl sm:text-5xl font-bold text-indigo-900 mb-8">
             Request Interviewer
           </h1>
-          
+
           <div className="relative mb-8">
             <input
               value={search}
@@ -63,17 +63,15 @@ const StackSelection = ({onSelectStack}: any) => {
                 key={index}
                 onClick={() => onSelectStack(stack.stackName)}
                 className="bg-gradient-to-r from-[#1D2B6B] to-[#142057] hover:from-[#2A3F7E] hover:to-[#0A102E] text-white font-semibold py-4 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1D2B6B]"
-                >
+              >
                 {stack.stackName}
               </button>
-
-              
             ))}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default StackSelection
+export default StackSelection;

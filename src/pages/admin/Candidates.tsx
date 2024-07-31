@@ -33,7 +33,6 @@ interface Candidate {
 
 const Candidates: React.FC = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [block, setBlock] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(
     null
@@ -60,11 +59,21 @@ const Candidates: React.FC = () => {
   ) => {
     try {
       const response = await blockCandidate(candidateId);
-      if (response) {
-        setBlock(!block);
-        candidateBlocked
-          ? toast.success("Candidate Unblocked Successfully")
-          : toast.success("Candidate Blocked Successfully");
+      console.log(response);
+      if (response.success) {
+        setCandidates((prevCandidates) =>
+          prevCandidates.map((candidate) =>
+            candidate._id === candidateId
+              ? { ...candidate, isBlocked: !candidateBlocked }
+              : candidate
+          )
+        );
+
+        setSelectedCandidate((prevCandidate) =>
+          prevCandidate
+            ? { ...prevCandidate, isBlocked: !candidateBlocked }
+            : null
+        );
         setOpenModal(false);
       }
     } catch (error) {
@@ -83,7 +92,7 @@ const Candidates: React.FC = () => {
     } catch (error) {
       console.error(error);
       toast.error("Failed to fetch candidates");
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -93,7 +102,7 @@ const Candidates: React.FC = () => {
 
   useEffect(() => {
     fetchCandidates(currentPage, limit);
-  }, [block, currentPage, limit]);
+  }, [currentPage, limit]);
 
   const handleOpenModal = (candidate: Candidate) => {
     setSelectedCandidate(candidate);
@@ -199,23 +208,20 @@ const Candidates: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => handleOpenModal(candidate)}
-                        className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
+                        className={`inline-flex items-center px-5 py-2.5 text-sm font-semibold rounded-full shadow-sm transition-all duration-300 ease-in-out ${
                           candidate.isBlocked
-                            ? "bg-green-600 hover:bg-green-700"
-                            : "bg-red-600 hover:bg-red-700"
-                        } focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                          candidate.isBlocked
-                            ? "focus:ring-green-500"
-                            : "focus:ring-red-500"
-                        }`}
+                            ? "bg-white text-green-700 border border-green-300 hover:bg-green-50 hover:border-green-400 focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                            : "bg-white text-red-700 border border-red-300 hover:bg-red-50 hover:border-red-400 focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        } hover:shadow-md focus:outline-none`}
                       >
                         {candidate.isBlocked ? (
                           <>
-                            <FiUnlock className="mr-2" /> Unblock
+                            <FiUnlock className="mr-2 h-4 w-4 stroke-2" />{" "}
+                            Unblock
                           </>
                         ) : (
                           <>
-                            <FiLock className="mr-2" /> Block
+                            <FiLock className="mr-2 h-4 w-4 stroke-2" /> Block
                           </>
                         )}
                       </button>

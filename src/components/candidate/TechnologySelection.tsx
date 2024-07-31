@@ -2,6 +2,7 @@ import  { useEffect, useState } from "react";
 import { home } from "../../api/candidateApi";
 import toast from "react-hot-toast";
 import { FaArrowLeft, FaSearch } from "react-icons/fa";
+import StacksSelectionShimmer from "../shimmer/StacksSelectionShimmer";
 
 interface Stack {
     stackName: string;
@@ -18,6 +19,7 @@ const TechnologySelection = ({
 
   const [techs, setTechs] = useState<string[]>([]);
   const [searchWord, setSearchWord] = useState("")
+  const [loading, setLoading] = useState(true)
 
 
   const filteredTechs = techs.filter((item) => item.toLowerCase().includes(searchWord.toLowerCase()))
@@ -35,15 +37,20 @@ const TechnologySelection = ({
       }
       
       setTechs(stack.technologies);
+      setLoading(false)
     } catch (error) {
       toast.error("No interviewers!")
       console.error("Error fetching stacks:", error);
+      setLoading(false)
     }
   };
 
   useEffect(() => {
     fetchAllStacks();
   }, [selectedStack]);
+
+
+  if(loading) return <StacksSelectionShimmer heading={selectedStack}/>
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
       <div className="w-1/2 bg-white rounded-xl shadow-2xl overflow-hidden">
