@@ -19,7 +19,6 @@ const InterviewerSidebar = () => {
   useEffect(() => {
     const interviewerDetails = async () => {
       const response = await getInterviewerDetails()
-      console.log('response', response)
       setProfilePicture(response.data.profilePicture)
     }
     interviewerDetails();

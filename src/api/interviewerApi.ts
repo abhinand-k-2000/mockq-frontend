@@ -74,14 +74,17 @@ export const verifyLogin = async (email: string, password: string) => {
 };
 
 interface InterviewerDetails {
-  yearsOfExperience: string;
+  name: string;
+  mobile: number;
+  email: string;
+  yearsOfExperience: number;
   currentDesignation: string;
   organisation: string;
-  collegeUniversity: string;
+  collegeUniversity?: string;
   introduction: string;
-  profilePicture: File[];
-  salarySlip: File[];
-  resume: File[];
+  profilePicture?: File[];
+  salarySlip?: File[];
+  resume?: File[];
 }
 
 export const verifyDetails = async (interviewerDetails: InterviewerDetails) => {
@@ -281,3 +284,23 @@ export const verifyInterviewerVideoConference = async (roomId: string, userId: s
       return error.response.data
   }
 }  
+
+
+export const editPassword = async (currentPassword: string, newPassword: string) => {
+  try {
+      const {data} = await Api.put(interviewerEndpoint.editPassword, {currentPassword, newPassword})
+      return data 
+  } catch (error: any) {
+      console.log(error)
+      return error.response.data
+  }
+}
+
+export const editProfile = async (details: InterviewerDetails) => {
+  try {
+    const {data} = await Api.put(interviewerEndpoint.editProfile, {details});
+    return data
+  } catch (error) {
+    console.log(error);
+  }
+}

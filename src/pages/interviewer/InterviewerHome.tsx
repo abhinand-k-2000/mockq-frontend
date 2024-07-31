@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { MdEdit, MdPhone, MdEmail } from "react-icons/md";
 import { homeDetails } from "../../api/interviewerApi";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "@material-tailwind/react";
+import EditInterviewer from "./EditInterviewer";
 
 interface Interviewer {
   name: string;
@@ -11,20 +13,24 @@ interface Interviewer {
   introduction: string;
   organisation: string;
   yearsOfExperience: number;
-  hasCompletedDetails: boolean;
+  // hasCompletedDetails: boolean;
 }
 
 const InterviewerHome = () => {
   const [interviewerDetails, setInterviewerDetails] = useState<Interviewer | null>(null);
   const [hasCompletedDetails, setHasCompletedDetails] = useState(false);
+
+  const [showEdit, setShowEdit] = useState(false)
+
   const navigate = useNavigate();
+
  
   useEffect(() => {
+    
     const fetchHomeDetails = async () => {
       const response = await homeDetails();
       setInterviewerDetails(response.data.interviewer);
       setHasCompletedDetails(response.data.interviewer.hasCompletedDetails);
-      console.log('data: ', response.data)
 
       if (!response.data.interviewer.hasCompletedDetails) {
         navigate('/interviewer/details');
@@ -41,8 +47,17 @@ const InterviewerHome = () => {
     return null; // Optionally return null to avoid rendering anything before redirection
   }
 
+  const handleProfileEdit =  (updatedData: Interviewer) => {
+    setInterviewerDetails(updatedData)
+  }
+
   return (
-    <div className="bg-gray-100 min-h-screen p-6">
+    
+        <div className="bg-gray-100 min-h-screen p-6">
+          {
+      showEdit ? (
+        <EditInterviewer setShowEdit={setShowEdit} interviewerDetails={interviewerDetails} onProfileEdit={handleProfileEdit}/>
+      ) : (
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <h2 className="text-3xl font-bold p-6 bg-[#142057] text-white">
           My Profile
@@ -67,9 +82,12 @@ const InterviewerHome = () => {
             </div>
           </div>
           <div className="space-y-6">
-            <button className="bg-[#142057] text-white p-2 rounded-full hover:bg-[#19328F] transition-colors">
+            <Tooltip content="Edit">
+
+            <button onClick={() => setShowEdit(true)} className="bg-[#142057] text-white p-2 rounded-full hover:bg-[#19328F] transition-colors">
               <MdEdit size={24} />
             </button>
+            </Tooltip>
             <div>
               <h4 className="text-xl font-semibold text-gray-800 mb-2 flex items-center">
                 <MdPhone className="mr-2" /> Mobile
@@ -85,7 +103,10 @@ const InterviewerHome = () => {
           </div>
         </div>
       </div>
+      )
+    }
     </div>
+      
   );
 };
 

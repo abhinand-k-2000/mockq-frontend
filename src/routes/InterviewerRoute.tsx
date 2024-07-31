@@ -17,6 +17,8 @@ import { RootState } from '../redux/store'
 import { ReactNode } from 'react'
 import PaymentsDashboard from '../pages/interviewer/PaymentsDashboard'
 
+
+
 interface ProtectedRouteProps {
   children: ReactNode
 }
@@ -57,6 +59,7 @@ const InterviewerRoute = () => {
         <Route path='approval-pending' element={<InterviewerLayout><ApprovalPending/></InterviewerLayout>} />
 
         <Route path='payments' element={<InterviewerLayout><PaymentsDashboard /></InterviewerLayout>} />
+
 
 
         </Route>

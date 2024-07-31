@@ -25,7 +25,11 @@ const interviewerEndpoint = {
 
     getPaymentDashboardDetails: '/interviewer/get-payment-dashboard',
 
-    verifyInterviewerVideoConference: "/interviewer/verify-video-conference"
+    verifyInterviewerVideoConference: "/interviewer/verify-video-conference",
+
+    editPassword: "/interviewer/edit-password",
+
+    editProfile: "/interviewer/edit-profile"
 
 
 

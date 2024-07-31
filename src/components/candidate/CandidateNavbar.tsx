@@ -27,7 +27,6 @@ interface INotification {
   message: string;
   read: boolean;
   feedbackId?: string; 
-
 }
 
 
@@ -195,7 +194,7 @@ const CandidateNavbar: React.FC = () => {
               />
             </MenuHandler>
             <MenuList className="bg-[#EEF5FF]">
-              <MenuItem className="flex items-center gap-2">
+              <MenuItem onClick={() => navigate('/candidate/profile')} className="flex items-center gap-2">
                 <IoPersonCircle className="h-4 w-4" />
                 <Typography variant="small" className="font-medium">
                   My Profile

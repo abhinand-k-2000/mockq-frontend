@@ -16,6 +16,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../redux/store"
 import { ReactNode } from "react"
 import Analytics from "../pages/candidate/Analytics"
+import Profile from "../pages/candidate/Profile"
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -58,6 +59,8 @@ const CandidateRoute = () => {
         <Route path="community-chat" element={<PremiumProtectedRoute />} />
 
         <Route path="analytics" element={<Analytics />} />
+
+        <Route path="profile" element={<Profile />} />
  
         </Route>
     </Routes>

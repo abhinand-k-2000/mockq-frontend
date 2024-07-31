@@ -35,7 +35,15 @@ const candidateEndpoint = {
 
   verifyCandidateVideoConference: "/candidate/verify-video-conference",
 
-  getNotifications: "/candidate/get-notifications"
+  getNotifications: "/candidate/get-notifications",
+
+  getProfileDetails: "/candidate/get-profile",
+
+  editProfile: "/candidate/edit-profile",
+
+  editPassword: "/candidate/edit-password"
+
+
 };
 
 export default candidateEndpoint;

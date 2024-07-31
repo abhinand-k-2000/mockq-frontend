@@ -261,3 +261,37 @@ export const getNotifications = async () => {
         console.log(error)
     }
 }
+
+export const getProfileDetails = async() => {
+    try {
+        const {data} = await Api.get(candidateEndpoint.getProfileDetails)
+        return data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const editProfile = async (formData: any) => {
+    try {
+        const {data} = await Api.put(candidateEndpoint.editProfile, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          return data
+    } catch (error) { 
+        console.log(error)
+    }
+}
+
+
+export const editPassword = async (currentPassword: string, newPassword: string) => {
+    try {
+        const {data} = await Api.put(candidateEndpoint.editPassword, {currentPassword, newPassword})
+        return data 
+    } catch (error: any) {
+        console.log(error)
+        return error.response.data
+    }
+}
