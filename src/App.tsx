@@ -1,6 +1,6 @@
 
 import Welcome from "./pages/common/Welcome"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import AdminRoute from "./routes/AdminRoute"
 import SignUp from "./pages/common/SignUp"
 import Login from "./pages/common/Login"
@@ -10,6 +10,7 @@ import Room from "./pages/common/Room"
 import { RootState } from "./redux/store"
 import { useSelector } from "react-redux"
 import { ReactNode } from "react"
+import NotFound from "./pages/common/NotFound"
 
 interface IProps {
   children: ReactNode;
@@ -31,7 +32,6 @@ function App() {
 
   return (
     <>
-      <Router>
         <Routes>
           <Route path="/" element={<Welcome/>} />
           <Route path="/sign-up" element={<SignUp/>} />
@@ -44,8 +44,8 @@ function App() {
           <Route path="/admin/*" element={<AdminRoute/>} />
           <Route path="/candidate/*" element={<CandidateRoute/>} />
           <Route path='/interviewer/*' element={<InterviewerRoute/>} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
     </>
   )
 }

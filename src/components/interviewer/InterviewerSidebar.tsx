@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { interviewerLogout } from "../../redux/slice/authSlice";
@@ -42,7 +41,6 @@ const InterviewerSidebar = () => {
   const handleLogout = async () => {
     const response = await logout();
     if (response.success) {
-      toast.success("Log out successful");
       dispatch(interviewerLogout());
       navigate("/");
     }

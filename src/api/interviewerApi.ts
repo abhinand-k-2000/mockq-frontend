@@ -159,9 +159,9 @@ export const addSlot = async (slotData: SlotData) => {
   }
 };
 
-export const getSlotsList = async (page: number, limit: number) => {
+export const getSlotsList = async (page: number, limit: number, query: string) => {
   try {
-    const response = await Api.get(interviewerEndpoint.getSlots + `?page=${page}&limit=${limit}`);
+    const response = await Api.get(interviewerEndpoint.getSlots + `?searchQuery=${query}&page=${page}&limit=${limit}`);
     return response.data;
   } catch (error: any) {
     return error.response.data

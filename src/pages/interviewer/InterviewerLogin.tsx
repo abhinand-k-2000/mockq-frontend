@@ -45,7 +45,6 @@ const InterviewerLogin = () => {
         token, isApproved
       }
       dispatch(setInterviewerCredentials(interviewerInfo))
-      toast.success("Successfully Logged in", response.data);
       navigate("/interviewer/home");
     }
   };

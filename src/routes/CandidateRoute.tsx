@@ -17,6 +17,7 @@ import { RootState } from "../redux/store"
 import { ReactNode } from "react"
 import Analytics from "../pages/candidate/Analytics"
 import Profile from "../pages/candidate/Profile"
+import Candidate404 from "../pages/candidate/Candidate404"
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -40,29 +41,20 @@ const CandidateRoute = () => {
         <Route path="otp" element={<ProtectedRoute><CandidateOtp/></ProtectedRoute>} />
         <Route path="forgot-password" element={<ProtectedRoute><ForgotPassword /></ProtectedRoute>} />
 
-
         <Route path="" element={<CandidateLoggedIn/>}>
-        
         <Route path="home" element={ <CandidateHome/>} />
-
-
         <Route path="interviewer-slot-details/:interviewerId" element={<InterviewerAndSlotDetails />} />
         <Route path="account" element={<Account />} />
-
         <Route path="outsourced-interviews" element={<OutsourcedInterviews/>} />
-
         <Route path="payment-success" element={<PaymentSuccess />} />
         <Route path="payment-failed" element={<PaymentFailed />} />
-
         <Route path="feedback/:interviewId" element={<CandidateFeedbackView />} />
-
         <Route path="community-chat" element={<PremiumProtectedRoute />} />
-
         <Route path="analytics" element={<Analytics />} />
-
         <Route path="profile" element={<Profile />} />
- 
         </Route>
+
+        <Route path="*" element={<Candidate404 />} />
     </Routes>
   )
 }

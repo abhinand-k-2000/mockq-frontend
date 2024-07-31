@@ -57,14 +57,6 @@ const CandidateNavbar: React.FC = () => {
     try {
       const response = await logout();
       if (response.success) {
-        toast.success("Log out successful", {
-          style: {
-            border: "1px solid #2F76FF",
-            padding: "16px",
-            color: "#19328F",
-            backgroundColor: "#D9E9FF",
-          },
-        });
         dispatch(candidateLogout());
         navigate("/");
       }

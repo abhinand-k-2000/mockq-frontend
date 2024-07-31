@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import  { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getSlotsList } from "../../api/interviewerApi";
 import { MdOutlineEdit } from "react-icons/md";
@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Pagination from "../../components/Pagination";
 import TableShimmer from "../../components/shimmer/TableShimmer";
+import {debounce} from "lodash"
 
 interface Schedule {
   from: string;
@@ -20,13 +21,15 @@ interface Schedule {
 interface Slot {
   date: Date;
   schedule: Schedule[];
-}
+} 
 
 const SlotsList = () => {
   const navigate = useNavigate();
   const [slotsList, setSlotsList] = useState<Slot[]>([]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [loading, setLoading] = useState(false)
+
+  const [searchQuery, setSearchQuery] = useState("")
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPages, setTotalPages] = useState(1);
@@ -45,10 +48,11 @@ const SlotsList = () => {
     navigate("/interviewer/add-slot");
   }; 
 
-  const fetchInterviewSlotsList = async (page: number, limit: number) => {
+  const fetchInterviewSlotsList = async (page: number, limit: number, query = "") => {
     setLoading(true)
-    const response = await getSlotsList(page, limit);
+    const response = await getSlotsList(page, limit, query);
     if (response.success) {
+      console.log('data: ', response.data)
       setSlotsList(response.data);
       setTotalPages(Math.ceil(response.total / limit));
       setLoading(false)
@@ -60,9 +64,24 @@ const SlotsList = () => {
     setSearchParams({ page: newPage.toString(), limit: limit.toString() });
   };
 
+  // const debounceFetch = useCallback(debounce(fetchInterviewSlotsList, 300), [])
+  const debounceFetch = useCallback(
+    debounce((query: string) =>{
+      fetchInterviewSlotsList(currentPage, limit, query)
+    }, 800), [currentPage, limit]
+  )
+
   useEffect(() => {
-    fetchInterviewSlotsList(currentPage, limit);
+    // fetchInterviewSlotsList(currentPage, limit);
+    fetchInterviewSlotsList(currentPage, limit, searchQuery)
   }, [currentPage, limit]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+    setSearchQuery(e.target.value.trim())
+    debounceFetch(e.target.value.trim())
+  }
+  console.log('search query: ', searchQuery)
 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-8">
@@ -109,6 +128,7 @@ const SlotsList = () => {
                   type="text"
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Search for interviews"
+                  onChange={handleSearchChange}
                 />
                 <div className="absolute left-3 top-2.5">
                   <svg
@@ -159,8 +179,8 @@ const SlotsList = () => {
               <TableShimmer columns={7}/>
             ) : (
               <tbody className="bg-white divide-y divide-gray-200">
-                {slotsList.map((slot, slotIndex) =>
-                  slot.schedule.map((schedule, scheduleIndex) => (
+                {slotsList?.map((slot, slotIndex) =>
+                  slot?.schedule?.map((schedule, scheduleIndex) => (
                     <tr
                       key={`${slotIndex}-${scheduleIndex}`}
                       className="hover:bg-gray-50 transition-colors duration-200"

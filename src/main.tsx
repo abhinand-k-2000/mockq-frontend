@@ -6,9 +6,22 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@material-tailwind/react";
 import { Provider } from "react-redux";
 import store from "./redux/store.ts";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { setupInterceptors } from "./services/axios.ts";
+
+const AppWrapper = () => {
+  const navigate = useNavigate();
+  setupInterceptors(navigate);
+  return <App />;
+};
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <Provider store={store}> 
+  <Provider store={store}>
     <React.StrictMode>
       <Toaster
         position="top-center"
@@ -18,7 +31,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }}
       />
       <ThemeProvider>
-        <App />
+        <Router>
+          <Routes>
+            <Route path="/*" element={<AppWrapper />} />
+          </Routes>
+        </Router>
       </ThemeProvider>
     </React.StrictMode>
   </Provider>

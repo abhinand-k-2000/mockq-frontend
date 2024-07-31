@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { adminLogout } from '../../redux/slice/authSlice';
 import { logout } from '../../api/adminApi';
 import { FiMenu, FiBell, FiUser } from 'react-icons/fi';
-import toast from 'react-hot-toast';
 
 interface IProps {
   toggleSidebar: () => void
@@ -20,7 +19,6 @@ const Navbar: React.FC<IProps> = ({ toggleSidebar }) => {
   const handleLogout = async () => {
     const response = await logout();
     if (response.success) {
-      toast.success('Log out successful');
       dispatch(adminLogout());
       navigate('/admin');
     }

@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../redux/store'
 import { ReactNode } from 'react'
 import PaymentsDashboard from '../pages/interviewer/PaymentsDashboard'
+import Interviewer404 from '../pages/interviewer/Interviewer404'
 
 
 
@@ -40,29 +41,17 @@ const InterviewerRoute = () => {
  
 
         <Route path='' element={<InterviewerLoggedIn/>}>
-
-
         <Route path='home' element={<InterviewerLayout><InterviewerHome/></InterviewerLayout>} />
         <Route path='add-slot' element={<InterviewerLayout><AddSlot/></InterviewerLayout>} />
-
-
         <Route path='slots-list' element={<InterviewerLayout><SlotsList/></InterviewerLayout>} />
-
         <Route path='scheduled-interviews' element={<InterviewerLayout><ScheduledInterviews/></InterviewerLayout>} />
-
         <Route path='details' element={<InterviewerDetails/>} />
-
-
         <Route path='feedback-form/:interviewId' element={<InterviewerLayout><FeedbackForm /></InterviewerLayout>} />
-
-
         <Route path='approval-pending' element={<InterviewerLayout><ApprovalPending/></InterviewerLayout>} />
-
         <Route path='payments' element={<InterviewerLayout><PaymentsDashboard /></InterviewerLayout>} />
-
-
-
         </Route>
+
+        <Route path='*' element={<Interviewer404 />} />
 
     </Routes>  
   )

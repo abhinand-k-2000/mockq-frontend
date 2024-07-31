@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getStacks, unlistStack } from "../../api/adminApi";
 import toast from "react-hot-toast";
@@ -27,11 +27,10 @@ const Stacks = () => {
   const limit = parseInt(searchParams.get("limit") || "5")
 
 
-  const fetchStacks = async (page: number, limit: number) => {
+  const fetchStacks = useCallback( async (page: number, limit: number) => {
     setLoading(true)
     try {
       const response = await getStacks(page, limit);
-      console.log('response;: ', response)
     if (response.success) {
       setStacks(response.data)
       setTotalPages(Math.ceil(response.total / limit))
@@ -41,7 +40,7 @@ const Stacks = () => {
     }finally {
       setLoading(false)
     }
-  };
+  }, []);
 
   const handleUnlist = async (stackId: string) => {
     const response = await unlistStack(stackId);
@@ -59,7 +58,7 @@ const Stacks = () => {
 
   useEffect(() => {
     fetchStacks(currentPage, limit);
-  }, [currentPage, limit]);
+  }, [currentPage, limit, fetchStacks]);
 
   const listedStacks = stacks.filter(stack => stack.isListed);
   const unlistedStacks = stacks.filter(stack => !stack.isListed);

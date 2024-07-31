@@ -22,7 +22,6 @@ const AdminLogin = () => {
     if (response?.data.success) {
       console.log(response.data);
       dispatch(setAdminCredentials(response.data.token));
-      toast.success("Successfully logged in");
       navigate('/admin/dashboard');
     } else {
       toast.error("Invalid credentials");

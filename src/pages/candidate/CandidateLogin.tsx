@@ -28,14 +28,6 @@ const CandidateLogin = () => {
 
     if (response?.data.success) {
       dispatch(setCandidateCredentials(response.data.data.token));
-      toast.success("Successfully Logged in", {
-        style: {
-          border: "1px solid #2F76FF",
-          padding: "16px",
-          color: "#19328F",
-          backgroundColor: "#D9E9FF",
-        },
-      });
       navigate("/candidate/home");
     } else {
 
@@ -51,7 +43,7 @@ const CandidateLogin = () => {
           secondary: "#721c24",
         },
       });
-      // toast.error(response.data.message)
+      toast.error(response.data.message)
     }
   };
 

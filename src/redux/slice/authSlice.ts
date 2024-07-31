@@ -3,7 +3,8 @@ import {createSlice } from  '@reduxjs/toolkit'
 const initialState = {
     candidateInfo: localStorage.getItem("candidateInfo") ? JSON.parse(localStorage.getItem('candidateInfo') as string) : null,
     interviewerInfo: localStorage.getItem("interviewerInfo") ? JSON.parse(localStorage.getItem("interviewerInfo") as string) : null,
-    adminInfo: localStorage.getItem("adminInfo") ? JSON.parse(localStorage.getItem("adminInfo") as string) : null
+    adminInfo: localStorage.getItem("adminInfo") ? JSON.parse(localStorage.getItem("adminInfo") as string) : null,
+    // isBlocked: false
 } 
 
 
@@ -18,6 +19,7 @@ const authSlice = createSlice({
         },
         candidateLogout: (state) => {
             state.candidateInfo = null
+            // state.isBlocked = false;
             localStorage.removeItem("candidateInfo")
         },
         setInterviewerCredentials: (state, action) => {
@@ -35,6 +37,9 @@ const authSlice = createSlice({
         adminLogout: (state) => { 
             state.adminInfo = null
             localStorage.removeItem("adminInfo")
+        },
+        setBlockedStatus: (state, action) => {
+            // state.isBlocked = action.payload
         }
 
 
@@ -42,6 +47,6 @@ const authSlice = createSlice({
 })
 
 
-export const {setCandidateCredentials, candidateLogout, setInterviewerCredentials, interviewerLogout, setAdminCredentials, adminLogout
+export const {setCandidateCredentials, candidateLogout, setInterviewerCredentials, interviewerLogout, setAdminCredentials, adminLogout, setBlockedStatus
 } = authSlice.actions;
 export default authSlice.reducer
