@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
+      initial={{ y: -80 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       style={{ backgroundColor: navBg }}
