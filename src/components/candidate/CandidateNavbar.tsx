@@ -42,8 +42,9 @@ const CandidateNavbar: React.FC = () => {
   const fetchNotifications = async () => {
     try {
       const list = await getNotifications();
-      setNotifications(list.data);
-      console.log(list.data)
+      if(list.length >0){
+        setNotifications(list.data);
+      }
     } catch (error) {
       console.error("Error fetching notifications:", error);
     }
