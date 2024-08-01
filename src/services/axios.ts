@@ -5,7 +5,7 @@ import { candidateLogout } from '../redux/slice/authSlice'
 
 const Api = axios.create({
     // baseURL: 'https://www.mockq.abhinandk.online/api',
-    baseURL: 'http://localhost:3000/api',
+    baseURL: import.meta.env.VITE_BASE_URL || 'http://localhost:3000/api',
     withCredentials: true
 })
 
