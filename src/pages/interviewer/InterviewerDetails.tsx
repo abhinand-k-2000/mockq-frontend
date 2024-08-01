@@ -5,7 +5,10 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
-  yearsOfExperience: string;
+  name: string;
+  email: string;
+  mobile: number
+  yearsOfExperience: number;
   currentDesignation: string;
   organisation: string;
   collegeUniversity: string;

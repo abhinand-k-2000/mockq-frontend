@@ -38,15 +38,15 @@ const authSlice = createSlice({
             state.adminInfo = null
             localStorage.removeItem("adminInfo")
         },
-        setBlockedStatus: (state, action) => {
-            // state.isBlocked = action.payload
-        }
+        // setBlockedStatus: (state, action) => {
+        //     // state.isBlocked = action.payload
+        // }
 
 
     }
 })
 
 
-export const {setCandidateCredentials, candidateLogout, setInterviewerCredentials, interviewerLogout, setAdminCredentials, adminLogout, setBlockedStatus
+export const {setCandidateCredentials, candidateLogout, setInterviewerCredentials, interviewerLogout, setAdminCredentials, adminLogout
 } = authSlice.actions;
 export default authSlice.reducer

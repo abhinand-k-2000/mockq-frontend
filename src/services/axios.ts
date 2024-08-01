@@ -1,6 +1,6 @@
 import axios from 'axios'
 import store from '../redux/store'
-import { candidateLogout, setBlockedStatus } from '../redux/slice/authSlice'
+import { candidateLogout } from '../redux/slice/authSlice'
 
 
 const Api = axios.create({

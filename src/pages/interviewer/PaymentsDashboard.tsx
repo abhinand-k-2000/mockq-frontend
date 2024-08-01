@@ -15,11 +15,6 @@ interface Transaction {
   price: number;
 }
 
-// interface DashboardResponse {
-//   totalRevenue: number;
-//   interviews: Transaction[];
-// }
-
 const PaymentsDashboard = () => {
   const [totalEarnings, setTotalEarnings] = useState(0);
   const [transactionHistory, setTransactionHistory] = useState<Transaction []>([]);
