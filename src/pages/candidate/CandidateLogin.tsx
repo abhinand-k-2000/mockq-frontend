@@ -32,7 +32,7 @@ const CandidateLogin = () => {
     } else {
 
       toast.error(response.data.message, {
-        style: {
+        style: {  
           border: "1px solid #dc3545",
           padding: "16px",
           color: "#721c24",
@@ -43,7 +43,6 @@ const CandidateLogin = () => {
           secondary: "#721c24",
         },
       });
-      toast.error(response.data.message)
     }
   };
 

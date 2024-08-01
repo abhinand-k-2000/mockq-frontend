@@ -43,7 +43,7 @@ const InterviewerSelection: React.FC<InterviewerSelectionProps> = ({
 
   const InterviewerCard: React.FC<{ interviewer: Interviewer }> = ({ interviewer }) => (
     <div
-      onClick={() => navigate(`/candidate/interviewer-slot-details/${interviewer._id}`, { state: { selectedTech } })}
+      onClick={() => navigate(`/candidate/interviewer-slot-details/${interviewer._id}?selectedTech=${selectedTech}`, { state: { selectedTech } })}
       className="bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 ease-in-out cursor-pointer overflow-hidden border border-indigo-100 group"
     >
       <div className="flex items-center p-2 space-x-6">

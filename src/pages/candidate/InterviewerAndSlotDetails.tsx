@@ -1,7 +1,7 @@
 import  { useEffect, useState } from "react";
 import CandidateNavbar from "../../components/candidate/CandidateNavbar";
 import { getInterviewerSlotDetails, makePayment } from "../../api/candidateApi";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation, useSearchParams } from "react-router-dom";
 import { FaArrowLeft, FaInfoCircle } from "react-icons/fa";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
 
@@ -20,12 +20,15 @@ const InterviewerAndSlotDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { selectedTech } = location.state || {}; 
+  const [searchParams] = useSearchParams();
+  const selectedTech = searchParams.get("selectedTech") as string
 
 
   const handleCheckout = async (slot: any) => {
 
-    const response = await makePayment(slot);
+    const previousUrl = `${location.pathname}${location.search}`
+    
+    const response = await makePayment(slot, previousUrl);
 
     if (response.success) {
       window.location = response.data;

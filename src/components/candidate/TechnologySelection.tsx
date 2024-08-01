@@ -51,6 +51,7 @@ const TechnologySelection = ({
 
 
   if(loading) return <StacksSelectionShimmer heading={selectedStack}/>
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#EEF5FF] to-[#D9E9FF] px-4 sm:px-6 lg:px-8">
       <div className="w-1/2 bg-white rounded-xl shadow-2xl overflow-hidden">

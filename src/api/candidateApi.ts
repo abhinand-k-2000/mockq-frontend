@@ -105,9 +105,9 @@ export const getInterviewerSlotDetails = async (interviewerId: string, techName:
     }
 }
 
-export const makePayment = async (data: any)=> {
+export const makePayment = async (data: any, previousUrl: string)=> {
     try {
-        const response = await Api.post(candidateEndpoint.makePayment, {data})
+        const response = await Api.post(candidateEndpoint.makePayment, {data, previousUrl})
         return response.data
     } catch (error) {
         console.log(error)
