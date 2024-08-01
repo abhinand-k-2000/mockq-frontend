@@ -30,19 +30,19 @@ interface INotification {
 }
 
 
-
-const CandidateNavbar: React.FC = () => {
+ 
+const CandidateNavbar: React.FC = () => { 
   const [navBg, setNavBg] = useState("#D9E9FF");
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [notificationButton, setNotificationButton] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+ 
   const fetchNotifications = async () => {
     try {
-      const list = await getNotifications();
-      if(list.length >0){
+      const list = await getNotifications(); 
+      if(list.success){
         setNotifications(list.data);
       }
     } catch (error) {
@@ -60,13 +60,13 @@ const CandidateNavbar: React.FC = () => {
       if (response.success) {
         dispatch(candidateLogout());
         navigate("/");
-      }
+      } 
     } catch (error) {
       console.error("Logout failed:", error);
       toast.error("Logout failed. Please try again.");
     }
   };
-
+ 
   const handleClick =(item: INotification) => {
     console.log("ckkk:", item)
     if(item.feedbackId){
