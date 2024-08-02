@@ -304,3 +304,14 @@ export const editProfile = async (details: InterviewerDetails) => {
     console.log(error);
   }
 }
+
+
+export const updateWallet = async (amount: number) => {
+  try {
+    const type = "debit"
+    const {data} = await Api.put(interviewerEndpoint.updateWallet, {amount, type})
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}

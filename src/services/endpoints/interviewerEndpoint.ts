@@ -29,7 +29,9 @@ const interviewerEndpoint = {
 
     editPassword: "/interviewer/edit-password",
 
-    editProfile: "/interviewer/edit-profile"
+    editProfile: "/interviewer/edit-profile",
+
+    updateWallet: "/interviewer/update-wallet"
 
 
 

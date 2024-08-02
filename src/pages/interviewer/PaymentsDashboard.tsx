@@ -4,6 +4,7 @@ import { GrTransaction } from "react-icons/gr";
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import { getPaymentDashboardDetails } from '../../api/interviewerApi';
+import WithdrawalModal from '../../components/interviewer/WithdrawalModal';
 
 interface Transaction {
   date: string;
@@ -15,9 +16,16 @@ interface Transaction {
   price: number;
 }
 
+// interface Wallet {
+//   balance: number
+// }
+
 const PaymentsDashboard = () => {
-  const [totalEarnings, setTotalEarnings] = useState(0);
   const [transactionHistory, setTransactionHistory] = useState<Transaction []>([]);
+  // const [wallet, setWallet] = useState<Wallet>() 
+  const [walletBalance, setWalletBalance] = useState(0)
+  const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState(false)
+
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 3
 
@@ -33,7 +41,7 @@ const PaymentsDashboard = () => {
         borderColor: 'rgba(59, 130, 246, 1)',
         backgroundColor: 'rgba(59, 130, 246, 0.2)',
         tension: 0.4,
-      },
+      }, 
     ],
   };
 
@@ -42,22 +50,38 @@ const PaymentsDashboard = () => {
     
     const fetchDashboadDetails = async () => {
       const response = await getPaymentDashboardDetails()
-      setTotalEarnings(response.data.totalRevenue)
       setTransactionHistory(response.data.interviews)
+      // setWallet(response.data.wallet)
+      setWalletBalance(response.data.wallet.balance)
     }
 
     fetchDashboadDetails()
   }, [])
 
-
+ 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentTransactions = transactionHistory.slice(indexOfFirstItem, indexOfLastItem)
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber)
 
+  const handleWithdrawalClick = () => {
+    setIsWithdrawalModalOpen(true);
+  };
+  const handleBalanceUpdate = (newBalance: number) => {
+    setWalletBalance(newBalance);
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen">
+
+<WithdrawalModal
+      isOpen={isWithdrawalModalOpen}
+      onClose={() => setIsWithdrawalModalOpen(false)}
+      balance={walletBalance}
+      onBalanceUpdate ={handleBalanceUpdate}
+    />
+
       <div className="container mx-auto p-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
           <div className="px-6 py-8">
@@ -82,13 +106,13 @@ const PaymentsDashboard = () => {
       </svg>
     </div>
     <div className="flex items-end justify-between">
-      <div>
-        <p className="text-5xl font-bold text-white mb-2">₹{totalEarnings}</p>
+      <div> 
+        <p className="text-5xl font-bold text-white mb-2">₹{walletBalance}</p>
         <p className="text-sm font-medium text-indigo-100">Last updated: {new Date().toLocaleDateString()}</p>
       </div>
       <button 
         className="bg-white text-indigo-600 font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 shadow-md hover:shadow-lg"
-        // onClick={handleWithdrawal}
+        onClick={handleWithdrawalClick}
       >
         Withdraw
       </button>
@@ -96,8 +120,8 @@ const PaymentsDashboard = () => {
   </div>
   <div className="mt-8 pt-6 border-t border-indigo-400 border-opacity-30">
     <div className="flex justify-between items-center text-indigo-100">
-      <span className="text-sm">This month's earnings</span>
-      <span className="text-lg font-semibold">₹{/* Add this month's earnings */}</span>
+      {/* <span className="text-sm">This month's earnings</span> */}
+      {/* <span className="text-lg font-semibold">₹Add this month's earnings</span> */}
     </div>
   </div>
 </div>
@@ -107,7 +131,7 @@ const PaymentsDashboard = () => {
           <h2 className="text-2xl font-semibold mb-4 flex items-center ">
             <GrTransaction  className='h-6 w-6 text-[#19328F] mr-3'/>
             Transaction History</h2>
-          <input className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Search transactions..." />
+          {/* <input className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" placeholder="Search transactions..." /> */}
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white ">
               <thead className="bg-gray-100 ">

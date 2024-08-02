@@ -161,7 +161,7 @@ const SlotsList = () => {
                     "Technologies",
                     "Price",
                     "Status",
-                    "Action",
+                    // "Action",
                   ].map((header) => (
                     <th
                       key={header}
@@ -234,11 +234,11 @@ const SlotsList = () => {
                           {schedule.status}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      {/* <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button className="text-indigo-600 hover:text-indigo-900">
                           <MdOutlineEdit className="h-5 w-5" />
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   
                   ))
