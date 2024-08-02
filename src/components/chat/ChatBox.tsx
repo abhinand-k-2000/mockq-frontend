@@ -12,9 +12,9 @@ const ChatBox = () => {
             <h2 className="text-xl font-semibold text-gray-800">
               {selectedChat.chatName}
             </h2>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300">
+            {/* <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300">
               View Group
-            </button>
+            </button> */}
         </div>
       )}
       <div className="flex-grow overflow-y-auto">
