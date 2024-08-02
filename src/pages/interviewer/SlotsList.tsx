@@ -1,7 +1,7 @@
 import  { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getSlotsList } from "../../api/interviewerApi";
-import { MdOutlineEdit } from "react-icons/md";
+// import { MdOutlineEdit } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Pagination from "../../components/Pagination";
